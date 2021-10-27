@@ -45,7 +45,7 @@
   3) 아파트 전월세 실거래(3순위)
 
 #### 코드 컨벤션
-- 네이버 코딩 컨벤션: https://naver.github.io/hackday-conventions-java/
+- 네이버 코딩 컨벤션(https://naver.github.io/hackday-conventions-java/)
 
 ### 브랜치 관리 전략
 - Git Flow
