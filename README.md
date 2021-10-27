@@ -44,6 +44,12 @@
   2) 아파트 분양권 전매 실거래(2순위)
   3) 아파트 전월세 실거래(3순위)
 
+#### 코드 컨벤션
+- 네이버 코딩 컨벤션: https://naver.github.io/hackday-conventions-java/
+
+### 브랜치 관리 전략
+- Git Flow
+
 ## 서비스 설계
 
 #### 1. 주요 기능의 Task Flow 정의
