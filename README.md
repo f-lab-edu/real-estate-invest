@@ -62,3 +62,10 @@
 - 선택 기능
   - 청약 조회
   - 실시간 사용자 조회 BEST 부동산 순위 조회 (순위 대로 N개)
+
+## 사용 기술
+- ubuntu 18.04 LTS
+- MySQL 
+- Spring
+- Naver Cloud
+- Java 11
