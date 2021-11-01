@@ -24,15 +24,38 @@ public class UserService {
 	@Transactional
 	public void createUser(UserDto requestUser) {
 		// String encryptedPw=passwordEncoder.encode(requestUser.getPassword());
+		validateNotExistUser(getUserById(requestUser.getId()));
 		String encryptedPw= BCrypt.hashpw(requestUser.getPassword(),BCrypt.gensalt());
 		User user = User.createUser(requestUser.getId(),encryptedPw);
 		userMapper.insertUser(user);
 	}
 
+	private void validateNotExistUser(Optional<User> foundUser) {
+		if(isExistUser(foundUser)){
+			throw new InvalidParameterException("이미 사용중인 아이디입니다.");
+		}
+	}
+
+
 	public User login(UserDto requestUser){
-		User foundUser= getUserById(requestUser.getId());
-		validatePassword(requestUser.getPassword(), foundUser.getPassword());
-		return foundUser;
+		Optional<User> foundUser= getUserById(requestUser.getId());
+		validateExistUser(foundUser);
+		User user = foundUser.get();
+		validatePassword(requestUser.getPassword(), user.getPassword());
+		return user;
+	}
+
+	private void validateExistUser(Optional<User> foundUser) {
+		if(!isExistUser(foundUser)){
+			throw new InvalidParameterException("없는 아이디 입니다.");
+		}
+	}
+
+	private boolean isExistUser(Optional<User> user){
+		if(user.isPresent()){
+			return true;
+		}
+		return false;
 	}
 
 	private void validatePassword(String inputPassword, String storedPassword) {
@@ -42,11 +65,8 @@ public class UserService {
 		}
 	}
 
-	public User getUserById(String id){
+	public Optional<User> getUserById(String id){
 		Optional<User> foundUser= userMapper.selectUserById(id);
-		if(foundUser.isEmpty()){
-			throw new InvalidParameterException("없는 아이디 입니다.");
-		}
-		return foundUser.get();
+		return foundUser;
 	}
 }
