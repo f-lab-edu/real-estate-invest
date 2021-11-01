@@ -16,17 +16,11 @@ import kancho.realestate.comparingprices.service.UserService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
 
 	private final UserService userService;
-	private static final String SESSION_KEY="userNo";
-
-	@GetMapping("/test")
-	public String test(){
-		return "test";
-	}
+	public static final String SESSION_KEY="userNo";
 
 	@PostMapping("/join")
 	public String join(@RequestBody UserDto requestUserDto){
@@ -41,11 +35,8 @@ public class UserController {
 		return "로그인 완료";
 	}
 
-	@GetMapping("/authTest")
-	public String authTest(HttpSession session) throws AuthenticationException {
-		if(session.getAttribute(SESSION_KEY)==null){
-			throw new AuthenticationException("로그인이 필요합니다.");
-		}
-		return "인증 테스트";
+	@GetMapping("/test")
+	public String test(){
+		return "test";
 	}
 }

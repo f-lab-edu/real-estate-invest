@@ -26,8 +26,6 @@ public class UserService {
 		// String encryptedPw=passwordEncoder.encode(requestUser.getPassword());
 		String encryptedPw= BCrypt.hashpw(requestUser.getPassword(),BCrypt.gensalt());
 		User user = User.createUser(requestUser.getId(),encryptedPw);
-		System.out.println(requestUser);
-		System.out.println("createSucess");
 		userMapper.insertUser(user);
 	}
 
