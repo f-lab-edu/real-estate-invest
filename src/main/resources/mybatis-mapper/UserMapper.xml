@@ -33,4 +33,9 @@
         where id=#{id}
     </select>
 
+    <delete id="deleteAll">
+        delete
+        from User
+    </delete>
+
 </mapper>

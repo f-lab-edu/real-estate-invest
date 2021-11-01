@@ -11,4 +11,5 @@ public interface UserMapper {
 
 	void insertUser(User user);
 	Optional<User> selectUserById(String id);
+	void deleteAll();
 }
