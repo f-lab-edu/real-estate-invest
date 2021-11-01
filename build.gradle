@@ -21,7 +21,8 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+	//implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.mindrot:jbcrypt:0.3m'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
 
 	compileOnly 'org.projectlombok:lombok'
