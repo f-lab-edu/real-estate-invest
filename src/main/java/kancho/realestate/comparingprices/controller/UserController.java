@@ -1,5 +1,6 @@
 package kancho.realestate.comparingprices.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.http.HttpStatus;
@@ -28,10 +29,11 @@ public class UserController {
 		userService.createUser(requestUserDto);
 		return new ResponseEntity<>(new SuccessReponse<>("회원가입 완료",""), HttpStatus.CREATED);
 	}
-
+//HttpSession session,
 	@PostMapping(value ="/login", produces = "application/json; charset=utf8")
-	public ResponseEntity login(HttpSession session, @RequestBody RequestUserDto requestUserDto){
+	public ResponseEntity login(HttpServletRequest request, @RequestBody RequestUserDto requestUserDto){
 		User loginUser = userService.login(requestUserDto);
+		HttpSession session = request.getSession();
 		if(session.getAttribute(SESSION_KEY)!=null){
 			validateDuplicateLogin((SessionUserVO)session.getAttribute(SESSION_KEY), requestUserDto);
 			expirePreLoginSession(session);
@@ -39,12 +41,14 @@ public class UserController {
 
 		/* User 다른 정보는 제외하고(특히 password) userNo와 id만 담은 SessionUserDto 사용 */
 		SessionUserVO userDto = new SessionUserVO(loginUser.getUserNo(),loginUser.getId());
+		session = request.getSession();
 		session.setAttribute(SESSION_KEY,userDto);
 
 		return new ResponseEntity<>(new SuccessReponse<>("로그인 성공",""), HttpStatus.CREATED);
 	}
 
 	private void expirePreLoginSession(HttpSession session) {
+		session.invalidate();
 		/* TODO: 기존 세션 만료 로직 */
 	}
 
