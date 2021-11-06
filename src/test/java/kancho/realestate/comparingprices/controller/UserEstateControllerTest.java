@@ -1,11 +1,13 @@
 package kancho.realestate.comparingprices.controller;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.HashMap;
 
+import javax.naming.AuthenticationException;
 import javax.servlet.http.Cookie;
 
 import org.json.JSONObject;
@@ -50,9 +52,17 @@ class UserEstateControllerTest {
 		Cookie cookie = result.getResponse().getCookie("SESSION");
 
 		mockMvc.perform(get("/my-estate/test")
-			.content(serializedBody)
 			.cookie(cookie)
 			.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk());
+	}
+
+	@Test
+	@Transactional
+	public void test_세션없이_요청_예외() throws Exception {
+		mockMvc.perform(get("/my-estate/test")
+			.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isBadRequest())
+			.andExpect(result -> assertThat(result.getResolvedException()).isInstanceOf(AuthenticationException.class));
 	}
 }

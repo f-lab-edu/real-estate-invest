@@ -31,14 +31,21 @@ public class UserController {
 
 	@PostMapping(value ="/login", produces = "application/json; charset=utf8")
 	public ResponseEntity login(HttpSession session, @RequestBody RequestUserDto requestUserDto){
-		if(session.getAttribute(SESSION_KEY)!=null){
-			validateDuplicateLogin((SessionUserVO)session.getAttribute(SESSION_KEY),requestUserDto);
-		}
 		User loginUser = userService.login(requestUserDto);
+		if(session.getAttribute(SESSION_KEY)!=null){
+			validateDuplicateLogin((SessionUserVO)session.getAttribute(SESSION_KEY), requestUserDto);
+			expirePreLoginSession(session);
+		}
+
 		/* User 다른 정보는 제외하고(특히 password) userNo와 id만 담은 SessionUserDto 사용 */
 		SessionUserVO userDto = new SessionUserVO(loginUser.getUserNo(),loginUser.getId());
 		session.setAttribute(SESSION_KEY,userDto);
-		return new ResponseEntity<>(new SuccessReponse<>("회원가입 완료",""), HttpStatus.CREATED);
+
+		return new ResponseEntity<>(new SuccessReponse<>("로그인 성공",""), HttpStatus.CREATED);
+	}
+
+	private void expirePreLoginSession(HttpSession session) {
+		/* TODO: 기존 세션 만료 로직 */
 	}
 
 	private void validateDuplicateLogin(SessionUserVO userInSession, RequestUserDto requestUserDto) {

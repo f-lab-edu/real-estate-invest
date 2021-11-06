@@ -1,5 +1,6 @@
 package kancho.realestate.comparingprices.exception;
 
+import javax.naming.AuthenticationException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpHeaders;
@@ -38,9 +39,18 @@ public class CommonExceptionHandler {
 			getHeader(), HttpStatus.BAD_REQUEST);
 	}
 
+	@ExceptionHandler(AuthenticationException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ResponseEntity handleAuthenticationException(HttpServletRequest request, Exception ex) {
+		System.out.println(ex.getMessage());
+		return new ResponseEntity<>(new ExceptionResponse(ex.getMessage(), ErrorCode.DUPLICATE_USER_ACCOUNT.getCode()),
+			getHeader(), HttpStatus.BAD_REQUEST);
+	}
+
 	private HttpHeaders getHeader(){
 		HttpHeaders responseHeader=new HttpHeaders();
 		responseHeader.set("Content-Type","application/json; charset=utf8");
 		return responseHeader;
 	}
+	//
 }
