@@ -29,12 +29,9 @@ class UserServiceTest {
 	@Autowired
 	UserMapper userMapper;
 
-	@AfterEach
-	void 데이터_초기화(){
-		userMapper.deleteAll();
-	}
-
-	@CsvSource(value = {"tom2542:23lg354232"}, delimiter = ':')
+	@Transactional
+	@ParameterizedTest
+	@CsvSource(value = {"tom2542,23lg354232"})
 	void 회원가입_패스워드_암호화_테스트(String id, String password) {
 		UserDto requestUserDto = new UserDto(id, password);
 		userService.createUser(requestUserDto);
