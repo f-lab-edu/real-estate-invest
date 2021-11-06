@@ -16,7 +16,15 @@ public class CommonExceptionHandler {
 
 	@ExceptionHandler(DuplicateUserAccountException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ResponseEntity handleNotFoundResourceException(HttpServletRequest request, Exception ex) {
+	public ResponseEntity handleDuplicateUserAccountException(HttpServletRequest request, Exception ex) {
+		System.out.println(ex.getMessage());
+		return new ResponseEntity<>(new ExceptionResponse(ex.getMessage(), ErrorCode.DUPLICATE_USER_ACCOUNT.getCode()),
+			getHeader(), HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(InvalidLoginParameterException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ResponseEntity handleInvalidLoginParameterException(HttpServletRequest request, Exception ex) {
 		System.out.println(ex.getMessage());
 		return new ResponseEntity<>(new ExceptionResponse(ex.getMessage(), ErrorCode.DUPLICATE_USER_ACCOUNT.getCode()),
 			getHeader(), HttpStatus.BAD_REQUEST);
