@@ -47,6 +47,7 @@ class UserServiceTest {
 		userService.login(requestUserDto);
 	}
 
+	@Transactional
 	@ParameterizedTest
 	@CsvSource(value = {"tom2542:23lg354232:23lg35423"}, delimiter = ':')
 	void 로그인_비밀번호_오류_테스트(String id, String password, String wrongPassword) {
@@ -60,6 +61,7 @@ class UserServiceTest {
 
 	}
 
+	@Transactional
 	@ParameterizedTest
 	@CsvSource(value = {"tom2542:23lg354232:tom25"}, delimiter = ':')
 	void 로그인_없는_아이디_오류_테스트(String id, String password, String wrongId) {
@@ -72,6 +74,7 @@ class UserServiceTest {
 		}).isInstanceOf(InvalidParameterException.class);
 	}
 
+	@Transactional
 	@ParameterizedTest
 	@CsvSource(value = {"tom2542:23lg354232"}, delimiter = ':')
 	void 회원가입_중복아이디_오류(String id, String password){
