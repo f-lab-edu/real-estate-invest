@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import kancho.realestate.comparingprices.domain.dto.request.UserDto;
 import kancho.realestate.comparingprices.domain.model.User;
+import kancho.realestate.comparingprices.exception.DuplicateUserAccountException;
+import kancho.realestate.comparingprices.exception.InvalidLoginParameterException;
 import kancho.realestate.comparingprices.repository.UserMapper;
 
 @SpringBootTest
@@ -57,7 +59,7 @@ class UserServiceTest {
 		UserDto requestLoginUserDto = new UserDto(id, wrongPassword);
 		Assertions.assertThatThrownBy(()->{
 			userService.login(requestLoginUserDto);
-		}).isInstanceOf(InvalidParameterException.class);
+		}).isInstanceOf(InvalidLoginParameterException.class);
 
 	}
 
@@ -71,7 +73,7 @@ class UserServiceTest {
 		UserDto requestLoginUserDto = new UserDto(wrongId, password);
 		Assertions.assertThatThrownBy(()->{
 			userService.login(requestLoginUserDto);
-		}).isInstanceOf(InvalidParameterException.class);
+		}).isInstanceOf(InvalidLoginParameterException.class);
 	}
 
 	@Transactional
@@ -84,7 +86,7 @@ class UserServiceTest {
 		UserDto requestDuplicateJoinUserDto = new UserDto(id, password);
 		Assertions.assertThatThrownBy(()->{
 			userService.createUser(requestDuplicateJoinUserDto);
-		}).isInstanceOf(InvalidParameterException.class);
+		}).isInstanceOf(DuplicateUserAccountException.class);
 
 	}
 }

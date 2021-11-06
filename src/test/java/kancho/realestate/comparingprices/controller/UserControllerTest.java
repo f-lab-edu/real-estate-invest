@@ -1,11 +1,13 @@
 package kancho.realestate.comparingprices.controller;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.HashMap;
 
+import org.assertj.core.api.Assertions;
 import org.json.JSONObject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +17,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+
+import kancho.realestate.comparingprices.exception.DuplicateUserAccountException;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
@@ -60,5 +64,26 @@ class UserControllerTest {
 			.content(serializedBody)
 			.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isCreated());
+	}
+
+	@Test
+	@Transactional
+	public void join_회원가입_중복_오류() throws Exception {
+
+		HashMap<String,String> bodyContent = new HashMap<>();
+		bodyContent.put("id","jerry");
+		bodyContent.put("password","1234");
+		String serializedBody = String.valueOf(new JSONObject(bodyContent));
+
+		mockMvc.perform(post("/join")
+			.content(serializedBody)
+			.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isCreated());
+
+		mockMvc.perform(post("/join")
+			.content(serializedBody)
+			.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isBadRequest())
+			.andExpect(result -> assertThat(result.getResolvedException()).isInstanceOf(DuplicateUserAccountException.class));
 	}
 }

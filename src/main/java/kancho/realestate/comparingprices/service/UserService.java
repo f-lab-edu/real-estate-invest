@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import kancho.realestate.comparingprices.domain.dto.request.UserDto;
 import kancho.realestate.comparingprices.domain.model.User;
+import kancho.realestate.comparingprices.exception.DuplicateUserAccountException;
+import kancho.realestate.comparingprices.exception.InvalidLoginParameterException;
 import kancho.realestate.comparingprices.repository.UserMapper;
 import lombok.RequiredArgsConstructor;
 
@@ -32,7 +34,7 @@ public class UserService {
 
 	private void validateNotExistUser(Optional<User> foundUser) {
 		if(isExistUser(foundUser)){
-			throw new InvalidParameterException("이미 사용중인 아이디입니다.");
+			throw new DuplicateUserAccountException("이미 사용중인 아이디입니다.");
 		}
 	}
 
@@ -47,7 +49,7 @@ public class UserService {
 
 	private void validateExistUser(Optional<User> foundUser) {
 		if(!isExistUser(foundUser)){
-			throw new InvalidParameterException("없는 아이디 입니다.");
+			throw new InvalidLoginParameterException("없는 아이디 입니다.");
 		}
 	}
 
@@ -61,7 +63,7 @@ public class UserService {
 	private void validatePassword(String inputPassword, String storedPassword) {
 		// if(!passwordEncoder.matches(inputPassword, storedPassword)){
 		if(!BCrypt.checkpw(inputPassword, storedPassword)){
-			throw new InvalidParameterException("비밀번호가 틀렸습니다.");
+			throw new InvalidLoginParameterException("비밀번호가 틀렸습니다.");
 		}
 	}
 
