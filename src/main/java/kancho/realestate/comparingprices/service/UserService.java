@@ -1,6 +1,5 @@
 package kancho.realestate.comparingprices.service;
 
-import java.security.InvalidParameterException;
 import java.util.Optional;
 
 import org.mindrot.jbcrypt.BCrypt;
@@ -8,7 +7,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import kancho.realestate.comparingprices.domain.dto.request.UserDto;
+import kancho.realestate.comparingprices.domain.dto.request.RequestUserDto;
 import kancho.realestate.comparingprices.domain.model.User;
 import kancho.realestate.comparingprices.exception.DuplicateUserAccountException;
 import kancho.realestate.comparingprices.exception.InvalidLoginParameterException;
@@ -24,7 +23,7 @@ public class UserService {
 	private final UserMapper userMapper;
 
 	@Transactional
-	public void createUser(UserDto requestUser) {
+	public void createUser(RequestUserDto requestUser) {
 		// String encryptedPw=passwordEncoder.encode(requestUser.getPassword());
 		validateNotExistUser(getUserById(requestUser.getId()));
 		String encryptedPw= BCrypt.hashpw(requestUser.getPassword(),BCrypt.gensalt());
@@ -39,7 +38,7 @@ public class UserService {
 	}
 
 
-	public User login(UserDto requestUser){
+	public User login(RequestUserDto requestUser){
 		Optional<User> foundUser= getUserById(requestUser.getId());
 		validateExistUser(foundUser);
 		User user = foundUser.get();

@@ -7,6 +7,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.HashMap;
 
+import javax.servlet.http.Cookie;
+
 import org.assertj.core.api.Assertions;
 import org.json.JSONObject;
 import org.junit.jupiter.api.AfterEach;
@@ -16,8 +18,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
+import kancho.realestate.comparingprices.exception.DuplicateLoginException;
 import kancho.realestate.comparingprices.exception.DuplicateUserAccountException;
 import kancho.realestate.comparingprices.exception.InvalidLoginParameterException;
 
@@ -138,5 +142,39 @@ class UserControllerTest {
 			.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isBadRequest())
 			.andExpect(result -> assertThat(result.getResolvedException()).isInstanceOf(InvalidLoginParameterException.class));
+	}
+
+	@Test
+	@Transactional
+	public void login_로그인한_사람이_같은_아이디로_로그인요청() throws Exception {
+
+		HashMap<String,String> signupBodyContent = new HashMap<>();
+		signupBodyContent.put("id","jerry");
+		signupBodyContent.put("password","1234");
+		String serializedSignupBody = String.valueOf(new JSONObject(signupBodyContent));
+
+		mockMvc.perform(post("/join")
+			.content(serializedSignupBody)
+			.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isCreated());
+
+		HashMap<String,String> loginBodyContent = new HashMap<>();
+		loginBodyContent.put("id","jerry");
+		loginBodyContent.put("password","1234");
+		String serializedLoginBody = String.valueOf(new JSONObject(loginBodyContent));
+
+		MvcResult mvcResult =mockMvc.perform(post("/login")
+			.content(serializedLoginBody)
+			.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isCreated())
+			.andReturn();
+
+		Cookie cookie = mvcResult.getResponse().getCookie("SESSION");
+		mockMvc.perform(post("/login")
+			.content(serializedLoginBody)
+			.cookie(cookie)
+			.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isBadRequest())
+			.andExpect(result -> assertThat(result.getResolvedException()).isInstanceOf(DuplicateLoginException.class));
 	}
 }
