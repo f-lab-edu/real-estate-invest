@@ -14,11 +14,13 @@ import javax.servlet.http.Cookie;
 import org.assertj.core.api.Assertions;
 import org.json.JSONObject;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.event.annotation.BeforeTestClass;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,11 +43,7 @@ class UserControllerTest {
 	@Test
 	@Transactional
 	public void join_회원가입_성공() throws Exception {
-
-		HashMap<String,String> bodyContent = new HashMap<>();
-		bodyContent.put("id","jerry");
-		bodyContent.put("password","1234");
-		String serializedBody = String.valueOf(new JSONObject(bodyContent));
+		String serializedBody = serailizedTesterBody("jerry","1234");
 
 		mockMvc.perform(post("/join")
 			.content(serializedBody)
@@ -53,14 +51,18 @@ class UserControllerTest {
 			.andExpect(status().isCreated());
 	}
 
+	public String serailizedTesterBody(String id, String password) {
+		HashMap<String, String> bodyContent = new HashMap<>();
+		bodyContent.put("id", id);
+		bodyContent.put("password", password);
+		return String.valueOf(new JSONObject(bodyContent));
+	}
+
 	@Test
 	@Transactional
 	public void join_회원가입_중복_오류() throws Exception {
 
-		HashMap<String,String> bodyContent = new HashMap<>();
-		bodyContent.put("id","jerry");
-		bodyContent.put("password","1234");
-		String serializedBody = String.valueOf(new JSONObject(bodyContent));
+		String serializedBody = serailizedTesterBody("jerry","1234");
 
 		mockMvc.perform(post("/join")
 			.content(serializedBody)
@@ -71,17 +73,15 @@ class UserControllerTest {
 			.content(serializedBody)
 			.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isBadRequest())
-			.andExpect(result -> assertThat(result.getResolvedException()).isInstanceOf(DuplicateUserAccountException.class));
+			.andExpect(
+				result -> assertThat(result.getResolvedException()).isInstanceOf(DuplicateUserAccountException.class));
 	}
 
 	@Test
 	@Transactional
 	public void login_로그인_성공() throws Exception {
 
-		HashMap<String,String> bodyContent = new HashMap<>();
-		bodyContent.put("id","jerry");
-		bodyContent.put("password","1234");
-		String serializedBody = String.valueOf(new JSONObject(bodyContent));
+		String serializedBody = serailizedTesterBody("jerry","1234");
 
 		mockMvc.perform(post("/join")
 			.content(serializedBody)
@@ -98,134 +98,113 @@ class UserControllerTest {
 	@Transactional
 	public void login_로그인_없는계정_오류() throws Exception {
 
-		HashMap<String,String> signupBodyContent = new HashMap<>();
-		signupBodyContent.put("id","jerry");
-		signupBodyContent.put("password","1234");
-		String serializedSignupBody = String.valueOf(new JSONObject(signupBodyContent));
+		String serializedBody = serailizedTesterBody("jerry","1234");
 
 		mockMvc.perform(post("/join")
-			.content(serializedSignupBody)
+			.content(serializedBody)
 			.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isCreated());
 
-		HashMap<String,String> loginBodyContent = new HashMap<>();
-		loginBodyContent.put("id","jerry9");
-		loginBodyContent.put("password","1234");
-		String serializedLoginBody = String.valueOf(new JSONObject(loginBodyContent));
+		String serializedBodyLogin = serailizedTesterBody("jerry9","1234");
 
 		mockMvc.perform(post("/login")
-			.content(serializedLoginBody)
+			.content(serializedBodyLogin)
 			.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isBadRequest())
-			.andExpect(result -> assertThat(result.getResolvedException()).isInstanceOf(InvalidLoginParameterException.class));
+			.andExpect(
+				result -> assertThat(result.getResolvedException()).isInstanceOf(InvalidLoginParameterException.class));
 	}
 
 	@Test
 	@Transactional
 	public void login_로그인_비밀번호_오류() throws Exception {
 
-		HashMap<String,String> signupBodyContent = new HashMap<>();
-		signupBodyContent.put("id","jerry");
-		signupBodyContent.put("password","1234");
-		String serializedSignupBody = String.valueOf(new JSONObject(signupBodyContent));
+		String serializedBody = serailizedTesterBody("jerry","1234");
 
 		mockMvc.perform(post("/join")
-			.content(serializedSignupBody)
+			.content(serializedBody)
 			.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isCreated());
 
-		HashMap<String,String> loginBodyContent = new HashMap<>();
-		loginBodyContent.put("id","jerry");
-		loginBodyContent.put("password","123");
-		String serializedLoginBody = String.valueOf(new JSONObject(loginBodyContent));
+		String serializedBodyLogin = serailizedTesterBody("jerry9","123");
 
 		mockMvc.perform(post("/login")
-			.content(serializedLoginBody)
+			.content(serializedBodyLogin)
 			.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isBadRequest())
-			.andExpect(result -> assertThat(result.getResolvedException()).isInstanceOf(InvalidLoginParameterException.class));
+			.andExpect(
+				result -> assertThat(result.getResolvedException()).isInstanceOf(InvalidLoginParameterException.class));
 	}
 
 	@Test
 	@Transactional
 	public void login_로그인한_사람이_같은_아이디로_로그인요청() throws Exception {
 
-		HashMap<String,String> signupBodyContent = new HashMap<>();
-		signupBodyContent.put("id","jerry");
-		signupBodyContent.put("password","1234");
-		String serializedSignupBody = String.valueOf(new JSONObject(signupBodyContent));
+		String serializedBody = serailizedTesterBody("jerry","1234");
 
 		mockMvc.perform(post("/join")
-			.content(serializedSignupBody)
+			.content(serializedBody)
 			.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isCreated());
 
-		HashMap<String,String> loginBodyContent = new HashMap<>();
-		loginBodyContent.put("id","jerry");
-		loginBodyContent.put("password","1234");
-		String serializedLoginBody = String.valueOf(new JSONObject(loginBodyContent));
-
-		MvcResult mvcResult =mockMvc.perform(post("/login")
-			.content(serializedLoginBody)
+		MvcResult mvcResult = mockMvc.perform(post("/login")
+			.content(serializedBody)
 			.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isCreated())
 			.andReturn();
 
 		Cookie cookie = mvcResult.getResponse().getCookie("SESSION");
+
 		mockMvc.perform(post("/login")
-			.content(serializedLoginBody)
+			.content(serializedBody)
 			.cookie(cookie)
 			.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isBadRequest())
 			.andExpect(result -> assertThat(result.getResolvedException()).isInstanceOf(DuplicateLoginException.class));
 	}
 
-
 	@Test
 	@Transactional
 	public void login_로그인한_사람이_다른_아이디로_로그인요청() throws Exception {
 
-		HashMap<String,String> signupBodyContent = new HashMap<>();
-		signupBodyContent.put("id","jerry");
-		signupBodyContent.put("password","1234");
-		String serializedBody1 = String.valueOf(new JSONObject(signupBodyContent));
+		String serializedBodyOne = serailizedTesterBody("jerry","1234");
 
+		// 회원가입
 		mockMvc.perform(post("/join")
-			.content(serializedBody1)
+			.content(serializedBodyOne)
 			.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isCreated());
 
-		HashMap<String,String> signupBodyContent2 = new HashMap<>();
-		signupBodyContent.put("id","adam");
-		signupBodyContent.put("password","13523");
-		String serializedBody2 = String.valueOf(new JSONObject(signupBodyContent));
+		String serializedBodyOther = serailizedTesterBody("adam","13523");
 
 		mockMvc.perform(post("/join")
-			.content(serializedBody2)
+			.content(serializedBodyOther)
 			.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isCreated());
 
-		MvcResult mvcResult =mockMvc.perform(post("/login")
-			.content(serializedBody1)
+		// 로그인
+		MvcResult loginResult = mockMvc.perform(post("/login")
+			.content(serializedBodyOne)
 			.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isCreated())
 			.andReturn();
 
-		Cookie cookie = mvcResult.getResponse().getCookie("SESSION");
+		Cookie cookie = loginResult.getResponse().getCookie("SESSION");
 
-
-		MvcResult mvcResult2 = mockMvc.perform(post("/login")
-			.content(serializedBody2)
+		// 로그인해서 세션이 있는 상태에서 다른 아이디로 로그인
+		MvcResult loginResultOther = mockMvc.perform(post("/login")
+			.content(serializedBodyOther)
 			.cookie(cookie)
 			.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isCreated())
 			.andReturn();
 
-		Cookie cookie2 = mvcResult2.getResponse().getCookie("SESSION");
+		Cookie cookieOther = loginResultOther.getResponse().getCookie("SESSION");
 
 		// 세션키 바뀜 검증
-		assertThat(cookie).isNotEqualTo(cookie2);
+		assertThat(cookie).isNotEqualTo(cookieOther);
 
+		// 세션키 없어서 인증 오류 확인
 		mockMvc.perform(get("/my-estate/test")
 			.cookie(cookie)
 			.contentType(MediaType.APPLICATION_JSON))
@@ -237,31 +216,25 @@ class UserControllerTest {
 	@Transactional
 	public void join_login_로그인_상태에서_회원가입_요청_예외처리() throws Exception {
 
-		HashMap<String,String> signupBodyContent = new HashMap<>();
-		signupBodyContent.put("id","jerry");
-		signupBodyContent.put("password","1234");
-		String serializedBody1 = String.valueOf(new JSONObject(signupBodyContent));
+		String serializedBodyOne = serailizedTesterBody("jerry","1234");
 
 		mockMvc.perform(post("/join")
-			.content(serializedBody1)
+			.content(serializedBodyOne)
 			.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isCreated());
 
-		MvcResult mvcResult =mockMvc.perform(post("/login")
-			.content(serializedBody1)
+		MvcResult mvcResult = mockMvc.perform(post("/login")
+			.content(serializedBodyOne)
 			.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isCreated())
 			.andReturn();
 
 		Cookie cookie = mvcResult.getResponse().getCookie("SESSION");
 
-		HashMap<String,String> signupBodyContent2 = new HashMap<>();
-		signupBodyContent.put("id","adam");
-		signupBodyContent.put("password","13523");
-		String serializedBody2 = String.valueOf(new JSONObject(signupBodyContent));
+		String serializedBodyOther = serailizedTesterBody("adam","13523");
 
 		mockMvc.perform(post("/join")
-			.content(serializedBody2)
+			.content(serializedBodyOther)
 			.cookie(cookie)
 			.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isBadRequest())
