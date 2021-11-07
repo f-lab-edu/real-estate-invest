@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.HashMap;
 
 import javax.naming.AuthenticationException;
+import javax.servlet.UnavailableException;
 import javax.servlet.http.Cookie;
 
 import org.assertj.core.api.Assertions;
@@ -225,7 +226,6 @@ class UserControllerTest {
 		// 세션키 바뀜 검증
 		assertThat(cookie).isNotEqualTo(cookie2);
 
-		/* TODO: 기존 세션 만료 로직 테스트 */
 		mockMvc.perform(get("/my-estate/test")
 			.cookie(cookie)
 			.contentType(MediaType.APPLICATION_JSON))
@@ -233,5 +233,38 @@ class UserControllerTest {
 			.andExpect(result -> assertThat(result.getResolvedException()).isInstanceOf(AuthenticationException.class));
 	}
 
-	/* TODO: 로그인 상태에서 회원가입 요청 예외처리 테스트 */
+	@Test
+	@Transactional
+	public void join_login_로그인_상태에서_회원가입_요청_예외처리() throws Exception {
+
+		HashMap<String,String> signupBodyContent = new HashMap<>();
+		signupBodyContent.put("id","jerry");
+		signupBodyContent.put("password","1234");
+		String serializedBody1 = String.valueOf(new JSONObject(signupBodyContent));
+
+		mockMvc.perform(post("/join")
+			.content(serializedBody1)
+			.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isCreated());
+
+		MvcResult mvcResult =mockMvc.perform(post("/login")
+			.content(serializedBody1)
+			.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isCreated())
+			.andReturn();
+
+		Cookie cookie = mvcResult.getResponse().getCookie("SESSION");
+
+		HashMap<String,String> signupBodyContent2 = new HashMap<>();
+		signupBodyContent.put("id","adam");
+		signupBodyContent.put("password","13523");
+		String serializedBody2 = String.valueOf(new JSONObject(signupBodyContent));
+
+		mockMvc.perform(post("/join")
+			.content(serializedBody2)
+			.cookie(cookie)
+			.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isBadRequest())
+			.andExpect(result -> assertThat(result.getResolvedException()).isInstanceOf(IllegalStateException.class));
+	}
 }

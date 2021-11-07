@@ -1,5 +1,6 @@
 package kancho.realestate.comparingprices.controller;
 
+import javax.servlet.UnavailableException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -22,39 +23,48 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 
 	private final UserService userService;
-	public static final String SESSION_KEY="userNo";
+	public static final String SESSION_KEY = "userNo";
 
 	@PostMapping(value = "/join", produces = "application/json; charset=utf8")
-	public ResponseEntity join(@RequestBody RequestUserDto requestUserDto){
+	public ResponseEntity join(HttpServletRequest request, @RequestBody RequestUserDto requestUserDto) {
+		HttpSession session = request.getSession();
+		if(hasSessionKey(session)){
+			throw new IllegalStateException("로그아웃 먼저 후 회원가입 해주세요.");
+		}
+
 		userService.createUser(requestUserDto);
-		return new ResponseEntity<>(new SuccessReponse<>("회원가입 완료",""), HttpStatus.CREATED);
+		return new ResponseEntity<>(new SuccessReponse<>("회원가입 완료", ""), HttpStatus.CREATED);
 	}
-//HttpSession session,
-	@PostMapping(value ="/login", produces = "application/json; charset=utf8")
-	public ResponseEntity login(HttpServletRequest request, @RequestBody RequestUserDto requestUserDto){
+
+	@PostMapping(value = "/login", produces = "application/json; charset=utf8")
+	public ResponseEntity login(HttpServletRequest request, @RequestBody RequestUserDto requestUserDto) {
 		User loginUser = userService.login(requestUserDto);
 		HttpSession session = request.getSession();
-		if(session.getAttribute(SESSION_KEY)!=null){
+
+		if(hasSessionKey(session)){
 			validateDuplicateLogin((SessionUserVO)session.getAttribute(SESSION_KEY), requestUserDto);
 			expirePreLoginSession(session);
 		}
 
 		/* User 다른 정보는 제외하고(특히 password) userNo와 id만 담은 SessionUserDto 사용 */
-		SessionUserVO userDto = new SessionUserVO(loginUser.getUserNo(),loginUser.getId());
+		SessionUserVO userDto = new SessionUserVO(loginUser.getUserNo(), loginUser.getId());
 		session = request.getSession();
-		session.setAttribute(SESSION_KEY,userDto);
+		session.setAttribute(SESSION_KEY, userDto);
 
-		return new ResponseEntity<>(new SuccessReponse<>("로그인 성공",""), HttpStatus.CREATED);
+		return new ResponseEntity<>(new SuccessReponse<>("로그인 성공", ""), HttpStatus.CREATED);
+	}
+
+	private boolean hasSessionKey(HttpSession session) {
+		return session.getAttribute(SESSION_KEY) != null;
+	}
+
+	private void validateDuplicateLogin(SessionUserVO userInSession, RequestUserDto requestUserDto) {
+		if (userInSession.getId().equals(requestUserDto.getId())) {
+			throw new DuplicateLoginException("이미 로그인한 상태입니다.");
+		}
 	}
 
 	private void expirePreLoginSession(HttpSession session) {
 		session.invalidate();
-		/* TODO: 기존 세션 만료 로직 */
-	}
-
-	private void validateDuplicateLogin(SessionUserVO userInSession, RequestUserDto requestUserDto) {
-		if(userInSession.getId().equals(requestUserDto.getId())){
-			throw new DuplicateLoginException("이미 로그인한 상태입니다.");
-		}
 	}
 }
