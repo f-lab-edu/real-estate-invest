@@ -8,10 +8,8 @@ import lombok.Setter;
 public class ExceptionResponse {
 
     private String message;
-    private String errorCode;
 
-    public ExceptionResponse(String message, String errorCode) {
+    public ExceptionResponse(String message) {
         this.message = message;
-        this.errorCode = errorCode;
     }
 }

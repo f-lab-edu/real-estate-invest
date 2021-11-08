@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import kancho.realestate.comparingprices.domain.dto.request.RequestUserDto;
 import kancho.realestate.comparingprices.domain.model.User;
 import kancho.realestate.comparingprices.exception.DuplicateUserAccountException;
+import kancho.realestate.comparingprices.exception.IdNotExistedException;
 import kancho.realestate.comparingprices.exception.InvalidLoginParameterException;
 import kancho.realestate.comparingprices.repository.UserMapper;
 
@@ -68,7 +69,7 @@ class UserServiceTest {
 		RequestUserDto requestLoginUserDto = new RequestUserDto(wrongId, password);
 		Assertions.assertThatThrownBy(()->{
 			userService.login(requestLoginUserDto);
-		}).isInstanceOf(InvalidLoginParameterException.class);
+		}).isInstanceOf(IdNotExistedException.class);
 	}
 
 	@Transactional

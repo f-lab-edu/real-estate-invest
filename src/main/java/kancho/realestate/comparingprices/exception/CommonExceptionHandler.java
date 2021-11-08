@@ -19,7 +19,7 @@ public class CommonExceptionHandler {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity handleDuplicateUserAccountException(HttpServletRequest request, Exception ex) {
 		System.out.println(ex.getMessage());
-		return new ResponseEntity<>(new ExceptionResponse(ex.getMessage(), ErrorCode.DUPLICATE_USER_ACCOUNT.getCode()),
+		return new ResponseEntity<>(new ExceptionResponse(ex.getMessage()),
 			getHeader(), HttpStatus.BAD_REQUEST);
 	}
 
@@ -27,7 +27,7 @@ public class CommonExceptionHandler {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity handleInvalidLoginParameterException(HttpServletRequest request, Exception ex) {
 		System.out.println(ex.getMessage());
-		return new ResponseEntity<>(new ExceptionResponse(ex.getMessage(), ErrorCode.DUPLICATE_USER_ACCOUNT.getCode()),
+		return new ResponseEntity<>(new ExceptionResponse(ex.getMessage()),
 			getHeader(), HttpStatus.BAD_REQUEST);
 	}
 
@@ -35,7 +35,7 @@ public class CommonExceptionHandler {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity handleDuplicateLoginException(HttpServletRequest request, Exception ex) {
 		System.out.println(ex.getMessage());
-		return new ResponseEntity<>(new ExceptionResponse(ex.getMessage(), ErrorCode.DUPLICATE_USER_ACCOUNT.getCode()),
+		return new ResponseEntity<>(new ExceptionResponse(ex.getMessage()),
 			getHeader(), HttpStatus.BAD_REQUEST);
 	}
 
@@ -43,7 +43,7 @@ public class CommonExceptionHandler {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity handleAuthenticationException(HttpServletRequest request, Exception ex) {
 		System.out.println(ex.getMessage());
-		return new ResponseEntity<>(new ExceptionResponse(ex.getMessage(), ErrorCode.DUPLICATE_USER_ACCOUNT.getCode()),
+		return new ResponseEntity<>(new ExceptionResponse(ex.getMessage()),
 			getHeader(), HttpStatus.BAD_REQUEST);
 	}
 
@@ -51,7 +51,23 @@ public class CommonExceptionHandler {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity handleIllegalStateException(HttpServletRequest request, Exception ex) {
 		System.out.println(ex.getMessage());
-		return new ResponseEntity<>(new ExceptionResponse(ex.getMessage(), ErrorCode.DUPLICATE_USER_ACCOUNT.getCode()),
+		return new ResponseEntity<>(new ExceptionResponse(ex.getMessage()),
+			getHeader(), HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(IdNotExistedException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ResponseEntity handleIdNotExistedException(HttpServletRequest request, Exception ex) {
+		System.out.println(ex.getMessage());
+		return new ResponseEntity<>(new ExceptionResponse(ex.getMessage()),
+			getHeader(), HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(PasswordWrongException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ResponseEntity handlePasswordWrongException(HttpServletRequest request, Exception ex) {
+		System.out.println(ex.getMessage());
+		return new ResponseEntity<>(new ExceptionResponse(ex.getMessage()),
 			getHeader(), HttpStatus.BAD_REQUEST);
 	}
 

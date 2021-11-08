@@ -1,6 +1,5 @@
 package kancho.realestate.comparingprices.controller;
 
-import javax.servlet.UnavailableException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import kancho.realestate.comparingprices.domain.dto.SessionUserVO;
 import kancho.realestate.comparingprices.domain.dto.request.RequestUserDto;
-import kancho.realestate.comparingprices.domain.dto.response.SuccessReponse;
+import kancho.realestate.comparingprices.domain.dto.response.SuccessReponseDto;
 import kancho.realestate.comparingprices.domain.model.User;
 import kancho.realestate.comparingprices.exception.DuplicateLoginException;
 import kancho.realestate.comparingprices.service.UserService;
@@ -31,9 +30,8 @@ public class UserController {
 		if(hasSessionKey(session)){
 			throw new IllegalStateException("로그아웃 먼저 후 회원가입 해주세요.");
 		}
-
 		userService.createUser(requestUserDto);
-		return new ResponseEntity<>(new SuccessReponse<>("회원가입 완료", ""), HttpStatus.CREATED);
+		return new ResponseEntity<>(new SuccessReponseDto<>("회원가입 완료", ""), HttpStatus.CREATED);
 	}
 
 	@PostMapping(value = "/login", produces = "application/json; charset=utf8")
@@ -51,7 +49,7 @@ public class UserController {
 		session = request.getSession();
 		session.setAttribute(SESSION_KEY, userDto);
 
-		return new ResponseEntity<>(new SuccessReponse<>("로그인 성공", ""), HttpStatus.CREATED);
+		return new ResponseEntity<>(new SuccessReponseDto<>("로그인 성공", ""), HttpStatus.CREATED);
 	}
 
 	private boolean hasSessionKey(HttpSession session) {

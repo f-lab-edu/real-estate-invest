@@ -26,7 +26,7 @@ class UserMapperTest {
 	@Transactional
 	@CsvSource(value = {"tom2542:23lg354232"}, delimiter = ':')
 	void 사용자_등록(String id, String password) {
-		User user = User.createUser(id,password);
+		User user = new User(id,password);
 		userMapper.insertUser(user);
 		Optional<User> createdUser = userMapper.selectUserById(id);
 		Assertions.assertThat(createdUser.isPresent()).isEqualTo(true);

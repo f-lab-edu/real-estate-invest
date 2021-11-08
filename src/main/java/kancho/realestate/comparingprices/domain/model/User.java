@@ -1,16 +1,15 @@
 package kancho.realestate.comparingprices.domain.model;
 
 import java.time.LocalDateTime;
-
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
+// @Builder
 @Getter
 @ToString
 @EqualsAndHashCode
-@AllArgsConstructor
 public class User {
 	private Long userNo;
 	private String id;
@@ -19,11 +18,7 @@ public class User {
 	private LocalDateTime lastLoginDttm;
 	private LocalDateTime deleteDttm;
 
-	public static User createUser(String id, String password) {
-		return new User(id, password);
-	}
-
-	private User(String id, String password) {
+	public User(String id, String password) {
 		validateId(id);
 		validatePassword(password);
 		this.id = id;

@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import kancho.realestate.comparingprices.exception.DuplicateLoginException;
 import kancho.realestate.comparingprices.exception.DuplicateUserAccountException;
+import kancho.realestate.comparingprices.exception.IdNotExistedException;
 import kancho.realestate.comparingprices.exception.InvalidLoginParameterException;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -112,7 +113,7 @@ class UserControllerTest {
 			.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isBadRequest())
 			.andExpect(
-				result -> assertThat(result.getResolvedException()).isInstanceOf(InvalidLoginParameterException.class));
+				result -> assertThat(result.getResolvedException()).isInstanceOf(IdNotExistedException.class));
 	}
 
 	@Test
@@ -133,7 +134,7 @@ class UserControllerTest {
 			.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isBadRequest())
 			.andExpect(
-				result -> assertThat(result.getResolvedException()).isInstanceOf(InvalidLoginParameterException.class));
+				result -> assertThat(result.getResolvedException()).isInstanceOf(IdNotExistedException.class));
 	}
 
 	@Test

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import kancho.realestate.comparingprices.domain.dto.request.RequestUserDto;
 import kancho.realestate.comparingprices.domain.model.User;
 import kancho.realestate.comparingprices.exception.DuplicateUserAccountException;
+import kancho.realestate.comparingprices.exception.IdNotExistedException;
 import kancho.realestate.comparingprices.exception.InvalidLoginParameterException;
 import kancho.realestate.comparingprices.repository.UserMapper;
 import lombok.RequiredArgsConstructor;
@@ -24,50 +25,40 @@ public class UserService {
 
 	@Transactional
 	public void createUser(RequestUserDto requestUser) {
-		// String encryptedPw=passwordEncoder.encode(requestUser.getPassword());
 		validateNotExistUser(getUserById(requestUser.getId()));
-		String encryptedPw= BCrypt.hashpw(requestUser.getPassword(),BCrypt.gensalt());
-		User user = User.createUser(requestUser.getId(),encryptedPw);
+		String encryptedPw = getEncryptedPassword(requestUser.getPassword());
+		User user = new User(requestUser.getId(), encryptedPw);
 		userMapper.insertUser(user);
 	}
 
+	public String getEncryptedPassword(String password) {
+		return BCrypt.hashpw(password, BCrypt.gensalt());
+	}
+
 	private void validateNotExistUser(Optional<User> foundUser) {
-		if(isExistUser(foundUser)){
+		if (isExistUser(foundUser)) {
 			throw new DuplicateUserAccountException("이미 사용중인 아이디입니다.");
 		}
 	}
 
-
-	public User login(RequestUserDto requestUser){
-		Optional<User> foundUser= getUserById(requestUser.getId());
-		validateExistUser(foundUser);
-		User user = foundUser.get();
-		validatePassword(requestUser.getPassword(), user.getPassword());
-		return user;
+	public User login(RequestUserDto requestUser) {
+		User foundUser = getUserById(requestUser.getId()).orElseThrow(() -> new IdNotExistedException());
+		validatePassword(requestUser.getPassword(), foundUser.getPassword());
+		return foundUser;
 	}
 
-	private void validateExistUser(Optional<User> foundUser) {
-		if(!isExistUser(foundUser)){
-			throw new InvalidLoginParameterException("없는 아이디 입니다.");
-		}
-	}
-
-	private boolean isExistUser(Optional<User> user){
-		if(user.isPresent()){
-			return true;
-		}
-		return false;
+	private boolean isExistUser(Optional<User> user) {
+		return user.isPresent();
 	}
 
 	private void validatePassword(String inputPassword, String storedPassword) {
-		// if(!passwordEncoder.matches(inputPassword, storedPassword)){
-		if(!BCrypt.checkpw(inputPassword, storedPassword)){
+		if (!BCrypt.checkpw(inputPassword, storedPassword)) {
 			throw new InvalidLoginParameterException("비밀번호가 틀렸습니다.");
 		}
 	}
 
-	public Optional<User> getUserById(String id){
-		Optional<User> foundUser= userMapper.selectUserById(id);
+	public Optional<User> getUserById(String id) {
+		Optional<User> foundUser = userMapper.selectUserById(id);
 		return foundUser;
 	}
 }
