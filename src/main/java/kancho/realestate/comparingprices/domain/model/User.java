@@ -20,7 +20,6 @@ public class User {
 
 	public User(String id, String password) {
 		validateId(id);
-		validatePassword(password);
 		this.id = id;
 		this.password = password;
 		this.joinDttm = LocalDateTime.now();
@@ -28,10 +27,6 @@ public class User {
 	}
 
 	private void validateId(String id) {
-
-	}
-
-	private void validatePassword(String password) {
 
 	}
 
