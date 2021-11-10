@@ -14,7 +14,7 @@ import kancho.realestate.comparingprices.domain.dto.request.RequestUserDto;
 import kancho.realestate.comparingprices.domain.model.User;
 import kancho.realestate.comparingprices.exception.DuplicateUserAccountException;
 import kancho.realestate.comparingprices.exception.IdNotExistedException;
-import kancho.realestate.comparingprices.exception.InvalidLoginParameterException;
+import kancho.realestate.comparingprices.exception.PasswordWrongException;
 import kancho.realestate.comparingprices.repository.UserMapper;
 
 @SpringBootTest
@@ -55,7 +55,7 @@ class UserServiceTest {
 		RequestUserDto requestLoginUserDto = new RequestUserDto(id, wrongPassword);
 		Assertions.assertThatThrownBy(()->{
 			userService.login(requestLoginUserDto);
-		}).isInstanceOf(InvalidLoginParameterException.class);
+		}).isInstanceOf(PasswordWrongException.class);
 
 	}
 
