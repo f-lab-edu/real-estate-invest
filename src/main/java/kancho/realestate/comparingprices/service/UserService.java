@@ -12,6 +12,7 @@ import kancho.realestate.comparingprices.domain.model.User;
 import kancho.realestate.comparingprices.exception.DuplicateUserAccountException;
 import kancho.realestate.comparingprices.exception.IdNotExistedException;
 import kancho.realestate.comparingprices.exception.InvalidLoginParameterException;
+import kancho.realestate.comparingprices.exception.PasswordWrongException;
 import kancho.realestate.comparingprices.repository.UserMapper;
 import lombok.RequiredArgsConstructor;
 
@@ -53,7 +54,7 @@ public class UserService {
 
 	private void validatePassword(String inputPassword, String storedPassword) {
 		if (!BCrypt.checkpw(inputPassword, storedPassword)) {
-			throw new InvalidLoginParameterException("비밀번호가 틀렸습니다.");
+			throw new PasswordWrongException();
 		}
 	}
 
