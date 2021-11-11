@@ -48,8 +48,7 @@ class UserControllerTest {
 	public void join_회원가입_중복_오류() throws Exception {
 		String serializedUser = serailizedTesterBody("tom ford", "12345678");
 		postSuccessTest("/join", serializedUser, status().isCreated());
-		postExceptionTest("/join", serializedUser, status().isBadRequest(),
-			result -> assertThat(result.getResolvedException()).isInstanceOf(DuplicateUserAccountException.class));
+		postExceptionTest("/join", serializedUser, status().isBadRequest(),DuplicateUserAccountException.class);
 	}
 
 	@Test
@@ -68,8 +67,7 @@ class UserControllerTest {
 		postSuccessTest("/join", serializedUser1, status().isCreated());
 
 		String serializedUser2 = serailizedTesterBody("tom ford9", "12345678");
-		postExceptionTest("/login", serializedUser2, status().isBadRequest(),
-			result -> assertThat(result.getResolvedException()).isInstanceOf(IdNotExistedException.class));
+		postExceptionTest("/login", serializedUser2, status().isBadRequest(),IdNotExistedException.class);
 	}
 
 	@Test
@@ -79,8 +77,7 @@ class UserControllerTest {
 		postSuccessTest("/join", serializedUser1, status().isCreated());
 
 		String serializedInvalidPasswordUser = serailizedTesterBody("tom ford", "a232fds");
-		postExceptionTest("/login", serializedInvalidPasswordUser, status().isBadRequest(),
-			result -> assertThat(result.getResolvedException()).isInstanceOf(PasswordWrongException.class));
+		postExceptionTest("/login", serializedInvalidPasswordUser, status().isBadRequest(),PasswordWrongException.class);
 	}
 
 	@Test
@@ -90,8 +87,7 @@ class UserControllerTest {
 		postSuccessTest("/join", serializedUser1, status().isCreated());
 		MvcResult loginResult = postSuccessTest("/login", serializedUser1, status().isCreated());
 
-		postExceptionTest("/login", serializedUser1, status().isBadRequest(),
-			result -> assertThat(result.getResolvedException()).isInstanceOf(DuplicateLoginException.class),
+		postExceptionTest("/login", serializedUser1, status().isBadRequest(),DuplicateLoginException.class,
 			loginResult.getResponse().getCookie("SESSION"));
 	}
 
@@ -114,9 +110,7 @@ class UserControllerTest {
 		// 세션키 바뀜 검증
 		assertThat(user1Cookie).isNotEqualTo(user2Cookie);
 
-		getExceptionTest("/my-estate/test", status().isBadRequest(),
-			result -> assertThat(result.getResolvedException()).isInstanceOf(AuthenticationException.class),
-			user1Cookie);
+		getExceptionTest("/my-estate/test", status().isBadRequest(),AuthenticationException.class,	user1Cookie);
 	}
 
 	@Test
@@ -129,8 +123,8 @@ class UserControllerTest {
 		Cookie user1Cookie = loginResult.getResponse().getCookie("SESSION");
 
 		String serializedUser2 = serailizedTesterBody("adam smith", "asd23121238");
-		postExceptionTest("/join", serializedUser2, status().isBadRequest(),
-			result -> assertThat(result.getResolvedException()).isInstanceOf(IllegalStateException.class),user1Cookie);
+		postExceptionTest("/join", serializedUser2, status().isBadRequest(),IllegalStateException.class
+			,user1Cookie);
 	}
 
 	public MvcResult postSuccessTest(String path, String content, ResultMatcher resultMatcher) throws Exception {
@@ -152,31 +146,31 @@ class UserControllerTest {
 	}
 
 	public void postExceptionTest(String path, String content, ResultMatcher resultStatus,
-		ResultMatcher resultException) throws Exception {
+		Class exceptionClass) throws Exception {
 		mockMvc.perform(post(path)
 			.content(content)
 			.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(resultStatus)
-			.andExpect(resultException);
+			.andExpect(result -> assertThat(result.getResolvedException()).isInstanceOf(exceptionClass));
 	}
 
 	public void postExceptionTest(String path, String content, ResultMatcher resultStatus,
-		ResultMatcher resultException, Cookie cookie) throws Exception {
+		Class exceptionClass, Cookie cookie) throws Exception {
 		mockMvc.perform(post(path)
 			.content(content)
 			.cookie(cookie)
 			.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(resultStatus)
-			.andExpect(resultException);
+			.andExpect(result -> assertThat(result.getResolvedException()).isInstanceOf(exceptionClass));
 	}
 
 	public void getExceptionTest(String path, ResultMatcher resultStatus,
-		ResultMatcher resultException, Cookie cookie) throws Exception {
+		Class exceptionClass, Cookie cookie) throws Exception {
 		mockMvc.perform(get(path)
 			.cookie(cookie)
 			.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(resultStatus)
-			.andExpect(resultException);
+			.andExpect(result -> assertThat(result.getResolvedException()).isInstanceOf(exceptionClass));
 	}
 
 	public String serailizedTesterBody(String id, String password) {
