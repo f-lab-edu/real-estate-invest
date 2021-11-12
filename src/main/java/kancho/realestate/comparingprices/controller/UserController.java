@@ -5,6 +5,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,6 +51,11 @@ public class UserController {
 		session.setAttribute(SESSION_KEY, userDto);
 
 		return new ResponseEntity<>(new SuccessReponseDto<>("로그인 성공", ""), HttpStatus.CREATED);
+	}
+
+	@GetMapping(value = "/health-check", produces = "application/json; charset=utf8")
+	public ResponseEntity test(){
+		return new ResponseEntity<>(new SuccessReponseDto<>("health-check",""), HttpStatus.OK);
 	}
 
 	private boolean hasSessionKey(HttpSession session) {

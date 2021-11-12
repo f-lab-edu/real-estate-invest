@@ -7,7 +7,7 @@
 
     <insert id="insertUser" parameterType="User" >
         insert
-        into User
+        into user
         ( id
         ,password
         ,join_dttm
@@ -29,13 +29,13 @@
              ,join_dttm
              ,last_login_dttm
              ,delete_dttm
-        from User
+        from user
         where id=#{id}
     </select>
 
     <delete id="deleteAll">
         delete
-        from User
+        from user
     </delete>
 
 </mapper>
