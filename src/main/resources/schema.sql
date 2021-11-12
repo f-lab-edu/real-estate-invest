@@ -1,3 +1,5 @@
+drop table if exists user;
+
 create table if not exists user (
       user_no bigint not null auto_increment,
       id varchar(20) unique not null,
