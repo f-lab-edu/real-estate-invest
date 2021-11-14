@@ -1,19 +1,16 @@
 package kancho.realestate.utils;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import kancho.realestate.comparingprices.domain.model.Apartment;
-
+import kancho.realestate.utils.storeaprtment.ApartmentMapper;
 
 @SpringBootTest
 @Transactional
