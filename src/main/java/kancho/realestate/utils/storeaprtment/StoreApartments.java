@@ -3,10 +3,15 @@ package kancho.realestate.utils.storeaprtment;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -24,31 +29,32 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Component
-public class StoreApartments  implements ApplicationRunner {
+public class StoreApartments implements ApplicationRunner {
 
 	private final ApartmentMapper apartmentMapper;
-	//
-	// @PostConstruct
-	// public void init() {
-	//
-	// }
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 		System.out.println("start read data");
-		readDatas();
+		List<String> files = getFiles("realestate-prices");
+		files.stream().forEach(file->readDatas(file));
 		System.out.println("end read data");
 	}
 
-	public void readDatas() {
-		String filePath = "src/main/resources/realestate-prices/2020_11_10-2021_11_09.xlsx";
+	public List<String> getFiles(String dirPath) throws IOException {
+		return Files.list(Paths.get(dirPath))
+			.filter(path -> !Files.isDirectory(path))
+			.map(path -> path.getFileName().toString())
+			.collect(Collectors.toList());
+	}
+
+	public void readDatas(String filePath) {
 		List<Apartment> apartments = new ArrayList<>();
 		try (FileInputStream file = new FileInputStream(filePath)) {
 			XSSFWorkbook workbook = new XSSFWorkbook(file);
 			XSSFSheet sheet = workbook.getSheetAt(1); // 아파트 정보
-
 			Map<Integer, String> fieldInfo = setFieldInfo(sheet.getRow(0)); // 필드명
-			apartments = getApartments(fieldInfo,sheet);
+			apartments = getApartments(fieldInfo, sheet);
 		} catch (IOException exception) {
 			System.out.println("file io exception");
 			exception.printStackTrace();
@@ -72,8 +78,17 @@ public class StoreApartments  implements ApplicationRunner {
 
 	private void saveApartments(List<Apartment> apartments) {
 		for (Apartment apartment : apartments) {
-			apartmentMapper.save(apartment);
+			if (isNew(apartment)) {
+				apartmentMapper.save(apartment);
+			}
 		}
+	}
+
+	// 기 등록된 아파트 정보인지 확인
+	private boolean isNew(Apartment apartment) {
+		Optional<Apartment> findApartment = apartmentMapper.findByRegionalCodeAndDongAndJibunAndApartmentName(
+			apartment);
+		return findApartment.isEmpty();
 	}
 
 	private List<Apartment> getApartments(Map<Integer, String> fieldInfo, XSSFSheet sheet) {

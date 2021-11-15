@@ -1,6 +1,6 @@
 drop table if exists user;
-drop table if exists apartment_prices;
-drop table if exists apartment;
+# drop table if exists apartment_prices;
+# drop table if exists apartment;
 
 create table if not exists user (
     user_no bigint not null auto_increment,
@@ -25,8 +25,11 @@ create table if not exists apartment (
     build_year smallint,
     road_address varchar(50),
     delete_dttm datetime,
-    primary key (`id`)
+    primary key (`id`),
+    index idx_unique_apartment (regional_code,dong,jibun,apartment_name)
 );
+
+# alter table apartment add index idx_unique_apartment (regional_code,dong,jibun,apartment_name);
 
 create table if not exists apartment_prices (
      id bigint not null auto_increment,

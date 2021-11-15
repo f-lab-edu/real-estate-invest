@@ -48,4 +48,16 @@
         from apartment
     </select>
 
+    <select id="findByRegionalCodeAndDongAndJibunAndApartmentName" resultType="Apartment" parameterType="Apartment">
+        select
+              regional_code
+             , dong
+             , jibun
+             , apartment_name
+        from apartment
+        where regional_code= #{regionalCode}
+            and dong = #{dong}
+            and jibun = #{jibun}
+            and apartment_name =  #{apartmentName}
+    </select>
 </mapper>

@@ -13,7 +13,7 @@ public class Apartment {
 	private String regionalCode;
 	private String city;
 	private String gu;
-	private String	dong;
+	private String dong;
 	private String jibun;
 	private String bonbun;
 	private String bubun;
@@ -51,6 +51,13 @@ public class Apartment {
 		this.buildYear = buildYear;
 		this.roadAddress = roadAddress;
 		this.deleteDttm = deleteDttm;
+	}
+
+	public Apartment(String regionalCode, String dong, String jibun, String apartmentName) {
+		this.regionalCode = regionalCode;
+		this.dong = dong;
+		this.jibun = jibun;
+		this.apartmentName = apartmentName;
 	}
 
 	@Override
