@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Component
-public class StoreApartments implements ApplicationRunner {
+public class ApartmentInfoStore implements ApplicationRunner {
 
 	private final ApartmentMapper apartmentMapper;
 	private static final String DATA_PATH="realestate-prices";
