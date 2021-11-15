@@ -1,10 +1,8 @@
 package kancho.realestate.utils.storeaprtment;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,8 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import javax.annotation.PostConstruct;
 
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -32,33 +28,37 @@ import lombok.RequiredArgsConstructor;
 public class StoreApartments implements ApplicationRunner {
 
 	private final ApartmentMapper apartmentMapper;
+	private static final String DATA_PATH="realestate-prices";
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 		System.out.println("start read data");
-		List<String> files = getFiles("realestate-prices");
-		files.stream().forEach(file->readDatas(file));
+		List<String> files = getFiles(DATA_PATH);
+		for(String fileName : files){
+			readDatas(fileName);
+		}
 		System.out.println("end read data");
 	}
 
 	public List<String> getFiles(String dirPath) throws IOException {
 		return Files.list(Paths.get(dirPath))
-			.filter(path -> !Files.isDirectory(path))
 			.map(path -> path.getFileName().toString())
+			.filter(fileName -> fileName.endsWith("xlsx"))
 			.collect(Collectors.toList());
 	}
 
 	public void readDatas(String filePath) {
 		List<Apartment> apartments = new ArrayList<>();
-		try (FileInputStream file = new FileInputStream(filePath)) {
+		try (FileInputStream file = new FileInputStream(DATA_PATH+"/"+filePath)) {
+			System.out.println(DATA_PATH+"/"+filePath);
 			XSSFWorkbook workbook = new XSSFWorkbook(file);
 			XSSFSheet sheet = workbook.getSheetAt(1); // 아파트 정보
 			Map<Integer, String> fieldInfo = setFieldInfo(sheet.getRow(0)); // 필드명
 			apartments = getApartments(fieldInfo, sheet);
 		} catch (IOException exception) {
 			System.out.println("file io exception");
-			exception.printStackTrace();
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("unexpected exception");
 		}
 		saveApartments(apartments);
