@@ -15,6 +15,8 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import kancho.realestate.comparingprices.domain.model.Apartment;
@@ -22,12 +24,17 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Component
-public class StoreApartments {
+public class StoreApartments  implements ApplicationRunner {
 
 	private final ApartmentMapper apartmentMapper;
+	//
+	// @PostConstruct
+	// public void init() {
+	//
+	// }
 
-	@PostConstruct
-	public void init() {
+	@Override
+	public void run(ApplicationArguments args) throws Exception {
 		System.out.println("start read data");
 		readDatas();
 		System.out.println("end read data");

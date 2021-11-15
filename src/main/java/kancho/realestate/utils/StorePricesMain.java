@@ -1,12 +1,13 @@
 package kancho.realestate.utils;
 
-import org.springframework.boot.SpringApplication;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 
 @SpringBootApplication
 public class StorePricesMain {
 
 	public static void main(String[] args){
-		SpringApplication.run(StorePricesMain.class, args);
+		new SpringApplicationBuilder(StorePricesMain.class).web(WebApplicationType.NONE).run(args);
 	}
 }
