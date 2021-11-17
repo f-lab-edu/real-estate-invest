@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 @Component
 public class ApartmentInfoStore implements ApplicationRunner {
 
-	private final ApartmentMapper apartmentMapper;
+	private final ApartmentStoreMapper apartmentStoreMapper;
 	private static final String DATA_PATH="realestate-prices";
 
 	@Override
@@ -79,14 +79,14 @@ public class ApartmentInfoStore implements ApplicationRunner {
 	private void saveApartments(List<Apartment> apartments) {
 		for (Apartment apartment : apartments) {
 			if (isNew(apartment)) {
-				apartmentMapper.save(apartment);
+				apartmentStoreMapper.save(apartment);
 			}
 		}
 	}
 
 	// 기 등록된 아파트 정보인지 확인
 	private boolean isNew(Apartment apartment) {
-		Optional<Apartment> findApartment = apartmentMapper.findByRegionalCodeAndDongAndJibunAndApartmentName(
+		Optional<Apartment> findApartment = apartmentStoreMapper.findByRegionalCodeAndDongAndJibunAndApartmentName(
 			apartment);
 		return findApartment.isEmpty();
 	}

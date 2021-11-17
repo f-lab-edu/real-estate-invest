@@ -10,21 +10,21 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import kancho.realestate.comparingprices.domain.model.Apartment;
-import kancho.realestate.utils.storeaprtment.ApartmentMapper;
+import kancho.realestate.utils.storeaprtment.ApartmentStoreMapper;
 
 @SpringBootTest
 @Transactional
-class ApartmentMapperTest {
+class ApartmentStoreMapperTest {
 
 	@Autowired
-	private ApartmentMapper apartmentMapper;
+	private ApartmentStoreMapper apartmentStoreMapper;
 
 	@Test
 	public void insertApartment() {
 		Apartment apartment = new Apartment("11680", "서울특별시", "강남구", "개포동", "655-2",
 			"0655", "0002", "개포2차현대아파트(220)",1988, "언주로 103");
-		apartmentMapper.save(apartment);
-		List<Apartment> apartments = apartmentMapper.findAll();
+		apartmentStoreMapper.save(apartment);
+		List<Apartment> apartments = apartmentStoreMapper.findAll();
 		assertThat(apartments.size()).isEqualTo(1);
 	}
 }
