@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'kancho.realestate'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1-comparing-price_main'
 sourceCompatibility = '11'
 
 configurations {
@@ -37,4 +37,8 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+}
+
+springBoot {
+	mainClass = "kancho.realestate.comparingprices.ComparingpricesApplication"
 }
