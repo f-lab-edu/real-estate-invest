@@ -10,7 +10,7 @@ create table if not exists user (
     last_login_dttm datetime default current_timestamp not null,
     delete_dttm datetime,
     primary key (`user_no`)
-);
+)DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
 
 create table if not exists apartment (
     id bigint not null auto_increment,
@@ -27,7 +27,7 @@ create table if not exists apartment (
     delete_dttm datetime,
     primary key (`id`),
     index idx_unique_apartment (regional_code,dong,jibun,apartment_name)
-);
+)DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
 
 # alter table apartment add index idx_unique_apartment (regional_code,dong,jibun,apartment_name);
 
@@ -43,4 +43,4 @@ create table if not exists apartment_prices (
      delete_dttm datetime,
      primary key (`id`),
      foreign key (apartment_id) references apartment(id)
-);
+)DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
