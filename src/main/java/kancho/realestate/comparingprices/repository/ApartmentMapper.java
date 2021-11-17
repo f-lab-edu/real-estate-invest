@@ -1,4 +1,4 @@
-package kancho.realestate.utils.storeaprtment;
+package kancho.realestate.comparingprices.repository;
 
 import java.util.List;
 import java.util.Optional;
