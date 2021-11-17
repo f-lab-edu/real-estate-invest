@@ -40,6 +40,12 @@ public class ApartmentDto {
 			apartment.getApartmentName(), apartment.getBuildYear(), apartment.getRoadAddress());
 	}
 
+	public static Apartment toApartment(ApartmentDto apartmentDto) {
+		return new Apartment(apartmentDto.getId(),apartmentDto.getRegionalCode(), apartmentDto.getCity(), apartmentDto.getGu(),
+			apartmentDto.getDong(), apartmentDto.getJibun(), apartmentDto.getBonbun(), apartmentDto.getBubun(),
+			apartmentDto.getApartmentName(), apartmentDto.getBuildYear(), apartmentDto.getRoadAddress());
+	}
+
 	public long getId() {
 		return id;
 	}

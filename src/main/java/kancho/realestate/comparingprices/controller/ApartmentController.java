@@ -7,8 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,9 +29,15 @@ public class ApartmentController {
 	private final ApartmentService apartmentService;
 
 	@GetMapping(produces = "application/json; charset=utf8")
-	public ResponseEntity showApartments(HttpServletRequest request) {
+	public ResponseEntity showApartments() {
 		List<Apartment> apartments = apartmentService.findAllApartments();
 		List<ApartmentDto> apartmentDtos = apartments.stream().map(ApartmentDto::of).collect(Collectors.toList());
 		return new ResponseEntity<>(new SuccessReponseDto<>("아파트 목록 조회", apartmentDtos), HttpStatus.OK);
+	}
+
+	@PostMapping(produces = "application/json; charset=utf8")
+	public ResponseEntity createApartment(@RequestBody ApartmentDto apartmentDto) {
+		apartmentService.save(apartmentDto);
+		return new ResponseEntity<>(new SuccessReponseDto<>("아파트가 등록되었습니다.", ""), HttpStatus.CREATED);
 	}
 }

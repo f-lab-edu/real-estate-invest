@@ -36,9 +36,8 @@ public class Apartment {
 		this.roadAddress = roadAddress;
 	}
 
-	public Apartment(int id, String regionalCode, String city, String gu, String dong, String jibun,
-		String bonbun, String bubun, String apartmentName, int buildYear, String roadAddress,
-		LocalDateTime deleteDttm) {
+	public Apartment(long id, String regionalCode, String city, String gu, String dong, String jibun,
+		String bonbun, String bubun, String apartmentName, int buildYear, String roadAddress) {
 		this.id = id;
 		this.regionalCode = regionalCode;
 		this.city = city;
@@ -50,7 +49,6 @@ public class Apartment {
 		this.apartmentName = apartmentName;
 		this.buildYear = buildYear;
 		this.roadAddress = roadAddress;
-		this.deleteDttm = deleteDttm;
 	}
 
 	public Apartment(String regionalCode, String dong, String jibun, String apartmentName) {

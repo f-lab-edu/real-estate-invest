@@ -18,8 +18,34 @@
              , apartment_name
              , build_year
              , road_address
-             , delete_dttm
         from apartment
+        where delete_dttm is null
     </select>
+
+    <insert id="save" parameterType="Apartment">
+        insert
+        into apartment
+        ( regional_code
+        , city
+        , gu
+        , dong
+        , jibun
+        , bonbun
+        , bubun
+        , apartment_name
+        , build_year
+        , road_address)
+        values ( #{regionalCode}
+               , #{city}
+               , #{gu}
+               , #{dong}
+               , #{jibun}
+               , #{bonbun}
+               , #{bubun}
+               , #{apartmentName}
+               , #{buildYear}
+               , #{roadAddress}
+               )
+    </insert>
 
 </mapper>
