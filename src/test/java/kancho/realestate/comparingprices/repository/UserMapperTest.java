@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import kancho.realestate.comparingprices.domain.model.User;
 
 @SpringBootTest
-
 class UserMapperTest {
 
 	@Autowired
