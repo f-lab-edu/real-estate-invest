@@ -15,6 +15,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 			.addPathPatterns("/my-estate/*");
 
 		registry.addInterceptor(new LoggingInterceptor())
-			.addPathPatterns("/**");
+			.addPathPatterns("/**")
+			.excludePathPatterns("/health-check");
 	}
 }
