@@ -1,6 +1,8 @@
+drop table if exists group_item;
+drop table if exists comparing_group;
 drop table if exists user;
-# drop table if exists apartment_prices;
-# drop table if exists apartment;
+-- drop table if exists apartment_prices;
+-- drop table if exists apartment;
 
 create table if not exists user (
     user_no bigint not null auto_increment,
@@ -29,7 +31,7 @@ create table if not exists apartment (
     index idx_unique_apartment (regional_code,dong,jibun,apartment_name)
 )DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
 
-# alter table apartment add index idx_unique_apartment (regional_code,dong,jibun,apartment_name);
+-- alter table apartment add index idx_unique_apartment (regional_code,dong,jibun,apartment_name);
 
 create table if not exists apartment_prices (
      id bigint not null auto_increment,
@@ -57,3 +59,26 @@ CREATE TABLE if not exists soaring_apartment_price (
      create_ddtm datetime DEFAULT NULL COMMENT '데이터 생성 날짜',
      PRIMARY KEY (id)
 );
+
+
+create table if not exists comparing_group(
+      id bigint not null auto_increment,
+      user_no bigint not null,
+      name varchar(40),
+      delete_dttm datetime,
+      primary key(id),
+      foreign key(user_no) references user(user_no),
+      index idx_user_no_id (user_no,id)
+);
+
+create table if not exists group_item(
+     id bigint not null auto_increment,
+     group_id bigint not null,
+     apartment_id bigint not null,
+     delete_dttm datetime,
+     primary key(id),
+     foreign key(group_id) references comparing_group(id),
+     foreign key(apartment_id) references apartment(id),
+     index idx_group_id_apartment_id (group_id,apartment_id)
+);
+-- delete_dttm 도 index에 포함시켜주어야할지. 처음부터 이렇게 인덱스를 만드는것 보다 성능이슈가 있을때 만드는게 나을지
