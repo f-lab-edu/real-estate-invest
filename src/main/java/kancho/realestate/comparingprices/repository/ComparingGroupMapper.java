@@ -9,6 +9,6 @@ import kancho.realestate.comparingprices.domain.model.ComparingGroup;
 @Mapper
 public interface ComparingGroupMapper {
 
-	void saveComparingGroup(ComparingGroup group);
+	Long saveComparingGroup(ComparingGroup group);
 	List<ComparingGroup> findComparingGroupsByUserNo(Long userNo);
 }

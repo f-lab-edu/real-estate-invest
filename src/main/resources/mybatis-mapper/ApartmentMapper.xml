@@ -22,7 +22,8 @@
         from apartment
     </select>
 
-    <insert id="save" parameterType="Apartment">
+<!-- 입력 객체에 id 맵핑됨-->
+    <insert id="save" parameterType="Apartment" useGeneratedKeys="true" keyProperty="id">
         insert
         into apartment
         ( regional_code

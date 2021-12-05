@@ -5,7 +5,7 @@
 
 <mapper namespace="kancho.realestate.utils.storeaprtment.ApartmentStoreMapper">
 
-    <insert id="save" parameterType="Apartment">
+    <insert id="save" parameterType="Apartment" useGeneratedKeys="true" keyProperty="id">
         insert
         into apartment
         ( regional_code

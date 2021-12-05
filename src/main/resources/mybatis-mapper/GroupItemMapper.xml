@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kancho.realestate.comparingprices.repository.GroupItemMapper">
-    <insert id="saveGroupItem" parameterType="GroupItem" >
+    <insert id="saveGroupItem" parameterType="GroupItem" useGeneratedKeys="true" keyProperty="id">
         insert
         into group_item
         (group_id

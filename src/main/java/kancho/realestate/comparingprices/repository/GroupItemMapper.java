@@ -9,7 +9,7 @@ import kancho.realestate.comparingprices.domain.model.GroupItem;
 @Mapper
 public interface GroupItemMapper {
 
-	void saveGroupItem(GroupItem item);
+	Long saveGroupItem(GroupItem item);
 
 	List<GroupItem> findByGroupId(Long groupId);
 }
