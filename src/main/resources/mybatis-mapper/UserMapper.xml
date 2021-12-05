@@ -5,7 +5,7 @@
 
 <mapper namespace="kancho.realestate.comparingprices.repository.UserMapper">
 
-    <insert id="saveUser" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+    <insert id="saveUser" parameterType="User" useGeneratedKeys="true" keyProperty="userNo">
         insert
         into user
         ( id
