@@ -20,7 +20,7 @@ public class RequestApartmentDto {
 	public RequestApartmentDto() {
 	}
 
-	private RequestApartmentDto(String regionalCode, String city, String gu, String dong, String jibun,
+	public RequestApartmentDto(String regionalCode, String city, String gu, String dong, String jibun,
 		String bonbun, String bubun, String apartmentName, int buildYear, String roadAddress) {
 		this.regionalCode = regionalCode;
 		this.city = city;
@@ -34,9 +34,9 @@ public class RequestApartmentDto {
 		this.roadAddress = roadAddress;
 	}
 
-	public static Apartment toApartment(RequestApartmentDto requestApartmentDto) {
-		return new Apartment(requestApartmentDto.getRegionalCode(), requestApartmentDto.getCity(), requestApartmentDto.getGu(),
-			requestApartmentDto.getDong(), requestApartmentDto.getJibun(), requestApartmentDto.getBonbun(), requestApartmentDto.getBubun(),
-			requestApartmentDto.getApartmentName(), requestApartmentDto.getBuildYear(), requestApartmentDto.getRoadAddress());
+	public Apartment toApartment() {
+		return new Apartment(getRegionalCode(), getCity(), getGu(),
+			getDong(), getJibun(), getBonbun(), getBubun(),
+			getApartmentName(), getBuildYear(), getRoadAddress());
 	}
 }

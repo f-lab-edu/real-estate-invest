@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import kancho.realestate.comparingprices.domain.dto.request.RequestApartmentDto;
 import kancho.realestate.comparingprices.domain.dto.response.ResponseApartmentDto;
+import kancho.realestate.comparingprices.domain.model.Apartment;
 import kancho.realestate.comparingprices.repository.ApartmentMapper;
 import lombok.RequiredArgsConstructor;
 
@@ -23,7 +24,13 @@ public class ApartmentService {
 			.collect(Collectors.toList());
 	}
 
-	public void save(RequestApartmentDto requestApartmentDto){
-		apartmentMapper.save(RequestApartmentDto.toApartment(requestApartmentDto));
+	public void save(RequestApartmentDto requestApartmentDto) {
+		apartmentMapper.save(requestApartmentDto.toApartment());
+	}
+
+	public Apartment findApartmentByDistinguishable(RequestApartmentDto apartmentDto) {
+		return apartmentMapper.findByRegionalCodeAndDongAndJibunAndApartmentName(
+				apartmentDto.toApartment())
+			.orElseThrow(IllegalStateException::new);
 	}
 }

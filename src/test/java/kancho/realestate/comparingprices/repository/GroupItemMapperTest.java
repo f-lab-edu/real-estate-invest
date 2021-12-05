@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -67,12 +65,8 @@ class GroupItemMapperTest {
 		apartmentMapper.save(apartment);
 		Apartment findApartment = apartmentMapper.findByRegionalCodeAndDongAndJibunAndApartmentName(apartment)
 			.orElseThrow(IllegalStateException::new);
-		System.out.println(apartment);
-		System.out.println(findApartment);
-		System.out.println(comparingGroup);
 		// when
 		GroupItem item = new GroupItem(comparingGroup.getId(),findApartment.getId());
-
 		groupItemMapper.saveGroupItem(item);
 
 		// then
@@ -80,7 +74,6 @@ class GroupItemMapperTest {
 		assertThat(groupItems.size()).isEqualTo(1);
 		assertThat(groupItems.get(0).getApartmentId()).isEqualTo(findApartment.getId());
 
-		//TODO: 삭제했다가 다시 등록할경우, update해주기 추가
+		//TODO: 1)중복등록 방지 기능, 2)삭제했다가 다시 등록할경우, update 처리, 3)삭제 기능
 	}
-
 }
