@@ -17,7 +17,7 @@ public class ResponseGroupItemDto {
 		this.apartmentId = apartmentId;
 	}
 
-	public ResponseGroupItemDto from(GroupItem groupItem) {
+	public static ResponseGroupItemDto from(GroupItem groupItem) {
 		return new ResponseGroupItemDto(groupItem.getId(), groupItem.getGroupId(),
 			groupItem.getApartmentId());
 	}
