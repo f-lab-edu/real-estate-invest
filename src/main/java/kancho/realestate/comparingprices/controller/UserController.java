@@ -31,8 +31,8 @@ public class UserController {
 		if(hasSessionKey(session)){
 			throw new IllegalStateException("로그아웃 먼저 후 회원가입 해주세요.");
 		}
-		userService.createUser(requestUserDto);
-		return new ResponseEntity<>(new SuccessReponseDto<>("회원가입 완료", ""), HttpStatus.CREATED);
+		Long createdId = userService.createUser(requestUserDto);
+		return new ResponseEntity<>(new SuccessReponseDto<>("회원가입 완료", createdId), HttpStatus.CREATED);
 	}
 
 	@PostMapping(value = "/login", produces = "application/json; charset=utf8")
