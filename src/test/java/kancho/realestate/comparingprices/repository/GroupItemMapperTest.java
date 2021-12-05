@@ -1,7 +1,6 @@
 package kancho.realestate.comparingprices.repository;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
@@ -42,7 +41,7 @@ class GroupItemMapperTest {
 		String userId="testid12312";
 		String pssword="password1234";
 		User user = new User(userId, pssword);
-		userMapper.insertUser(user);
+		userMapper.saveUser(user);
 		User findUser = userMapper.selectUserById(userId).orElseThrow(IllegalStateException::new);
 
 		String groupName="마래푸34 아리팍 24";
