@@ -13,9 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -24,10 +22,10 @@ import org.springframework.transaction.annotation.Transactional;
 class ApartmentControllerTest {
 
 	@Autowired
-	MockMvc mockMvc;
+	private MockMvc mockMvc;
 
 	@Autowired
-	ApartmentController apartmentController;
+	private ApartmentController apartmentController;
 
 	private String apartmentInfo;
 
@@ -62,8 +60,7 @@ class ApartmentControllerTest {
 
 	}
 
-
-	public String createApartmentInfo(String regionalCode, String city, String gu, String dong, String jibun,
+	public static String createApartmentInfo(String regionalCode, String city, String gu, String dong, String jibun,
 		String bonbun, String bubun, String apartmentName, int buildYear, String roadAddress) {
 		HashMap<String, String> bodyContent = new HashMap<>();
 		bodyContent.put("regionalCode", regionalCode);
