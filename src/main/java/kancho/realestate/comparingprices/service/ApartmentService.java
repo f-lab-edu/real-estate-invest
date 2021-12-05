@@ -27,8 +27,10 @@ public class ApartmentService {
 	}
 
 	@Transactional
-	public Long save(RequestApartmentDto requestApartmentDto) {
-		return apartmentMapper.save(requestApartmentDto.toApartment());
+	public ResponseApartmentDto save(RequestApartmentDto requestApartmentDto) {
+		Apartment apartment = requestApartmentDto.toApartment();
+		apartmentMapper.save(apartment);
+		return ResponseApartmentDto.from(apartment);
 	}
 
 	public Apartment findApartmentByDistinguishable(RequestApartmentDto apartmentDto) {

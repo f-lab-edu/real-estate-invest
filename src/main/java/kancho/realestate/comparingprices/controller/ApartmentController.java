@@ -33,7 +33,7 @@ public class ApartmentController {
 
 	@PostMapping(produces = "application/json; charset=utf8")
 	public ResponseEntity createApartment(@RequestBody RequestApartmentDto requestApartmentDto) {
-		Long createdId = apartmentService.save(requestApartmentDto);
-		return new ResponseEntity<>(new SuccessReponseDto<>("아파트가 등록되었습니다.", createdId), HttpStatus.CREATED);
+		ResponseApartmentDto savedApartment = apartmentService.save(requestApartmentDto);
+		return new ResponseEntity<>(new SuccessReponseDto<>("아파트가 등록되었습니다.", savedApartment), HttpStatus.CREATED);
 	}
 }
