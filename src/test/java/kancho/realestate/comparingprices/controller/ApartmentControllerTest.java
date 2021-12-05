@@ -34,7 +34,7 @@ class ApartmentControllerTest {
 	@BeforeEach
 	public void setUpApartmentInfo(){
 		//given
-		apartmentInfo = createApartmentInfo(0, "12345", "서울", "강남구", "역삼동",
+		apartmentInfo = createApartmentInfo( "12345", "서울", "강남구", "역삼동",
 			"23-23", "3423", "1230", "test name", 1994,
 			"test road");
 	}
@@ -63,10 +63,9 @@ class ApartmentControllerTest {
 	}
 
 
-	public String createApartmentInfo(long id, String regionalCode, String city, String gu, String dong, String jibun,
+	public String createApartmentInfo(String regionalCode, String city, String gu, String dong, String jibun,
 		String bonbun, String bubun, String apartmentName, int buildYear, String roadAddress) {
 		HashMap<String, String> bodyContent = new HashMap<>();
-		bodyContent.put("id", String.valueOf(id));
 		bodyContent.put("regionalCode", regionalCode);
 		bodyContent.put("city", city);
 		bodyContent.put("gu", gu);
