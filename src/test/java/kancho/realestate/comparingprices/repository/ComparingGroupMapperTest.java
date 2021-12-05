@@ -14,7 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import kancho.realestate.comparingprices.domain.model.ComparingGroup;
 import kancho.realestate.comparingprices.domain.model.User;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 class ComparingGroupMapperTest {
 
 	@Autowired

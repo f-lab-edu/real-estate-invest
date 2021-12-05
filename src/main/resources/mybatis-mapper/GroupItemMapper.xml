@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kancho.realestate.comparingprices.repository.GroupItemMapper">
+    <insert id="saveGroupItem" parameterType="GroupItem" >
+        insert
+        into group_item
+        (group_id
+        ,apartment_id
+        )
+        values (
+                #{groupId}
+               , #{apartmentId}
+               )
+    </insert>
+
+    <select id="findByGroupId" parameterType="Long" resultType="GroupItem">
+        select
+             id
+             ,group_id
+             ,apartment_id
+             ,delete_dttm
+        from group_item
+        where group_id=#{groupId}
+    </select>
+</mapper>
