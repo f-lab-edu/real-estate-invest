@@ -10,6 +10,9 @@ public class ResponseComparingGroupDto {
 	private Long userNo;
 	private String name;
 
+	public ResponseComparingGroupDto() {
+	}
+
 	private ResponseComparingGroupDto(Long id, Long userNo, String name) {
 		this.id = id;
 		this.userNo = userNo;
