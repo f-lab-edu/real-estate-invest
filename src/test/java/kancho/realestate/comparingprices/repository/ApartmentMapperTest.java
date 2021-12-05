@@ -21,7 +21,7 @@ class ApartmentMapperTest {
 		Apartment apartment = new Apartment("34302", "서울특별시", "강남구", "개포동", "22",
 			"43", "0002", "테스트 아파트",1988, "언주로 103");
 		apartmentMapper.save(apartment);
-		Apartment findApartment = apartmentMapper.findByRegionalCodeAndDongAndJibunAndApartmentName(apartment).orElseThrow(IllegalStateException::new);
-		assertThat(findApartment.getApartmentName()).isEqualTo(apartment.getApartmentName());
+
+		assertThat(apartment.getId()).isNotNull();
 	}
 }

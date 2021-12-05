@@ -42,13 +42,12 @@ class GroupItemMapperTest {
 		String pssword="password1234";
 		User user = new User(userId, pssword);
 		userMapper.saveUser(user);
-		User findUser = userMapper.selectUserById(userId).orElseThrow(IllegalStateException::new);
 
 		String groupName="마래푸34 아리팍 24";
-		ComparingGroup group = new ComparingGroup(findUser.getUserNo(),groupName);
+		ComparingGroup group = new ComparingGroup(user.getUserNo(),groupName);
 		comparingGroupMapper.saveComparingGroup(group);
 
-		List<ComparingGroup> findGroups = comparingGroupMapper.findComparingGroupsByUserNo(findUser.getUserNo());
+		List<ComparingGroup> findGroups = comparingGroupMapper.findComparingGroupsByUserNo(user.getUserNo());
 		comparingGroup=findGroups.get(0);
 	}
 
@@ -62,16 +61,15 @@ class GroupItemMapperTest {
 			"23-23", "3423", "1230", "test name", 1994,
 			"test road");
 		apartmentMapper.save(apartment);
-		Apartment findApartment = apartmentMapper.findByRegionalCodeAndDongAndJibunAndApartmentName(apartment)
-			.orElseThrow(IllegalStateException::new);
+
 		// when
-		GroupItem item = new GroupItem(comparingGroup.getId(),findApartment.getId());
+		GroupItem item = new GroupItem(comparingGroup.getId(),apartment.getId());
 		groupItemMapper.saveGroupItem(item);
 
 		// then
 		List<GroupItem> groupItems = groupItemMapper.findByGroupId(comparingGroup.getId());
 		assertThat(groupItems.size()).isEqualTo(1);
-		assertThat(groupItems.get(0).getApartmentId()).isEqualTo(findApartment.getId());
+		assertThat(groupItems.get(0).getApartmentId()).isEqualTo(apartment.getId());
 
 		//TODO: 1)중복등록 방지 기능, 2)삭제했다가 다시 등록할경우, update 처리, 3)삭제 기능
 	}

@@ -31,15 +31,14 @@ class ComparingGroupMapperTest {
 		String pssword="password1234";
 		User user = new User(userId, pssword);
 		userMapper.saveUser(user);
-		User findUser = userMapper.selectUserById(userId).orElseThrow(IllegalStateException::new);
 
 		// when
 		String groupName="마래푸34 아리팍 24";
-		ComparingGroup group = new ComparingGroup(findUser.getUserNo(),groupName);
+		ComparingGroup group = new ComparingGroup(user.getUserNo(),groupName);
 		comparingGroupMapper.saveComparingGroup(group);
 
 		// then
-		List<ComparingGroup> findGroup = comparingGroupMapper.findComparingGroupsByUserNo(findUser.getUserNo());
+		List<ComparingGroup> findGroup = comparingGroupMapper.findComparingGroupsByUserNo(user.getUserNo());
 		assertThat(findGroup.size()).isEqualTo(1);
 		assertThat(findGroup.get(0).getName()).isEqualTo(groupName);
 	}
