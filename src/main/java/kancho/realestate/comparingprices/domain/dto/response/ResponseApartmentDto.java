@@ -42,4 +42,20 @@ public class ResponseApartmentDto {
 			apartment.getApartmentName(), apartment.getBuildYear(), apartment.getRoadAddress());
 	}
 
+	@Override
+	public String toString() {
+		return "ResponseApartmentDto{" +
+			"id=" + id +
+			", regionalCode='" + regionalCode + '\'' +
+			", city='" + city + '\'' +
+			", gu='" + gu + '\'' +
+			", dong='" + dong + '\'' +
+			", jibun='" + jibun + '\'' +
+			", bonbun='" + bonbun + '\'' +
+			", bubun='" + bubun + '\'' +
+			", apartmentName='" + apartmentName + '\'' +
+			", buildYear=" + buildYear +
+			", roadAddress='" + roadAddress + '\'' +
+			'}';
+	}
 }
