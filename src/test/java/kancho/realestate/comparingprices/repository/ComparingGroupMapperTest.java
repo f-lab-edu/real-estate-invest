@@ -30,7 +30,7 @@ class ComparingGroupMapperTest {
 		String userId="testid12312";
 		String pssword="password1234";
 		User user = new User(userId, pssword);
-		userMapper.insertUser(user);
+		userMapper.saveUser(user);
 		User findUser = userMapper.selectUserById(userId).orElseThrow(IllegalStateException::new);
 
 		// when
