@@ -14,7 +14,7 @@
             price_difference_unit,
             price_difference,
             create_ddtm
-        from soaring_prices
+        from soaring_apartment_price
         where price_difference_unit = #{priceDifferenceUnit}
         order by create_ddtm desc
         limit 10
