@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -90,7 +89,7 @@ class ComparingGroupServiceTest {
 		comparingGroupService.saveGroupItem(groupItemDto2);
 
 		// then
-		List<GroupItem> groupItems = comparingGroupService.findByGroupId(comparingGroup.getId());
+		List<GroupItem> groupItems = comparingGroupService.findGroupItemsByGroupId(comparingGroup.getId());
 
 		assertThat(groupItems.size()).isEqualTo(2);
 	}
