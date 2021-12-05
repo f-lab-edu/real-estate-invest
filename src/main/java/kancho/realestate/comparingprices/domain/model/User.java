@@ -26,6 +26,11 @@ public class User {
 
 	}
 
+	// mybatis로 insert 후 입력받으려면 필요
+	protected void setUserNo(Long userNo) {
+		this.userNo = userNo;
+	}
+
 	@Override
 	public String toString() {
 		return "User{" +
