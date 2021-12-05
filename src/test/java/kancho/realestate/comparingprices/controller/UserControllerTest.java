@@ -37,14 +37,12 @@ class UserControllerTest {
 	UserController userController;
 
 	@Test
-	@Transactional
 	public void join_회원가입_성공() throws Exception {
 		String serializedUser = serailizedTesterBody("tom ford", "12345678");
 		postSuccessTest("/join", serializedUser, status().isCreated());
 	}
 
 	@Test
-	@Transactional
 	public void join_회원가입_중복_오류() throws Exception {
 		String serializedUser = serailizedTesterBody("tom ford", "12345678");
 		postSuccessTest("/join", serializedUser, status().isCreated());
@@ -52,7 +50,6 @@ class UserControllerTest {
 	}
 
 	@Test
-	@Transactional
 	public void login_로그인_성공() throws Exception {
 		String serializedUser = serailizedTesterBody("tom ford", "12345678");
 
@@ -61,7 +58,6 @@ class UserControllerTest {
 	}
 
 	@Test
-	@Transactional
 	public void login_로그인_없는계정_오류() throws Exception {
 		String serializedUser1 = serailizedTesterBody("tom ford", "12345678");
 		postSuccessTest("/join", serializedUser1, status().isCreated());
@@ -71,7 +67,6 @@ class UserControllerTest {
 	}
 
 	@Test
-	@Transactional
 	public void login_로그인_비밀번호_오류() throws Exception {
 		String serializedUser1 = serailizedTesterBody("tom ford", "12345678");
 		postSuccessTest("/join", serializedUser1, status().isCreated());
@@ -81,7 +76,6 @@ class UserControllerTest {
 	}
 
 	@Test
-	@Transactional
 	public void login_로그인한_사람이_같은_아이디로_로그인요청() throws Exception {
 		String serializedUser1 = serailizedTesterBody("tom ford", "12345678");
 		postSuccessTest("/join", serializedUser1, status().isCreated());
@@ -92,7 +86,6 @@ class UserControllerTest {
 	}
 
 	@Test
-	@Transactional
 	public void login_로그인한_사람이_다른_아이디로_로그인요청() throws Exception {
 		String serializedUser1 = serailizedTesterBody("tom ford", "12345678");
 		postSuccessTest("/join", serializedUser1, status().isCreated());
@@ -114,7 +107,6 @@ class UserControllerTest {
 	}
 
 	@Test
-	@Transactional
 	public void join_login_로그인_상태에서_회원가입_요청_예외처리() throws Exception {
 		String serializedUser1 = serailizedTesterBody("tom ford", "12345678");
 		postSuccessTest("/join", serializedUser1, status().isCreated());

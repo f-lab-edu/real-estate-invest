@@ -30,7 +30,6 @@ class UserEstateControllerTest {
 	MockMvc mockMvc;
 
 	@Test
-	@Transactional
 	public void test_세션인증_성공_테스트() throws Exception {
 
 		HashMap<String, String> bodyContent = new HashMap<>();
@@ -58,7 +57,6 @@ class UserEstateControllerTest {
 	}
 
 	@Test
-	@Transactional
 	public void test_세션없이_요청_예외() throws Exception {
 		mockMvc.perform(get("/my-estate/test")
 			.contentType(MediaType.APPLICATION_JSON))
