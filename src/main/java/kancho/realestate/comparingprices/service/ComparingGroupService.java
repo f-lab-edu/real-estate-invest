@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import kancho.realestate.comparingprices.domain.dto.request.RequestComparingGroupDto;
 import kancho.realestate.comparingprices.domain.dto.request.RequestGroupItemDto;
 import kancho.realestate.comparingprices.domain.dto.response.ResponseComparingGroupDto;
+import kancho.realestate.comparingprices.domain.dto.response.ResponseGroupItemDto;
 import kancho.realestate.comparingprices.domain.model.ComparingGroup;
 import kancho.realestate.comparingprices.domain.model.GroupItem;
 import kancho.realestate.comparingprices.repository.ComparingGroupMapper;
@@ -16,13 +18,15 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ComparingGroupService {
 
 	private final ComparingGroupMapper comparingGroupMapper;
 	private final GroupItemMapper groupItemMapper;
 
-	public void saveComparingGroup(RequestComparingGroupDto requestDto){
-		comparingGroupMapper.saveComparingGroup(requestDto.toComparingGroup());
+	@Transactional
+	public Long saveComparingGroup(RequestComparingGroupDto requestDto){
+		return comparingGroupMapper.saveComparingGroup(requestDto.toComparingGroup());
 	}
 
 	public List<ResponseComparingGroupDto> findComparingGroupsByUserNoResponses(Long userNo){
@@ -35,11 +39,19 @@ public class ComparingGroupService {
 		return comparingGroupMapper.findComparingGroupsByUserNo(userNo);
 	}
 
-	public void saveGroupItem(RequestGroupItemDto requestDto){
-		groupItemMapper.saveGroupItem(requestDto.toGroupItem());
+	@Transactional
+	public Long saveGroupItem(RequestGroupItemDto requestDto){
+		return groupItemMapper.saveGroupItem(requestDto.toGroupItem());
 	}
 
-	public List<GroupItem> findByGroupId(Long groupId){
+	public List<GroupItem> findGroupItemsByGroupId(Long groupId){
 		return groupItemMapper.findByGroupId(groupId);
+	}
+
+	public List<ResponseGroupItemDto> findGroupItemsByGroupIdResponses(Long groupId){
+		return findGroupItemsByGroupId(groupId)
+			.stream()
+			.map(ResponseGroupItemDto::from)
+			.collect(Collectors.toList());
 	}
 }
