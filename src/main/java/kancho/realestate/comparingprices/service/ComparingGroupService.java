@@ -25,8 +25,10 @@ public class ComparingGroupService {
 	private final GroupItemMapper groupItemMapper;
 
 	@Transactional
-	public Long saveComparingGroup(RequestComparingGroupDto requestDto){
-		return comparingGroupMapper.saveComparingGroup(requestDto.toComparingGroup());
+	public ResponseComparingGroupDto saveComparingGroup(RequestComparingGroupDto requestDto){
+		ComparingGroup comparingGroup = requestDto.toComparingGroup();
+		comparingGroupMapper.saveComparingGroup(comparingGroup);
+		return ResponseComparingGroupDto.from(comparingGroup);
 	}
 
 	public List<ResponseComparingGroupDto> findComparingGroupsByUserNoResponses(Long userNo){
@@ -40,8 +42,10 @@ public class ComparingGroupService {
 	}
 
 	@Transactional
-	public Long saveGroupItem(RequestGroupItemDto requestDto){
-		return groupItemMapper.saveGroupItem(requestDto.toGroupItem());
+	public ResponseGroupItemDto saveGroupItem(RequestGroupItemDto requestDto){
+		GroupItem groupItem = requestDto.toGroupItem();
+		groupItemMapper.saveGroupItem(groupItem);
+		return ResponseGroupItemDto.from(groupItem);
 	}
 
 	public List<GroupItem> findGroupItemsByGroupId(Long groupId){
