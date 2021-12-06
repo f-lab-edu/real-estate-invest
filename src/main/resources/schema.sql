@@ -69,7 +69,7 @@ create table if not exists comparing_group(
       delete_dttm datetime,
       primary key(id),
       foreign key(user_no) references user(user_no),
-      index idx_user_no_id (user_no,id)
+      index idx_user_no (user_no)
 );
 
 create table if not exists group_item(
@@ -80,6 +80,5 @@ create table if not exists group_item(
      primary key(id),
      foreign key(group_id) references comparing_group(id),
      foreign key(apartment_id) references apartment(id),
-     index idx_group_id_apartment_id (group_id,apartment_id)
+     index idx_group_id_apartment_id (group_id)
 );
--- delete_dttm 도 index에 포함시켜주어야할지. 처음부터 이렇게 인덱스를 만드는것 보다 성능이슈가 있을때 만드는게 나을지
