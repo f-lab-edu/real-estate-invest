@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import kancho.realestate.comparingprices.domain.dto.SessionUserVO;
 import kancho.realestate.comparingprices.domain.dto.request.RequestUserDto;
+import kancho.realestate.comparingprices.domain.dto.response.ResponseUserDto;
 import kancho.realestate.comparingprices.domain.dto.response.SuccessReponseDto;
 import kancho.realestate.comparingprices.domain.model.User;
 import kancho.realestate.comparingprices.exception.DuplicateLoginException;
@@ -31,8 +32,8 @@ public class UserController {
 		if(hasSessionKey(session)){
 			throw new IllegalStateException("로그아웃 먼저 후 회원가입 해주세요.");
 		}
-		userService.createUser(requestUserDto);
-		return new ResponseEntity<>(new SuccessReponseDto<>("회원가입 완료", ""), HttpStatus.CREATED);
+		ResponseUserDto savedUser = userService.createUser(requestUserDto);
+		return new ResponseEntity<>(new SuccessReponseDto<>("회원가입 완료", savedUser), HttpStatus.CREATED);
 	}
 
 	@PostMapping(value = "/login", produces = "application/json; charset=utf8")

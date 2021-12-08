@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kancho.realestate.comparingprices.domain.dto.request.RequestUserDto;
+import kancho.realestate.comparingprices.domain.dto.response.ResponseUserDto;
 import kancho.realestate.comparingprices.domain.model.User;
 import kancho.realestate.comparingprices.exception.DuplicateUserAccountException;
 import kancho.realestate.comparingprices.exception.IdNotExistedException;
-import kancho.realestate.comparingprices.exception.InvalidLoginParameterException;
 import kancho.realestate.comparingprices.exception.PasswordWrongException;
 import kancho.realestate.comparingprices.repository.UserMapper;
 import lombok.RequiredArgsConstructor;
@@ -21,15 +21,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserService {
 
-	// private final BCryptPasswordEncoder passwordEncoder;
 	private final UserMapper userMapper;
 
 	@Transactional
-	public void createUser(RequestUserDto requestUser) {
+	public ResponseUserDto createUser(RequestUserDto requestUser) {
 		validateNotExistUser(getUserById(requestUser.getId()));
 		String encryptedPw = getEncryptedPassword(requestUser.getPassword());
 		User user = new User(requestUser.getId(), encryptedPw);
-		userMapper.insertUser(user);
+		userMapper.saveUser(user);
+
+		return ResponseUserDto.from(user);
 	}
 
 	public String getEncryptedPassword(String password) {

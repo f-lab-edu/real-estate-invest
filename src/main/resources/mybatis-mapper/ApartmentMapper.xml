@@ -18,11 +18,12 @@
              , apartment_name
              , build_year
              , road_address
+             , delete_dttm
         from apartment
-        where delete_dttm is null
     </select>
 
-    <insert id="save" parameterType="Apartment">
+<!-- 입력 객체에 id 맵핑됨-->
+    <insert id="save" parameterType="Apartment" useGeneratedKeys="true" keyProperty="id">
         insert
         into apartment
         ( regional_code
@@ -47,5 +48,26 @@
                , #{roadAddress}
                )
     </insert>
+
+    <select id="findByRegionalCodeAndDongAndJibunAndApartmentName" resultType="Apartment" parameterType="Apartment">
+        select
+         id
+        , regional_code
+        , city
+        , gu
+        , dong
+        , jibun
+        , bonbun
+        , bubun
+        , apartment_name
+        , build_year
+        , road_address
+        , delete_dttm
+        from apartment
+        where regional_code= #{regionalCode}
+          and dong = #{dong}
+          and jibun = #{jibun}
+          and apartment_name =  #{apartmentName}
+    </select>
 
 </mapper>

@@ -10,7 +10,7 @@ import kancho.realestate.comparingprices.domain.model.Apartment;
 @Mapper
 public interface ApartmentMapper {
 
-	void save(Apartment apartment);
+	Long save(Apartment apartment);
 
 	List<Apartment> findAll();
 

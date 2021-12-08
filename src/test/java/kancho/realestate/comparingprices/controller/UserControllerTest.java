@@ -37,53 +37,47 @@ class UserControllerTest {
 	UserController userController;
 
 	@Test
-	@Transactional
 	public void join_회원가입_성공() throws Exception {
-		String serializedUser = serailizedTesterBody("tom ford", "12345678");
+		String serializedUser = createUserInfo("tom ford", "12345678");
 		postSuccessTest("/join", serializedUser, status().isCreated());
 	}
 
 	@Test
-	@Transactional
 	public void join_회원가입_중복_오류() throws Exception {
-		String serializedUser = serailizedTesterBody("tom ford", "12345678");
+		String serializedUser = createUserInfo("tom ford", "12345678");
 		postSuccessTest("/join", serializedUser, status().isCreated());
 		postExceptionTest("/join", serializedUser, status().isBadRequest(),DuplicateUserAccountException.class);
 	}
 
 	@Test
-	@Transactional
 	public void login_로그인_성공() throws Exception {
-		String serializedUser = serailizedTesterBody("tom ford", "12345678");
+		String serializedUser = createUserInfo("tom ford", "12345678");
 
 		postSuccessTest("/join", serializedUser, status().isCreated());
 		postSuccessTest("/login", serializedUser, status().isCreated());
 	}
 
 	@Test
-	@Transactional
 	public void login_로그인_없는계정_오류() throws Exception {
-		String serializedUser1 = serailizedTesterBody("tom ford", "12345678");
+		String serializedUser1 = createUserInfo("tom ford", "12345678");
 		postSuccessTest("/join", serializedUser1, status().isCreated());
 
-		String serializedUser2 = serailizedTesterBody("tom ford9", "12345678");
+		String serializedUser2 = createUserInfo("tom ford9", "12345678");
 		postExceptionTest("/login", serializedUser2, status().isBadRequest(),IdNotExistedException.class);
 	}
 
 	@Test
-	@Transactional
 	public void login_로그인_비밀번호_오류() throws Exception {
-		String serializedUser1 = serailizedTesterBody("tom ford", "12345678");
+		String serializedUser1 = createUserInfo("tom ford", "12345678");
 		postSuccessTest("/join", serializedUser1, status().isCreated());
 
-		String serializedInvalidPasswordUser = serailizedTesterBody("tom ford", "a232fds");
+		String serializedInvalidPasswordUser = createUserInfo("tom ford", "a232fds");
 		postExceptionTest("/login", serializedInvalidPasswordUser, status().isBadRequest(),PasswordWrongException.class);
 	}
 
 	@Test
-	@Transactional
 	public void login_로그인한_사람이_같은_아이디로_로그인요청() throws Exception {
-		String serializedUser1 = serailizedTesterBody("tom ford", "12345678");
+		String serializedUser1 = createUserInfo("tom ford", "12345678");
 		postSuccessTest("/join", serializedUser1, status().isCreated());
 		MvcResult loginResult = postSuccessTest("/login", serializedUser1, status().isCreated());
 
@@ -92,12 +86,11 @@ class UserControllerTest {
 	}
 
 	@Test
-	@Transactional
 	public void login_로그인한_사람이_다른_아이디로_로그인요청() throws Exception {
-		String serializedUser1 = serailizedTesterBody("tom ford", "12345678");
+		String serializedUser1 = createUserInfo("tom ford", "12345678");
 		postSuccessTest("/join", serializedUser1, status().isCreated());
 
-		String serializedUser2 = serailizedTesterBody("adam smith", "asd23121238");
+		String serializedUser2 = createUserInfo("adam smith", "asd23121238");
 		postSuccessTest("/join", serializedUser2, status().isCreated());
 
 		MvcResult loginResult = postSuccessTest("/login", serializedUser1, status().isCreated());
@@ -114,15 +107,14 @@ class UserControllerTest {
 	}
 
 	@Test
-	@Transactional
 	public void join_login_로그인_상태에서_회원가입_요청_예외처리() throws Exception {
-		String serializedUser1 = serailizedTesterBody("tom ford", "12345678");
+		String serializedUser1 = createUserInfo("tom ford", "12345678");
 		postSuccessTest("/join", serializedUser1, status().isCreated());
 
 		MvcResult loginResult = postSuccessTest("/login", serializedUser1, status().isCreated());
 		Cookie user1Cookie = loginResult.getResponse().getCookie("SESSION");
 
-		String serializedUser2 = serailizedTesterBody("adam smith", "asd23121238");
+		String serializedUser2 = createUserInfo("adam smith", "asd23121238");
 		postExceptionTest("/join", serializedUser2, status().isBadRequest(),IllegalStateException.class
 			,user1Cookie);
 	}
@@ -173,7 +165,7 @@ class UserControllerTest {
 			.andExpect(result -> assertThat(result.getResolvedException()).isInstanceOf(exceptionClass));
 	}
 
-	public String serailizedTesterBody(String id, String password) {
+	public static String createUserInfo(String id, String password) {
 		HashMap<String, String> bodyContent = new HashMap<>();
 		bodyContent.put("id", id);
 		bodyContent.put("password", password);

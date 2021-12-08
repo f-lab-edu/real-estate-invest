@@ -9,7 +9,7 @@ import kancho.realestate.comparingprices.domain.model.User;
 @Mapper
 public interface UserMapper {
 
-	void insertUser(User user);
+	Long saveUser(User user);
 	Optional<User> selectUserById(String id);
 	void deleteAll();
 }
