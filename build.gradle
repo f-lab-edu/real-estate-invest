@@ -28,7 +28,14 @@ dependencies {
 	implementation 'org.springframework.session:spring-session-jdbc:2.5.3'
 	implementation 'org.apache.poi:poi:5.0.0'
 	implementation 'org.apache.poi:poi-ooxml:5.0.0'
-	compileOnly 'org.projectlombok:lombok'
+
+	// xml to object
+	implementation('javax.xml.bind:jaxb-api:2.3.0')
+	implementation('javax.activation:activation:1.1')
+	implementation('org.glassfish.jaxb:jaxb-runtime:2.3.0')
+    implementation 'org.projectlombok:lombok:1.18.18'
+
+    compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

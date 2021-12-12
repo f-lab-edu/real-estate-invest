@@ -1,4 +1,4 @@
-package kancho.realestate.utils;
+package kancho.realestate.utils.excel.storeaprtment;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import kancho.realestate.comparingprices.domain.model.Apartment;
-import kancho.realestate.utils.storeaprtment.ApartmentStoreMapper;
+import kancho.realestate.utils.excel.storeaprtment.ApartmentStoreMapper;
 
 @SpringBootTest
 @Transactional

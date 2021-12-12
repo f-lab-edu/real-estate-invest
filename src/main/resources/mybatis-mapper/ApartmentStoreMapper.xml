@@ -3,7 +3,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kancho.realestate.utils.storeaprtment.ApartmentStoreMapper">
+<mapper namespace="kancho.realestate.utils.excel.storeaprtment.ApartmentStoreMapper">
 
     <insert id="save" parameterType="Apartment">
         insert
