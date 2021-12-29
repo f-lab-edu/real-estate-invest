@@ -1,4 +1,4 @@
-package kancho.realestate.utils;
+package kancho.realestate.utils.excel;
 
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

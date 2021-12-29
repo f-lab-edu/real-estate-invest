@@ -1,4 +1,4 @@
-package kancho.realestate.utils.storeaprtment;
+package kancho.realestate.utils.excel.storeaprtment;
 
 import java.io.FileInputStream;
 import java.io.IOException;
