@@ -22,6 +22,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import kancho.realestate.comparingprices.domain.model.Apartment;
+import kancho.realestate.comparingprices.repository.ApartmentMapper;
 import kancho.realestate.utils.excel.storeaprtment.domain.ApartmentlField;
 import lombok.RequiredArgsConstructor;
 
@@ -34,7 +35,7 @@ public class ApartmentInfoStore implements ApplicationRunner {
 	private static final int APARTMENT_SHEET_INDEX = 1;
 	private static final int DATA_ROW_START_INDEX = 1;
 
-	private final ApartmentStoreMapper apartmentStoreMapper;
+	private final ApartmentMapper apartmentMapper;
 
 	@Override
 	public void run(ApplicationArguments args) throws IOException {
@@ -44,7 +45,7 @@ public class ApartmentInfoStore implements ApplicationRunner {
 		logger.info("end application");
 	}
 
-	public List<String> searchFileNames(String dirPath) throws IOException {
+	private List<String> searchFileNames(String dirPath) throws IOException {
 		return Files.list(Paths.get(dirPath))
 			.map(path -> path.getFileName().toString())
 			.filter(fileName -> fileName.endsWith("xlsx"))
@@ -56,7 +57,7 @@ public class ApartmentInfoStore implements ApplicationRunner {
 			.forEach(fileName -> saveData(fileName));
 	}
 
-	public void saveData(String fileName) {
+	private void saveData(String fileName) {
 		logger.info("filename : {}", fileName);
 		List<Apartment> apartments = new ArrayList<>();
 		try (XSSFWorkbook workbook = new XSSFWorkbook(new File(DATA_PATH + "/" + fileName))) {
@@ -66,23 +67,6 @@ public class ApartmentInfoStore implements ApplicationRunner {
 			logger.info("{} 파일 참조에 오류가 발생하였습니다.", fileName);
 		}
 		saveApartmentAll(apartments);
-	}
-
-	private void saveApartmentAll(List<Apartment> apartments) {
-		apartments.stream()
-			.forEach(apartment -> saveApartment(apartment));
-	}
-
-	private void saveApartment(Apartment apartment) {
-		if (isNew(apartment)) {
-			apartmentStoreMapper.save(apartment);
-		}
-	}
-
-	private boolean isNew(Apartment apartment) {
-		Optional<Apartment> findApartment = apartmentStoreMapper.findExistApartment(
-			apartment);
-		return findApartment.isEmpty();
 	}
 
 	private List<Apartment> getApartments(XSSFSheet sheet) {
@@ -111,4 +95,22 @@ public class ApartmentInfoStore implements ApplicationRunner {
 		XSSFCell cell = row.getCell(fieldIdx);
 		return cell.getStringCellValue();
 	}
+
+	private void saveApartmentAll(List<Apartment> apartments) {
+		apartments.stream()
+			.forEach(apartment -> saveApartment(apartment));
+	}
+
+	private void saveApartment(Apartment apartment) {
+		if (isNew(apartment)) {
+			apartmentMapper.save(apartment);
+		}
+	}
+
+	private boolean isNew(Apartment apartment) {
+		Optional<Apartment> findApartment = apartmentMapper.findExistApartment(
+			apartment);
+		return findApartment.isEmpty();
+	}
+
 }

@@ -32,10 +32,4 @@ public class ApartmentService {
 		apartmentMapper.save(apartment);
 		return ResponseApartmentDto.from(apartment);
 	}
-
-	public Apartment findApartmentByDistinguishable(RequestApartmentDto apartmentDto) {
-		return apartmentMapper.findByRegionalCodeAndDongAndJibunAndApartmentName(
-				apartmentDto.toApartment())
-			.orElseThrow(IllegalStateException::new);
-	}
 }

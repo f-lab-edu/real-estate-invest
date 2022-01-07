@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import kancho.realestate.comparingprices.domain.dto.request.RequestApartmentDto;
 import kancho.realestate.comparingprices.domain.dto.response.ResponseApartmentDto;
 import kancho.realestate.comparingprices.domain.dto.response.SuccessReponseDto;
-import kancho.realestate.comparingprices.domain.model.Apartment;
 import kancho.realestate.comparingprices.service.ApartmentService;
 import lombok.RequiredArgsConstructor;
 

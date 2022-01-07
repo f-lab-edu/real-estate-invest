@@ -15,5 +15,5 @@ public interface ApartmentMapper {
 	List<Apartment> findAll();
 
 	// idx_unique_apartment 인덱스 사용하도록 관련 필드만 select절 포함
-	Optional<Apartment> findByRegionalCodeAndDongAndJibunAndApartmentName(Apartment apartment);
+	Optional<Apartment> findExistApartment(Apartment apartment);
 }
