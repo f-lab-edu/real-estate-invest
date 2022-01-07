@@ -31,17 +31,6 @@ public class User {
 		this.userNo = userNo;
 	}
 
-	@Override
-	public String toString() {
-		return "User{" +
-			"userNo=" + userNo +
-			", id='" + id + '\'' +
-			", password='" + password + '\'' +
-			", joinDttm=" + joinDttm +
-			", lastLoginDttm=" + lastLoginDttm +
-			", deleteDttm=" + deleteDttm +
-			'}';
-	}
 
 	@Override
 	public boolean equals(Object o) {
@@ -50,14 +39,11 @@ public class User {
 		if (o == null || getClass() != o.getClass())
 			return false;
 		User user = (User)o;
-		return Objects.equals(getUserNo(), user.getUserNo()) && Objects.equals(getId(), user.getId())
-			&& Objects.equals(getPassword(), user.getPassword()) && Objects.equals(getJoinDttm(),
-			user.getJoinDttm()) && Objects.equals(getLastLoginDttm(), user.getLastLoginDttm())
-			&& Objects.equals(getDeleteDttm(), user.getDeleteDttm());
+		return Objects.equals(getUserNo(), user.getUserNo());
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getUserNo(), getId(), getPassword(), getJoinDttm(), getLastLoginDttm(), getDeleteDttm());
+		return Objects.hash(getUserNo());
 	}
 }
