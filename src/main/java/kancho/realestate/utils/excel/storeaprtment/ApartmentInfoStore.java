@@ -1,161 +1,114 @@
 package kancho.realestate.utils.excel.storeaprtment;
 
-import java.io.FileInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import kancho.realestate.comparingprices.domain.model.Apartment;
+import kancho.realestate.utils.excel.storeaprtment.domain.ApartmentlField;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Component
 public class ApartmentInfoStore implements ApplicationRunner {
 
+	private static final String DATA_PATH = "realestate-prices";
+	private static final Logger logger = LoggerFactory.getLogger(ApartmentInfoStore.class);
+	private static final int APARTMENT_SHEET_INDEX = 1;
+	private static final int DATA_ROW_START_INDEX = 1;
+
 	private final ApartmentStoreMapper apartmentStoreMapper;
-	private static final String DATA_PATH="realestate-prices";
 
 	@Override
-	public void run(ApplicationArguments args) throws Exception {
-		System.out.println("start read data");
-		List<String> files = getFiles(DATA_PATH);
-		for(String fileName : files){
-			readDatas(fileName);
-		}
-		System.out.println("end read data");
+	public void run(ApplicationArguments args) throws IOException {
+		logger.info("start application");
+		List<String> fileNames = searchFileNames(DATA_PATH);
+		saveData(fileNames);
+		logger.info("end application");
 	}
 
-	public List<String> getFiles(String dirPath) throws IOException {
+	public List<String> searchFileNames(String dirPath) throws IOException {
 		return Files.list(Paths.get(dirPath))
 			.map(path -> path.getFileName().toString())
 			.filter(fileName -> fileName.endsWith("xlsx"))
 			.collect(Collectors.toList());
 	}
 
-	public void readDatas(String filePath) {
+	private void saveData(List<String> fileNames) {
+		fileNames.stream()
+			.forEach(fileName -> saveData(fileName));
+	}
+
+	public void saveData(String fileName) {
+		logger.info("filename : {}", fileName);
 		List<Apartment> apartments = new ArrayList<>();
-		try (FileInputStream file = new FileInputStream(DATA_PATH+"/"+filePath)) {
-			System.out.println(DATA_PATH+"/"+filePath);
-			XSSFWorkbook workbook = new XSSFWorkbook(file);
-			XSSFSheet sheet = workbook.getSheetAt(1); // 아파트 정보
-			Map<Integer, String> fieldInfo = setFieldInfo(sheet.getRow(0)); // 필드명
-			apartments = getApartments(fieldInfo, sheet);
-		} catch (IOException exception) {
-			System.out.println("file io exception");
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("unexpected exception");
+		try (XSSFWorkbook workbook = new XSSFWorkbook(new File(DATA_PATH + "/" + fileName))) {
+			XSSFSheet apartmentDataSheet = workbook.getSheetAt(APARTMENT_SHEET_INDEX); // 아파트 정보
+			apartments = getApartments(apartmentDataSheet);
+		} catch (IOException | InvalidFormatException ex) {
+			logger.info("{} 파일 참조에 오류가 발생하였습니다.", fileName);
 		}
-		saveApartments(apartments);
+		saveApartmentAll(apartments);
 	}
 
-	private Map<Integer, String> setFieldInfo(XSSFRow row) {
-		Map<Integer, String> map = new HashMap<>();
-		for (int colIdx = 0; colIdx < row.getPhysicalNumberOfCells(); colIdx++) {
-			XSSFCell cell = row.getCell(colIdx);
-			if (cell == null) {
-				continue;
-			}
-			map.put(colIdx, cell.getStringCellValue());
-		}
-		return map;
+	private void saveApartmentAll(List<Apartment> apartments) {
+		apartments.stream()
+			.forEach(apartment -> saveApartment(apartment));
 	}
 
-	private void saveApartments(List<Apartment> apartments) {
-		for (Apartment apartment : apartments) {
-			if (isNew(apartment)) {
-				apartmentStoreMapper.save(apartment);
-			}
+	private void saveApartment(Apartment apartment) {
+		if (isNew(apartment)) {
+			apartmentStoreMapper.save(apartment);
 		}
 	}
 
-	// 기 등록된 아파트 정보인지 확인
 	private boolean isNew(Apartment apartment) {
-		Optional<Apartment> findApartment = apartmentStoreMapper.findByRegionalCodeAndDongAndJibunAndApartmentName(
+		Optional<Apartment> findApartment = apartmentStoreMapper.findExistApartment(
 			apartment);
 		return findApartment.isEmpty();
 	}
 
-	private List<Apartment> getApartments(Map<Integer, String> fieldInfo, XSSFSheet sheet) {
+	private List<Apartment> getApartments(XSSFSheet sheet) {
 		List<Apartment> apartments = new ArrayList<>();
-		for (int rowIdx = 1; rowIdx < sheet.getPhysicalNumberOfRows(); rowIdx++) {
+		for (int rowIdx = DATA_ROW_START_INDEX; rowIdx < sheet.getPhysicalNumberOfRows(); rowIdx++) {
 			XSSFRow row = sheet.getRow(rowIdx);
 			if (row == null) {
 				continue;
 			}
-			apartments.add(makeApartmentInfo(fieldInfo, row));
+			apartments.add(makeApartmentInfo(row));
 		}
 		return apartments;
 	}
 
-	private Apartment makeApartmentInfo(Map<Integer, String> fieldInfo, XSSFRow row) {
-		String regionalCode = "";
-		String city = "";
-		String gu = "";
-		String dong = "";
-		String jibun = "";
-		String bonbun = "";
-		String bubun = "";
-		String apartmentName = "";
-		int buildYear = 0;
-		String roadAddress = "";
+	private Apartment makeApartmentInfo(XSSFRow row) {
+		return new Apartment(getField(row, ApartmentlField.REGIONAL_CODE.getIdx()),
+			getField(row, ApartmentlField.CITY.getIdx()),
+			getField(row, ApartmentlField.GU.getIdx()), getField(row, ApartmentlField.DONG.getIdx()),
+			getField(row, ApartmentlField.JIBUN.getIdx()), getField(row, ApartmentlField.BUBUN.getIdx()),
+			getField(row, ApartmentlField.BONBUN.getIdx()), getField(row, ApartmentlField.APARTMENT_NAME.getIdx()),
+			Integer.parseInt(getField(row, ApartmentlField.BUILD_YEAR.getIdx())),
+			getField(row, ApartmentlField.ROAD_ADDRESS.getIdx()));
+	}
 
-		for (int colIdx = 0; colIdx <= row.getPhysicalNumberOfCells(); colIdx++) {
-
-			XSSFCell cell = row.getCell(colIdx);
-
-			if (cell == null) {
-				continue;
-			}
-
-			switch (fieldInfo.get(colIdx)) {
-				case "regional_code":
-					regionalCode = cell.getStringCellValue();
-					break;
-				case "city":
-					city = cell.getStringCellValue();
-					break;
-				case "gu":
-					gu = cell.getStringCellValue();
-					break;
-				case "dong":
-					dong = cell.getStringCellValue();
-					break;
-				case "jibun":
-					jibun = cell.getStringCellValue();
-					break;
-				case "bonbun":
-					bonbun = cell.getStringCellValue();
-					break;
-				case "bubun":
-					bubun = cell.getStringCellValue();
-					break;
-				case "apartment_name":
-					apartmentName = cell.getStringCellValue();
-					break;
-				case "build_year":
-					buildYear = Integer.parseInt(cell.getStringCellValue());
-					break;
-				case "road_address":
-					roadAddress = cell.getStringCellValue();
-					break;
-			}
-		}
-		return new Apartment(regionalCode, city, gu, dong, jibun, bonbun, bubun, apartmentName, buildYear, roadAddress);
+	private String getField(XSSFRow row, int fieldIdx) {
+		XSSFCell cell = row.getCell(fieldIdx);
+		return cell.getStringCellValue();
 	}
 }
