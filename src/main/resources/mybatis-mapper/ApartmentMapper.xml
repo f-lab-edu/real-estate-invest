@@ -22,6 +22,24 @@
         from apartment
     </select>
 
+    <select id="findAllWithPaging" resultType="Apartment" parameterType="RequestPage">
+        select
+            id
+             , regional_code
+             , city
+             , gu
+             , dong
+             , jibun
+             , bonbun
+             , bubun
+             , apartment_name
+             , build_year
+             , road_address
+             , delete_dttm
+        from apartment
+        limit #{limit} offset #{offset}
+    </select>
+
 <!-- 입력 객체에 id 맵핑됨-->
     <insert id="save" parameterType="Apartment" useGeneratedKeys="true" keyProperty="id">
         insert

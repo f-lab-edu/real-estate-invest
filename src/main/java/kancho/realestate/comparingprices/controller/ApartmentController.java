@@ -1,8 +1,10 @@
 package kancho.realestate.comparingprices.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,10 +25,11 @@ import lombok.RequiredArgsConstructor;
 public class ApartmentController {
 
 	private final ApartmentService apartmentService;
+	private final int PAGE_SIZE=30;
 
 	@GetMapping(produces = "application/json; charset=utf8")
-	public ResponseEntity showApartments() {
-		List<ResponseApartmentDto> requestApartmentDtos = apartmentService.findAllApartments();
+	public ResponseEntity showApartments(@PageableDefault(size=PAGE_SIZE, sort="id", direction = Sort.Direction.ASC) Pageable pageable) {
+		List<ResponseApartmentDto> requestApartmentDtos = apartmentService.findApartmentDtosWithPaging(pageable);
 		return new ResponseEntity<>(new SuccessReponseDto<>("아파트 목록 조회", requestApartmentDtos), HttpStatus.OK);
 	}
 
