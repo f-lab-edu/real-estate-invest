@@ -1,4 +1,4 @@
-package kancho.realestate.utils.api.storeaprtment;
+package kancho.realestate.utils.api.storeaprtment.mapper;
 
 import java.io.StringReader;
 import java.util.List;

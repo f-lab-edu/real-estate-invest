@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import kancho.realestate.comparingprices.domain.dto.request.RequestApartmentDetailDto;
 import kancho.realestate.comparingprices.domain.model.ApartmentDetail;
+import kancho.realestate.utils.api.storeaprtment.mapper.ApartmentXmlMapper;
 
 @Component
 public class ApartmentApiClient {
