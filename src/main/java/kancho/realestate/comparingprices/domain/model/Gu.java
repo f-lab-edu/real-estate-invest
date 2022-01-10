@@ -1,5 +1,8 @@
 package kancho.realestate.comparingprices.domain.model;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public enum Gu {
 	강남구("11680"), 강동구("11740"), 강북구("11305"), 강서구("11500"),
 	관악구("11620"), 광진구("11215"), 구로구("11530"), 금천구("11545"),
@@ -26,5 +29,13 @@ public enum Gu {
 			}
 		}
 		return false;
+	}
+
+	public static String getGuName(String reginalCode) {
+		return Arrays.stream(Gu.values())
+			.filter(gu -> gu.getReginalCode().equals(reginalCode))
+			.collect(Collectors.toList())
+			.get(0)
+			.toString();
 	}
 }
