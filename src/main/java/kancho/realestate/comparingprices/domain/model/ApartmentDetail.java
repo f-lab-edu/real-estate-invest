@@ -1,7 +1,5 @@
 package kancho.realestate.comparingprices.domain.model;
 
-import java.time.LocalDateTime;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -47,4 +45,20 @@ public class ApartmentDetail {
 	private String dealAmount;
 	@XmlElement(name = "층")
 	private int floor;
+
+	public ApartmentPrice getApartmentPrice() {
+		return new ApartmentPrice(this);
+	}
+
+	public Apartment getApartment(){
+		return new Apartment(getRegionalCode(), getCityName(), getGuName(), getDong(), getJibun(), getBonbun(), getBubun(), getApartmentName(), getBuildYear(), getRoadAddress());
+	}
+
+	private String getCityName(){
+		return City.getCityName(getRegionalCode());
+	}
+
+	private String getGuName(){
+		return Gu.getGuName(getRegionalCode());
+	}
 }
