@@ -22,6 +22,8 @@ public class Apartment {
 	private String roadAddress;
 	private LocalDateTime deleteDttm;
 
+	private Apartment() {}
+
 	public Apartment(String regionalCode, String city, String gu, String dong, String jibun,
 		String bonbun, String bubun, String apartmentName, int buildYear, String roadAddress) {
 		this.regionalCode = regionalCode;
@@ -58,6 +60,10 @@ public class Apartment {
 		this.dong = dong;
 		this.jibun = jibun;
 		this.apartmentName = apartmentName;
+	}
+
+	public ApartmentUniqueInfo getApartmentUniqueInfo() {
+		return new ApartmentUniqueInfo(this);
 	}
 
 	@Override
