@@ -3,7 +3,6 @@ package kancho.realestate.comparingprices.domain.model;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @Getter
@@ -63,7 +62,8 @@ public class Apartment {
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		if (o == null || getClass() != o.getClass())
+		// if (o == null || getClass() != o.getClass())
+		if(!(o instanceof Apartment))
 			return false;
 		Apartment apartment = (Apartment)o;
 		return getId() == apartment.getId();
