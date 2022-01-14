@@ -1,5 +1,6 @@
 package kancho.realestate.comparingprices.domain.model;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 import lombok.Getter;
@@ -42,9 +43,13 @@ public class ApartmentPrice {
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
+
 		ApartmentPrice that = (ApartmentPrice)o;
+		BigDecimal thisAreaForExclusiveUse = new BigDecimal(that.areaForExclusiveUse);
+		BigDecimal thatAreaForExclusiveUse = new BigDecimal(areaForExclusiveUse);
+		
 		return apartmentId == that.apartmentId
-			&& Float.compare(that.areaForExclusiveUse, areaForExclusiveUse) == 0 && dealYear == that.dealYear
+			&& thisAreaForExclusiveUse.compareTo(thatAreaForExclusiveUse) == 0 && dealYear == that.dealYear
 			&& dealMonth == that.dealMonth && dealDay == that.dealDay && dealAmount == that.dealAmount
 			&& floor == that.floor;
 	}
