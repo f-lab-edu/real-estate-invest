@@ -3,11 +3,9 @@ package kancho.realestate.comparingprices.domain.model;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @Getter
-@EqualsAndHashCode
 public class Apartment {
 	private long id;
 	private String regionalCode;
@@ -64,41 +62,15 @@ public class Apartment {
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		if (o == null || getClass() != o.getClass())
+		// if (o == null || getClass() != o.getClass())
+		if(!(o instanceof Apartment))
 			return false;
 		Apartment apartment = (Apartment)o;
-		return getId() == apartment.getId() && getBuildYear() == apartment.getBuildYear() && Objects.equals(
-			getRegionalCode(), apartment.getRegionalCode()) && Objects.equals(getCity(), apartment.getCity())
-			&& Objects.equals(getGu(), apartment.getGu()) && Objects.equals(getDong(),
-			apartment.getDong()) && Objects.equals(getJibun(), apartment.getJibun()) && Objects.equals(
-			getBonbun(), apartment.getBonbun()) && Objects.equals(getBubun(), apartment.getBubun())
-			&& Objects.equals(getApartmentName(), apartment.getApartmentName()) && Objects.equals(
-			getRoadAddress(), apartment.getRoadAddress()) && Objects.equals(getDeleteDttm(),
-			apartment.getDeleteDttm());
+		return getId() == apartment.getId();
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getId(), getRegionalCode(), getCity(), getGu(), getDong(), getJibun(), getBonbun(),
-			getBubun(),
-			getApartmentName(), getBuildYear(), getRoadAddress(), getDeleteDttm());
-	}
-
-	@Override
-	public String toString() {
-		return "Apartment{" +
-			"id=" + id +
-			", regionalCode='" + regionalCode + '\'' +
-			", city='" + city + '\'' +
-			", gu='" + gu + '\'' +
-			", dong='" + dong + '\'' +
-			", jibun='" + jibun + '\'' +
-			", bonbun='" + bonbun + '\'' +
-			", bubun='" + bubun + '\'' +
-			", apartmentName='" + apartmentName + '\'' +
-			", buildYear=" + buildYear +
-			", roadAddress='" + roadAddress + '\'' +
-			", deleteDttm=" + deleteDttm +
-			'}';
+		return Objects.hash(getId());
 	}
 }

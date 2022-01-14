@@ -48,7 +48,7 @@
         from apartment
     </select>
 
-    <select id="findByRegionalCodeAndDongAndJibunAndApartmentName" resultType="Apartment" parameterType="Apartment">
+    <select id="findExistApartment" resultType="Apartment" parameterType="Apartment">
         select
               regional_code
              , dong
