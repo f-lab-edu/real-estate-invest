@@ -28,15 +28,8 @@ public class ApartmentPrice {
 	}
 
 	private int parseDealAmount(String dealAmount) {
-			dealAmount = dealAmount.trim(); // 공백 제거
-			// 금액을 나누는 ',' 부호 제거
-			String[] strArr = dealAmount.split(",");
-			StringBuilder sb = new StringBuilder();
-			for (String str: strArr) {
-				sb.append(str);
-			}
-
-			return Integer.parseInt(sb.toString());
+			dealAmount = dealAmount.trim().replace(",",""); // 공백 제거
+			return Integer.parseInt(dealAmount);
 	}
 
 	public ApartmentPriceUniqueInfo getApartmentPriceUniqueInfo() {
