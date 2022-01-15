@@ -16,10 +16,10 @@ import kancho.realestate.comparingprices.domain.model.ApartmentPrice;
 @ActiveProfiles("test")
 @SpringBootTest
 @Transactional
-class ApartmentServiceTest {
+class ApartmentApiServiceTest {
 
 	@Autowired
-	ApartmentService apartmentService;
+	ApartmentApiService apartmentService;
 
 	@Test
 	void 모든_아파트_정보를_조회하면_값이_존재함() {

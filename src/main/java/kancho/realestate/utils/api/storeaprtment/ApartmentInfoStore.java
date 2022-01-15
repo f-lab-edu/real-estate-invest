@@ -22,7 +22,7 @@ import kancho.realestate.comparingprices.domain.model.ApartmentPrice;
 import kancho.realestate.comparingprices.domain.model.ApartmentPriceUniqueInfo;
 import kancho.realestate.comparingprices.domain.model.ApartmentUniqueInfo;
 import kancho.realestate.comparingprices.domain.model.Gu;
-import kancho.realestate.utils.api.storeaprtment.service.ApartmentService;
+import kancho.realestate.utils.api.storeaprtment.service.ApartmentApiService;
 import lombok.RequiredArgsConstructor;
 
 @Profile("!test") // 테스트시 실행 x
@@ -32,7 +32,7 @@ public class ApartmentInfoStore implements ApplicationRunner {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	private final ApartmentApiClient apartmentApiClient;
-	private final ApartmentService apartmentService;
+	private final ApartmentApiService apartmentApiService;
 
 	private final int numOfMonth = 1; // 데이터로 가져올 개월 수
 
@@ -75,12 +75,12 @@ public class ApartmentInfoStore implements ApplicationRunner {
 	}
 
 	private Map<ApartmentUniqueInfo, Long> getExistingApartments() {
-		return apartmentService.findAllApartments().stream() // 기존 아파트 정보를 찾아서,
+		return apartmentApiService.findAllApartments().stream() // 기존 아파트 정보를 찾아서,
 			.collect(Collectors.toMap(Apartment::getApartmentUniqueInfo, Apartment::getId)); // Map 자료구조로 매핑
 	}
 
 	private Map<ApartmentPriceUniqueInfo, Long> getExistingApartmentPrices() {
-		return apartmentService.findAllApartmentsPrice().stream() // 기존 아파트 가격 정보를 찾아서,
+		return apartmentApiService.findAllApartmentsPrice().stream() // 기존 아파트 가격 정보를 찾아서,
 			.collect(
 				Collectors.toMap(ApartmentPrice::getApartmentPriceUniqueInfo, ApartmentPrice::getId)); // Map 자료구조로 매핑
 	}
@@ -91,7 +91,7 @@ public class ApartmentInfoStore implements ApplicationRunner {
 		Apartment apartment = apartmentDetail.getApartment();
 
 		if (isNew(existingApartmentData, apartment)) {
-			apartmentId = apartmentService.save(apartment);
+			apartmentId = apartmentApiService.save(apartment);
 			existingApartmentData.put(new ApartmentUniqueInfo(apartment), apartmentId);
 			logger.info("아파트 정보 저장 성공 = {}", apartment);
 		} else {
@@ -106,7 +106,7 @@ public class ApartmentInfoStore implements ApplicationRunner {
 		ApartmentPrice apartmentPrice = apartmentDetail.getApartmentPrice();
 
 		if (isNew(existingApartmentPriceData, apartmentPrice)) {
-			long id = apartmentService.save(apartmentPrice);
+			long id = apartmentApiService.save(apartmentPrice);
 			existingApartmentPriceData.put(new ApartmentPriceUniqueInfo(apartmentPrice), id);
 			logger.info("아파트 가격 정보 저장 성공 = {}", apartmentPrice);
 		} else {

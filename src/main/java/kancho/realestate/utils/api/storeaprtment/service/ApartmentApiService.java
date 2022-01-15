@@ -6,13 +6,13 @@ import org.springframework.stereotype.Service;
 
 import kancho.realestate.comparingprices.domain.model.Apartment;
 import kancho.realestate.comparingprices.domain.model.ApartmentPrice;
-import kancho.realestate.utils.api.storeaprtment.mapper.ApartmentMapper;
-import kancho.realestate.utils.api.storeaprtment.mapper.ApartmentPriceMapper;
+import kancho.realestate.comparingprices.repository.ApartmentMapper;
+import kancho.realestate.comparingprices.repository.ApartmentPriceMapper;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-public class ApartmentService {
+public class ApartmentApiService {
 	private final ApartmentMapper apartmentMapper;
 	private final ApartmentPriceMapper apartmentPriceMapper;
 
