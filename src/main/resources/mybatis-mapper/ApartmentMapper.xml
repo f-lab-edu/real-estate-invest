@@ -20,6 +20,7 @@
              , road_address
              , delete_dttm
         from apartment
+        where delete_dttm is null
     </select>
 
     <select id="findAllWithPaging" resultType="Apartment" parameterType="RequestPage">
