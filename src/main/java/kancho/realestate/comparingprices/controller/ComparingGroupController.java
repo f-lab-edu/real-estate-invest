@@ -34,9 +34,9 @@ public class ComparingGroupController {
 	}
 
 	@GetMapping
-	public ResponseEntity showComparingGroupsInUser(@RequestParam("userNo") Long userNo) {
+	public ResponseEntity showComparingGroupsInUser(@RequestParam("userId") Long userId) {
 		List<ResponseComparingGroupDto> groupResponses = comparingGroupService
-			.findComparingGroupsByUserNoResponses(userNo);
+			.findComparingGroupsByUserIdResponses(userId);
 		return new ResponseEntity<>(new SuccessReponseDto<>("그룹 목록 조회", groupResponses), HttpStatus.OK);
 	}
 

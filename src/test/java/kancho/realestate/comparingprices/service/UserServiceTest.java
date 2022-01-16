@@ -7,7 +7,6 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import kancho.realestate.comparingprices.domain.dto.request.RequestUserDto;
@@ -15,17 +14,15 @@ import kancho.realestate.comparingprices.domain.model.User;
 import kancho.realestate.comparingprices.exception.DuplicateUserAccountException;
 import kancho.realestate.comparingprices.exception.IdNotExistedException;
 import kancho.realestate.comparingprices.exception.PasswordWrongException;
-import kancho.realestate.comparingprices.repository.UserMapper;
+import kancho.realestate.comparingprices.repository.UserRepository;
 
-@SpringBootTest
-@Transactional
-class UserServiceTest {
+class UserServiceTest extends ServiceTest {
 
 	@Autowired
 	UserService userService;
 
 	@Autowired
-	UserMapper userMapper;
+	UserRepository userRepository;
 
 	@Transactional
 	@ParameterizedTest

@@ -22,7 +22,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import kancho.realestate.comparingprices.domain.model.Apartment;
-import kancho.realestate.comparingprices.repository.ApartmentMapper;
+import kancho.realestate.comparingprices.repository.ApartmentRepository;
 import kancho.realestate.utils.excel.storeaprtment.domain.ApartmentlField;
 import lombok.RequiredArgsConstructor;
 
@@ -35,7 +35,7 @@ public class ApartmentInfoStore implements ApplicationRunner {
 	private static final int APARTMENT_SHEET_INDEX = 1;
 	private static final int DATA_ROW_START_INDEX = 1;
 
-	private final ApartmentMapper apartmentMapper;
+	private final ApartmentRepository apartmentRepository;
 
 	@Override
 	public void run(ApplicationArguments args) throws IOException {
@@ -103,14 +103,15 @@ public class ApartmentInfoStore implements ApplicationRunner {
 
 	private void saveApartment(Apartment apartment) {
 		if (isNew(apartment)) {
-			apartmentMapper.save(apartment);
+			apartmentRepository.save(apartment);
 		}
 	}
 
 	private boolean isNew(Apartment apartment) {
-		Optional<Apartment> findApartment = apartmentMapper.findExistApartment(
-			apartment);
+		Optional<Apartment> findApartment = apartmentRepository.findApartByDistinctFields(
+			apartment.getRegionalCode(), apartment.getDong(), apartment.getJibun(), apartment.getApartmentName());
 		return findApartment.isEmpty();
+		// return true;
 	}
 
 }

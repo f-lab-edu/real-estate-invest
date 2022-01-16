@@ -13,7 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import kancho.realestate.comparingprices.domain.dto.request.RequestApartmentDetailDto;
-import kancho.realestate.comparingprices.domain.model.ApartmentDetail;
+import kancho.realestate.comparingprices.domain.vo.ApartmentDetail;
 import kancho.realestate.comparingprices.exception.InvalidDealYearAndMonthException;
 import kancho.realestate.comparingprices.exception.InvalidRegionalCodeException;
 

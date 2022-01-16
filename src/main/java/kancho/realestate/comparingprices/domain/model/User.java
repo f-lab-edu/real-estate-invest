@@ -3,34 +3,43 @@ package kancho.realestate.comparingprices.domain.model;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 import lombok.Getter;
 
+
 @Getter
-public class User {
-	private Long userNo;
-	private String id;
+@Entity
+public class User extends BaseTimeEntity{
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@Column(unique = true, nullable = false)
+	private String account;
+
+	@Column(nullable = false)
 	private String password;
-	private LocalDateTime joinDttm;
+
 	private LocalDateTime lastLoginDttm;
+
 	private LocalDateTime deleteDttm;
 
-	public User(String id, String password) {
-		validateId(id);
-		this.id = id;
+	protected User() {
+	}
+
+	public User(String account, String password) {
+		validateId(account);
+		this.account = account;
 		this.password = password;
-		this.joinDttm = LocalDateTime.now();
-		this.lastLoginDttm = LocalDateTime.now();
 	}
 
 	private void validateId(String id) {
 
 	}
-
-	// mybatis로 insert 후 입력받으려면 필요
-	protected void setUserNo(Long userNo) {
-		this.userNo = userNo;
-	}
-
 
 	@Override
 	public boolean equals(Object o) {
@@ -39,11 +48,15 @@ public class User {
 		if(!(o instanceof User))
 			return false;
 		User user = (User)o;
-		return Objects.equals(getUserNo(), user.getUserNo());
+		return Objects.equals(this.getId(), user.getId());
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getUserNo());
+		return Objects.hash(this.getId());
+	}
+
+	public void updateLastLoginDttm() {
+		this.lastLoginDttm=LocalDateTime.now();
 	}
 }

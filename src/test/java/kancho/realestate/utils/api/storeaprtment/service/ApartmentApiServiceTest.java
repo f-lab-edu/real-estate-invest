@@ -37,7 +37,7 @@ class ApartmentApiServiceTest {
 	void 아파트_정보를_저장하면_반환되는_id는_양의_정수() {
 		Apartment apartment = new Apartment("11680", "어떤시", "어떤구", "어떤동", "777", "7777", "7777", "어떤아파트", 2022,
 			"어떤도로명");
-		long id = apartmentService.save(apartment);
-		assertThat(id).isGreaterThan(0);
+		Apartment persistApartment = apartmentService.save(apartment);
+		assertThat(persistApartment.getId()).isGreaterThan(0);
 	}
 }

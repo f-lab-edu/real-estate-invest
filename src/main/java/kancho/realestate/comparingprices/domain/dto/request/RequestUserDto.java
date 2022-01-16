@@ -1,18 +1,18 @@
 package kancho.realestate.comparingprices.domain.dto.request;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class RequestUserDto {
-	private String id;
+	private String account;
 	private String password;
 
 	/* @RequestBody에 사용하려면 Default constructor를 만들어야함 */
-	public RequestUserDto() {
+	private RequestUserDto() {
 	}
 
-	public RequestUserDto(String id, String password) {
-		this.id = id;
+	public RequestUserDto(String account, String password) {
+		this.account = account;
 		this.password = password;
 	}
 }

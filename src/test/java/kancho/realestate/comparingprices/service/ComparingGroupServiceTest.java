@@ -8,8 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import kancho.realestate.comparingprices.domain.dto.request.RequestApartmentDto;
 import kancho.realestate.comparingprices.domain.dto.request.RequestComparingGroupDto;
@@ -20,10 +18,7 @@ import kancho.realestate.comparingprices.domain.dto.response.ResponseComparingGr
 import kancho.realestate.comparingprices.domain.dto.response.ResponseGroupItemDto;
 import kancho.realestate.comparingprices.domain.dto.response.ResponseUserDto;
 
-
-@Transactional
-@SpringBootTest
-class ComparingGroupServiceTest {
+class ComparingGroupServiceTest extends ServiceTest {
 
 	@Autowired
 	private ComparingGroupService comparingGroupService;
@@ -60,7 +55,7 @@ class ComparingGroupServiceTest {
 
 		// when
 		String groupName = "가장 관심가지는 곳";
-		RequestComparingGroupDto requestComparingGroupDto = new RequestComparingGroupDto(user.getUserNo(),
+		RequestComparingGroupDto requestComparingGroupDto = new RequestComparingGroupDto(user.getUserId(),
 			groupName);
 		ResponseComparingGroupDto groupDto = comparingGroupService.saveComparingGroup(requestComparingGroupDto);
 
@@ -74,9 +69,10 @@ class ComparingGroupServiceTest {
 	void saveComparingGroupItem() {
 		// given
 		String groupName = "가장 관심가지는 곳";
-		RequestComparingGroupDto requestComparingGroupDto = new RequestComparingGroupDto(user.getUserNo(),
+		RequestComparingGroupDto requestComparingGroupDto = new RequestComparingGroupDto(user.getUserId(),
 			groupName);
-		ResponseComparingGroupDto groupDto =comparingGroupService.saveComparingGroup(requestComparingGroupDto);
+		ResponseComparingGroupDto groupDto = comparingGroupService.saveComparingGroup(requestComparingGroupDto);
+		System.out.println(groupDto);
 
 		// when
 		RequestGroupItemDto requestDto = new RequestGroupItemDto(groupDto.getId(), apartment1.getId());
@@ -84,7 +80,7 @@ class ComparingGroupServiceTest {
 
 		// then
 		assertThat(responseGroupItemDto.getId()).isNotNull();
-		assertThat(responseGroupItemDto.getGroupId()).isEqualTo(groupDto.getId());
+		assertThat(responseGroupItemDto.getComparingGroupDto().getId()).isEqualTo(groupDto.getId());
 	}
 
 	@DisplayName("사용자가 등록한 비교그룹 조회")
@@ -92,18 +88,18 @@ class ComparingGroupServiceTest {
 	void findComparingGroupsByUserNo() {
 		// given
 		String groupName1 = "가장 관심가지는 곳";
-		RequestComparingGroupDto requestComparingGroupDto1 = new RequestComparingGroupDto(user.getUserNo(),
+		RequestComparingGroupDto requestComparingGroupDto1 = new RequestComparingGroupDto(user.getUserId(),
 			groupName1);
 		ResponseComparingGroupDto groupDto1 = comparingGroupService.saveComparingGroup(requestComparingGroupDto1);
 
 		String groupName2 = "가장 관심가지는 곳";
-		RequestComparingGroupDto requestComparingGroupDto2 = new RequestComparingGroupDto(user.getUserNo(),
+		RequestComparingGroupDto requestComparingGroupDto2 = new RequestComparingGroupDto(user.getUserId(),
 			groupName2);
 		ResponseComparingGroupDto groupDto2 = comparingGroupService.saveComparingGroup(requestComparingGroupDto2);
 
 		// when
-		List<ResponseComparingGroupDto> responses = comparingGroupService.findComparingGroupsByUserNoResponses(
-			user.getUserNo());
+		List<ResponseComparingGroupDto> responses = comparingGroupService.findComparingGroupsByUserIdResponses(
+			user.getUserId());
 
 		// then
 		assertThat(responses.size()).isEqualTo(2);
@@ -111,15 +107,14 @@ class ComparingGroupServiceTest {
 		assertThat(responses.contains(groupDto2)).isTrue();
 	}
 
-
 	@DisplayName("비교군 그룹 내 아파트 목록 조회")
 	@Test
-	void findGroupItemsByGroupIdResponses(){
+	void findGroupItemsByGroupIdResponses() {
 		// given
 		String groupName = "가장 관심가지는 곳";
-		RequestComparingGroupDto requestComparingGroupDto = new RequestComparingGroupDto(user.getUserNo(),
+		RequestComparingGroupDto requestComparingGroupDto = new RequestComparingGroupDto(user.getUserId(),
 			groupName);
-		ResponseComparingGroupDto groupDto =comparingGroupService.saveComparingGroup(requestComparingGroupDto);
+		ResponseComparingGroupDto groupDto = comparingGroupService.saveComparingGroup(requestComparingGroupDto);
 
 		RequestGroupItemDto groupItemDto1 = new RequestGroupItemDto(groupDto.getId(), apartment1.getId());
 		RequestGroupItemDto groupItemDto2 = new RequestGroupItemDto(groupDto.getId(), apartment2.getId());

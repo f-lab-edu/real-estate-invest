@@ -1,5 +1,7 @@
 package kancho.realestate.comparingprices.domain.dto.request;
 
+import kancho.realestate.comparingprices.domain.model.Apartment;
+import kancho.realestate.comparingprices.domain.model.ComparingGroup;
 import kancho.realestate.comparingprices.domain.model.GroupItem;
 import lombok.Getter;
 
@@ -9,7 +11,7 @@ public class RequestGroupItemDto {
 	private Long groupId;
 	private Long apartmentId;
 
-	public RequestGroupItemDto() {
+	private RequestGroupItemDto() {
 	}
 
 	public RequestGroupItemDto(Long groupId, Long apartmentId) {
@@ -17,7 +19,7 @@ public class RequestGroupItemDto {
 		this.apartmentId = apartmentId;
 	}
 
-	public GroupItem toGroupItem() {
-		return new GroupItem(getGroupId(),getApartmentId());
+	public GroupItem toGroupItem(ComparingGroup group, Apartment apartment) {
+		return new GroupItem(group,apartment);
 	}
 }

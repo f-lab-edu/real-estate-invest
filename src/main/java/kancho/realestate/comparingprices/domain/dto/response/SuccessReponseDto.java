@@ -7,7 +7,7 @@ public class SuccessReponseDto<T> {
     private String message;
     private T result;
 
-    public SuccessReponseDto() {
+    private SuccessReponseDto() {
     }
 
     public SuccessReponseDto(String message, T result) {

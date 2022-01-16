@@ -6,29 +6,29 @@ import org.springframework.stereotype.Service;
 
 import kancho.realestate.comparingprices.domain.model.Apartment;
 import kancho.realestate.comparingprices.domain.model.ApartmentPrice;
-import kancho.realestate.comparingprices.repository.ApartmentMapper;
-import kancho.realestate.comparingprices.repository.ApartmentPriceMapper;
+import kancho.realestate.comparingprices.repository.ApartmentPriceRepository;
+import kancho.realestate.comparingprices.repository.ApartmentRepository;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
 public class ApartmentApiService {
-	private final ApartmentMapper apartmentMapper;
-	private final ApartmentPriceMapper apartmentPriceMapper;
+	private final ApartmentRepository apartmentRepository;
+	private final ApartmentPriceRepository apartmentPriceRepository;
 
 	public List<Apartment> findAllApartments() {
-		return apartmentMapper.findAll();
+		return apartmentRepository.findAll();
 	}
 
 	public List<ApartmentPrice> findAllApartmentsPrice() {
-		return apartmentPriceMapper.findAll();
+		return apartmentPriceRepository.findAll();
 	}
 
-	public long save(Apartment apartment){
-		return apartmentMapper.save(apartment);
+	public Apartment save(Apartment apartment) {
+		return apartmentRepository.save(apartment);
 	}
 
-	public long save(ApartmentPrice apartmentPrice) {
-		return apartmentPriceMapper.save(apartmentPrice);
+	public ApartmentPrice save(ApartmentPrice apartmentPrice) {
+		return apartmentPriceRepository.save(apartmentPrice);
 	}
 }

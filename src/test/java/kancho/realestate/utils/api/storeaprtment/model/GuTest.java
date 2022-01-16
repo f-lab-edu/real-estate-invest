@@ -3,7 +3,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import kancho.realestate.comparingprices.domain.model.Gu;
+import kancho.realestate.comparingprices.domain.vo.Gu;
 
 class GuTest {
 

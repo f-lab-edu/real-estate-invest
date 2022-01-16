@@ -1,18 +1,11 @@
 package kancho.realestate.comparingprices.controller;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.io.DataInput;
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
-import org.apache.coyote.Response;
-import org.assertj.core.api.Assertions;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
@@ -31,6 +23,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import kancho.realestate.comparingprices.acceptance.AcceptanceTest;
 import kancho.realestate.comparingprices.domain.dto.response.ResponseApartmentDto;
 import kancho.realestate.comparingprices.domain.dto.response.ResponseComparingGroupDto;
 import kancho.realestate.comparingprices.domain.dto.response.ResponseGroupItemDto;
@@ -40,7 +33,7 @@ import kancho.realestate.comparingprices.domain.dto.response.SuccessReponseDto;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 @Transactional
-class ComparingGroupControllerTest {
+class ComparingGroupControllerTest extends AcceptanceTest {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -75,7 +68,7 @@ class ComparingGroupControllerTest {
 
 		// when
 		String groupName="1순위그룹";
-		MvcResult result = requestPost("/comparing-group", createComparingGroup(user.getUserNo(), groupName),
+		MvcResult result = requestPost("/comparing-group", createComparingGroup(user.getUserId(), groupName),
 			status().isCreated());
 
 		// then
@@ -91,7 +84,7 @@ class ComparingGroupControllerTest {
 	void addGroupItem() throws Exception {
 
 		// given
-		MvcResult result = requestPost("/comparing-group", createComparingGroup(user.getUserNo(), "1순위그룹"),
+		MvcResult result = requestPost("/comparing-group", createComparingGroup(user.getUserId(), "1순위그룹"),
 			status().isCreated());
 
 		ResponseComparingGroupDto groupDto =getContentFromResult(result.getResponse().getContentAsString(),
@@ -108,13 +101,13 @@ class ComparingGroupControllerTest {
 			}).getResult();
 
 		assertThat(groupItemDto.getId()).isNotNull();
-		assertThat(groupItemDto.getGroupId()).isEqualTo(groupDto.getId());
+		assertThat(groupItemDto.getComparingGroupDto().getId()).isEqualTo(groupDto.getId());
 		assertThat(groupItemDto.getApartmentId()).isEqualTo(apartment1.getId());
 	}
 
-	public String createComparingGroup(Long userNo, String name) {
+	public String createComparingGroup(Long userId, String name) {
 		HashMap<String, String> bodyContent = new HashMap<>();
-		bodyContent.put("userNo", String.valueOf(userNo));
+		bodyContent.put("userId", String.valueOf(userId));
 		bodyContent.put("name", name);
 
 		return String.valueOf(new JSONObject(bodyContent));

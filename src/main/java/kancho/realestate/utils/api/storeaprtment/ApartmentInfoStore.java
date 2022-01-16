@@ -17,11 +17,11 @@ import org.springframework.stereotype.Component;
 
 import kancho.realestate.comparingprices.domain.dto.request.RequestApartmentDetailDto;
 import kancho.realestate.comparingprices.domain.model.Apartment;
-import kancho.realestate.comparingprices.domain.model.ApartmentDetail;
+import kancho.realestate.comparingprices.domain.vo.ApartmentDetail;
 import kancho.realestate.comparingprices.domain.model.ApartmentPrice;
-import kancho.realestate.comparingprices.domain.model.ApartmentPriceUniqueInfo;
-import kancho.realestate.comparingprices.domain.model.ApartmentUniqueInfo;
-import kancho.realestate.comparingprices.domain.model.Gu;
+import kancho.realestate.comparingprices.domain.vo.ApartmentPriceUniqueInfo;
+import kancho.realestate.comparingprices.domain.vo.ApartmentUniqueInfo;
+import kancho.realestate.comparingprices.domain.vo.Gu;
 import kancho.realestate.utils.api.storeaprtment.service.ApartmentApiService;
 import lombok.RequiredArgsConstructor;
 
@@ -91,7 +91,7 @@ public class ApartmentInfoStore implements ApplicationRunner {
 		Apartment apartment = apartmentDetail.getApartment();
 
 		if (isNew(existingApartmentData, apartment)) {
-			apartmentId = apartmentApiService.save(apartment);
+			apartmentId = apartmentApiService.save(apartment).getId();
 			existingApartmentData.put(new ApartmentUniqueInfo(apartment), apartmentId);
 			logger.info("아파트 정보 저장 성공 = {}", apartment);
 		} else {
@@ -106,7 +106,7 @@ public class ApartmentInfoStore implements ApplicationRunner {
 		ApartmentPrice apartmentPrice = apartmentDetail.getApartmentPrice();
 
 		if (isNew(existingApartmentPriceData, apartmentPrice)) {
-			long id = apartmentApiService.save(apartmentPrice);
+			long id = apartmentApiService.save(apartmentPrice).getApartmentId();
 			existingApartmentPriceData.put(new ApartmentPriceUniqueInfo(apartmentPrice), id);
 			logger.info("아파트 가격 정보 저장 성공 = {}", apartmentPrice);
 		} else {

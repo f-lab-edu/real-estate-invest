@@ -1,6 +1,8 @@
-package kancho.realestate.comparingprices.domain.model;
+package kancho.realestate.comparingprices.domain.vo;
 
 import java.util.Objects;
+
+import kancho.realestate.comparingprices.domain.model.ApartmentPrice;
 
 public class ApartmentPriceUniqueInfo {
 	private long apartmentId;

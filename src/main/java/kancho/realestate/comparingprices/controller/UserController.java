@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 
 	private final UserService userService;
-	public static final String SESSION_KEY = "userNo";
+	public static final String SESSION_KEY = "userId";
 
 	@PostMapping(value = "/join", produces = "application/json; charset=utf8")
 	public ResponseEntity join(HttpServletRequest request, @RequestBody RequestUserDto requestUserDto) {
@@ -46,8 +46,8 @@ public class UserController {
 			expirePreLoginSession(session);
 		}
 
-		/* User 다른 정보는 제외하고(특히 password) userNo와 id만 담은 SessionUserDto 사용 */
-		SessionUserVO userDto = new SessionUserVO(loginUser.getUserNo(), loginUser.getId());
+		/* User 다른 정보는 제외하고(특히 password) userId와 account만 담은 SessionUserDto 사용 */
+		SessionUserVO userDto = new SessionUserVO(loginUser.getId(), loginUser.getAccount());
 		session = request.getSession();
 		session.setAttribute(SESSION_KEY, userDto);
 
@@ -64,7 +64,7 @@ public class UserController {
 	}
 
 	private void validateDuplicateLogin(SessionUserVO userInSession, RequestUserDto requestUserDto) {
-		if (userInSession.getId().equals(requestUserDto.getId())) {
+		if (userInSession.getAccount().equals(requestUserDto.getAccount())) {
 			throw new DuplicateLoginException("이미 로그인한 상태입니다.");
 		}
 	}

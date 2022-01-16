@@ -9,21 +9,21 @@ import lombok.Getter;
 public class ResponseComparingGroupDto {
 
 	private Long id;
-	private Long userNo;
+	private Long userId;
 	private String name;
 
-	public ResponseComparingGroupDto() {
+	private ResponseComparingGroupDto() {
 	}
 
-	private ResponseComparingGroupDto(Long id, Long userNo, String name) {
+	private ResponseComparingGroupDto(Long id, Long userId, String name) {
 		this.id = id;
-		this.userNo = userNo;
+		this.userId = userId;
 		this.name = name;
 	}
 
 	public static ResponseComparingGroupDto from(ComparingGroup comparingGroup) {
-		return new ResponseComparingGroupDto(comparingGroup.getId(), comparingGroup.getUserNo(),
-			comparingGroup.getName());
+		return new ResponseComparingGroupDto(comparingGroup.getId(), comparingGroup.getId(),
+			comparingGroup.getGroupName());
 	}
 
 	@Override
@@ -33,12 +33,21 @@ public class ResponseComparingGroupDto {
 		if (o == null || getClass() != o.getClass())
 			return false;
 		ResponseComparingGroupDto groupDto = (ResponseComparingGroupDto)o;
-		return Objects.equals(getId(), groupDto.getId()) && Objects.equals(getUserNo(),
-			groupDto.getUserNo()) && Objects.equals(getName(), groupDto.getName());
+		return Objects.equals(getId(), groupDto.getId()) && Objects.equals(this.getUserId(),
+			groupDto.getUserId()) && Objects.equals(getName(), groupDto.getName());
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getId(), getUserNo(), getName());
+		return Objects.hash(getId(), this.getUserId(), getName());
+	}
+
+	@Override
+	public String toString() {
+		return "ResponseComparingGroupDto{" +
+			"id=" + id +
+			", userId=" + userId +
+			", name='" + name + '\'' +
+			'}';
 	}
 }

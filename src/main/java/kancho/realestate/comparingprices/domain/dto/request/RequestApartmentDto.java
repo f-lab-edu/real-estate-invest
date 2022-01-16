@@ -17,7 +17,7 @@ public class RequestApartmentDto {
 	private int buildYear;
 	private String roadAddress;
 
-	public RequestApartmentDto() {
+	private RequestApartmentDto() {
 	}
 
 	public RequestApartmentDto(String regionalCode, String city, String gu, String dong, String jibun,

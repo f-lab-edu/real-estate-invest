@@ -5,12 +5,10 @@ import static org.assertj.core.api.Assertions.*;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import kancho.realestate.comparingprices.domain.model.SoaringPrices;
 
-@SpringBootTest
-class SoaringPricesServiceTest {
+class SoaringPricesServiceTest extends ServiceTest {
 
 	@Autowired
 	SoaringPricesService soaringPricesService;

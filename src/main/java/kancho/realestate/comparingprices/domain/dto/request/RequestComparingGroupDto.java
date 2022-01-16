@@ -1,25 +1,24 @@
 package kancho.realestate.comparingprices.domain.dto.request;
 
-import java.time.LocalDateTime;
-
 import kancho.realestate.comparingprices.domain.model.ComparingGroup;
+import kancho.realestate.comparingprices.domain.model.User;
 import lombok.Getter;
 
 @Getter
 public class RequestComparingGroupDto {
 
-	private Long userNo;
+	private Long userId;
 	private String name;
 
-	public RequestComparingGroupDto() {
+	private RequestComparingGroupDto() {
 	}
 
-	public RequestComparingGroupDto(Long userNo, String name) {
-		this.userNo = userNo;
+	public RequestComparingGroupDto(Long userId, String name) {
+		this.userId = userId;
 		this.name = name;
 	}
 
-	public ComparingGroup toComparingGroup() {
-		return new ComparingGroup(getUserNo(), getName());
+	public ComparingGroup toComparingGroup(User user) {
+		return new ComparingGroup(user, getName());
 	}
 }

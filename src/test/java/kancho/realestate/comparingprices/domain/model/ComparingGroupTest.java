@@ -11,7 +11,7 @@ class ComparingGroupTest {
 	@Test
 	void comparingGroup(){
 		String groupName="마래푸34 아리팍24";
-		ComparingGroup group = new ComparingGroup(1L,groupName);
-		Assertions.assertThat(group.getName()).isEqualTo(groupName);
+		ComparingGroup group = new ComparingGroup(new User("abc","1234"),groupName);
+		Assertions.assertThat(group.getGroupName()).isEqualTo(groupName);
 	}
 }

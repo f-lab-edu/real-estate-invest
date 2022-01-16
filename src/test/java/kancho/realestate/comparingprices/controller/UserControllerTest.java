@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.transaction.annotation.Transactional;
 
+import kancho.realestate.comparingprices.acceptance.AcceptanceTest;
 import kancho.realestate.comparingprices.exception.DuplicateLoginException;
 import kancho.realestate.comparingprices.exception.DuplicateUserAccountException;
 import kancho.realestate.comparingprices.exception.IdNotExistedException;
@@ -28,7 +29,7 @@ import kancho.realestate.comparingprices.exception.PasswordWrongException;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 @Transactional
-class UserControllerTest {
+class UserControllerTest extends AcceptanceTest {
 
 	@Autowired
 	MockMvc mockMvc;
@@ -165,11 +166,10 @@ class UserControllerTest {
 			.andExpect(result -> assertThat(result.getResolvedException()).isInstanceOf(exceptionClass));
 	}
 
-	public static String createUserInfo(String id, String password) {
+	public static String createUserInfo(String account, String password) {
 		HashMap<String, String> bodyContent = new HashMap<>();
-		bodyContent.put("id", id);
+		bodyContent.put("account", account);
 		bodyContent.put("password", password);
 		return String.valueOf(new JSONObject(bodyContent));
 	}
-
 }

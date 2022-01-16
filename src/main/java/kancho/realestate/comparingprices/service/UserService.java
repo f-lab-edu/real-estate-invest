@@ -3,7 +3,6 @@ package kancho.realestate.comparingprices.service;
 import java.util.Optional;
 
 import org.mindrot.jbcrypt.BCrypt;
-// import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,7 +12,7 @@ import kancho.realestate.comparingprices.domain.model.User;
 import kancho.realestate.comparingprices.exception.DuplicateUserAccountException;
 import kancho.realestate.comparingprices.exception.IdNotExistedException;
 import kancho.realestate.comparingprices.exception.PasswordWrongException;
-import kancho.realestate.comparingprices.repository.UserMapper;
+import kancho.realestate.comparingprices.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -21,14 +20,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserService {
 
-	private final UserMapper userMapper;
+	private final UserRepository userRepository;
 
 	@Transactional
 	public ResponseUserDto createUser(RequestUserDto requestUser) {
-		validateNotExistUser(getUserById(requestUser.getId()));
+		validateNotExistUser(getUserById(requestUser.getAccount()));
 		String encryptedPw = getEncryptedPassword(requestUser.getPassword());
-		User user = new User(requestUser.getId(), encryptedPw);
-		userMapper.saveUser(user);
+		User user = new User(requestUser.getAccount(), encryptedPw);
+		userRepository.save(user);
 
 		return ResponseUserDto.from(user);
 	}
@@ -44,8 +43,9 @@ public class UserService {
 	}
 
 	public User login(RequestUserDto requestUser) {
-		User foundUser = getUserById(requestUser.getId()).orElseThrow(() -> new IdNotExistedException());
+		User foundUser = getUserById(requestUser.getAccount()).orElseThrow(() -> new IdNotExistedException());
 		validatePassword(requestUser.getPassword(), foundUser.getPassword());
+		foundUser.updateLastLoginDttm();
 		return foundUser;
 	}
 
@@ -59,8 +59,8 @@ public class UserService {
 		}
 	}
 
-	public Optional<User> getUserById(String id) {
-		Optional<User> foundUser = userMapper.selectUserById(id);
+	public Optional<User> getUserById(String account) {
+		Optional<User> foundUser = userRepository.findByAccount(account);
 		return foundUser;
 	}
 }

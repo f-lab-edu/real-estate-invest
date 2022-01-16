@@ -1,4 +1,4 @@
-package kancho.realestate.comparingprices.domain.model;
+package kancho.realestate.comparingprices.domain.vo;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;

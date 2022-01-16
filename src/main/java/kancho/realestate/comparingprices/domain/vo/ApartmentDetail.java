@@ -1,9 +1,13 @@
-package kancho.realestate.comparingprices.domain.model;
+package kancho.realestate.comparingprices.domain.vo;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 
+import kancho.realestate.comparingprices.domain.model.Apartment;
+import kancho.realestate.comparingprices.domain.model.ApartmentPrice;
+import kancho.realestate.comparingprices.domain.vo.City;
+import kancho.realestate.comparingprices.domain.vo.Gu;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

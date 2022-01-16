@@ -7,8 +7,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
-import kancho.realestate.comparingprices.domain.model.ApartmentDetail;
-import kancho.realestate.comparingprices.domain.model.ApartmentDetails;
+import kancho.realestate.comparingprices.domain.vo.ApartmentDetail;
+import kancho.realestate.comparingprices.domain.vo.ApartmentDetails;
 import kancho.realestate.comparingprices.exception.InvalidApartmentXmlException;
 
 public class ApartmentXmlMapper {
