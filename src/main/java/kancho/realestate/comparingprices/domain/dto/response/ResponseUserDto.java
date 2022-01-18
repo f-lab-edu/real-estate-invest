@@ -7,22 +7,22 @@ import lombok.Getter;
 
 @Getter
 public class ResponseUserDto {
-	private Long userNo;
-	private String id;
+	private Long userId;
+	private String account;
 	private LocalDateTime joinDttm;
 	private LocalDateTime lastLoginDttm;
 
-	public ResponseUserDto() {
+	private ResponseUserDto() {
 	}
 
-	public ResponseUserDto(Long userNo, String id, LocalDateTime joinDttm, LocalDateTime lastLoginDttm) {
-		this.userNo = userNo;
-		this.id = id;
+	public ResponseUserDto(Long userId, String account, LocalDateTime joinDttm, LocalDateTime lastLoginDttm) {
+		this.userId = userId;
+		this.account = account;
 		this.joinDttm = joinDttm;
 		this.lastLoginDttm = lastLoginDttm;
 	}
 
 	public static ResponseUserDto from(User user) {
-		return new ResponseUserDto(user.getUserNo(), user.getId(), user.getJoinDttm(), user.getLastLoginDttm());
+		return new ResponseUserDto(user.getId(), user.getAccount(), user.getCreatedDate(), user.getLastLoginDttm());
 	}
 }

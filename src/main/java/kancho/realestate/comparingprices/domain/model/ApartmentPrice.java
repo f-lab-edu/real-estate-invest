@@ -3,22 +3,39 @@ package kancho.realestate.comparingprices.domain.model;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+import kancho.realestate.comparingprices.domain.vo.ApartmentDetail;
+import kancho.realestate.comparingprices.domain.vo.ApartmentPriceUniqueInfo;
 import lombok.Getter;
 
 @Getter
-public class ApartmentPrice {
+@Entity
+public class ApartmentPrice extends BaseTimeEntity{
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+
 	private long apartmentId;
+
 	private float areaForExclusiveUse;
+
 	private int dealYear;
+
 	private int dealMonth;
+
 	private int dealDay;
+
 	private int dealAmount;
+
 	private int floor;
 
-	private ApartmentPrice() {}
+	protected ApartmentPrice() {}
 
-	ApartmentPrice(ApartmentDetail detail) {
+	public ApartmentPrice(ApartmentDetail detail) {
 		this.apartmentId = detail.getApartmentId();
 		this.areaForExclusiveUse = detail.getAreaForExclusiveUse();
 		this.dealYear = detail.getDealYear();
@@ -41,7 +58,7 @@ public class ApartmentPrice {
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		if (o == null || getClass() != o.getClass())
+		if (!(o instanceof ApartmentPrice))
 			return false;
 
 		ApartmentPrice that = (ApartmentPrice)o;

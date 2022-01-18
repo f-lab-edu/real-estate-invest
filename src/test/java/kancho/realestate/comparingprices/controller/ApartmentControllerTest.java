@@ -16,10 +16,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
+import kancho.realestate.comparingprices.acceptance.AcceptanceTest;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 @Transactional
-class ApartmentControllerTest {
+class ApartmentControllerTest extends AcceptanceTest {
 
 	@Autowired
 	private MockMvc mockMvc;

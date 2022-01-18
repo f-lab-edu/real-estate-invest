@@ -3,24 +3,48 @@ package kancho.realestate.comparingprices.domain.model;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.Table;
+
+import kancho.realestate.comparingprices.domain.vo.ApartmentUniqueInfo;
 import lombok.Getter;
 
 @Getter
-public class Apartment {
+@Table(indexes = @Index(name = "idx_distinct", columnList ="regionalCode, dong, jibun, apartmentName" ))
+@Entity
+public class Apartment extends BaseTimeEntity{
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+
 	private String regionalCode;
+
 	private String city;
+
 	private String gu;
+
 	private String dong;
+
 	private String jibun;
+
 	private String bonbun;
+
 	private String bubun;
+
 	private String apartmentName;
+
 	private int buildYear;
+
 	private String roadAddress;
+
 	private LocalDateTime deleteDttm;
 
-	private Apartment() {}
+	protected Apartment() {}
 
 	public Apartment(String regionalCode, String city, String gu, String dong, String jibun,
 		String bonbun, String bubun, String apartmentName, int buildYear, String roadAddress) {
@@ -34,23 +58,6 @@ public class Apartment {
 		this.apartmentName = apartmentName;
 		this.buildYear = buildYear;
 		this.roadAddress = roadAddress;
-	}
-
-	public Apartment(long id, String regionalCode, String city, String gu, String dong, String jibun,
-		String bonbun, String bubun, String apartmentName, int buildYear, String roadAddress,
-		LocalDateTime deleteDttm) {
-		this.id = id;
-		this.regionalCode = regionalCode;
-		this.city = city;
-		this.gu = gu;
-		this.dong = dong;
-		this.jibun = jibun;
-		this.bonbun = bonbun;
-		this.bubun = bubun;
-		this.apartmentName = apartmentName;
-		this.buildYear = buildYear;
-		this.roadAddress = roadAddress;
-		this.deleteDttm = deleteDttm;
 	}
 
 	public Apartment(String regionalCode, String dong, String jibun, String apartmentName) {
@@ -68,7 +75,6 @@ public class Apartment {
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		// if (o == null || getClass() != o.getClass())
 		if(!(o instanceof Apartment))
 			return false;
 		Apartment apartment = (Apartment)o;

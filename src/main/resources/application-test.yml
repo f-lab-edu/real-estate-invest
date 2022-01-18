@@ -1,0 +1,27 @@
+server:
+  port: 8080
+spring:
+  session:
+    store-type: jdbc
+    jdbc:
+      initialize-schema: always
+      table-name: SPRING_SESSION
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:testdb;MODE=MYSQL;DB_CLOSE_DELAY=-1
+logging:
+  level:
+    org.hibernate.SQL: debug
+
+# 공공데이터 api
+data-go-kr:
+  domain-name: http://openapi.molit.go.kr/
+  apartment-price-detail:
+    accessKey: =yeg%2FTeVekjTpvCh%2FHtlpUTrtw0Dn4wFR5M7G2nP8vsB6I4zbRK9s6bpzwb4%2By6Nmv7SsuKmBZFUgkp6pBmm4Ow%3D%3D
+    path: OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptTradeDev

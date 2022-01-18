@@ -6,7 +6,7 @@ import javax.xml.bind.JAXBException;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.*;
 
-import kancho.realestate.comparingprices.domain.model.ApartmentDetail;
+import kancho.realestate.comparingprices.domain.vo.ApartmentDetail;
 import kancho.realestate.comparingprices.exception.InvalidApartmentXmlException;
 import kancho.realestate.utils.api.storeaprtment.mapper.ApartmentXmlMapper;
 

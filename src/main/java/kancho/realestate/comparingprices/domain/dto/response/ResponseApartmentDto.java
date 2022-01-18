@@ -18,7 +18,7 @@ public class ResponseApartmentDto {
 	private int buildYear;
 	private String roadAddress;
 
-	public ResponseApartmentDto() {
+	private ResponseApartmentDto() {
 	}
 
 	public ResponseApartmentDto(long id, String regionalCode, String city, String gu, String dong, String jibun,

@@ -1,6 +1,5 @@
 package kancho.realestate.comparingprices.controller;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -12,9 +11,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import kancho.realestate.comparingprices.acceptance.AcceptanceTest;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-class SoaringPricesControllerTest {
+class SoaringPricesControllerTest extends AcceptanceTest {
 
 	@Autowired
 	MockMvc mockMvc;

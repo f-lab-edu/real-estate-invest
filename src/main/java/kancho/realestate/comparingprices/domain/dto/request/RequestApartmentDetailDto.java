@@ -2,7 +2,7 @@ package kancho.realestate.comparingprices.domain.dto.request;
 
 import java.time.LocalDateTime;
 
-import kancho.realestate.comparingprices.domain.model.Gu;
+import kancho.realestate.comparingprices.domain.vo.Gu;
 import kancho.realestate.comparingprices.exception.InvalidDealYearAndMonthException;
 import kancho.realestate.comparingprices.exception.InvalidRegionalCodeException;
 import lombok.Getter;

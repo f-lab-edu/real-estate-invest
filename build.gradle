@@ -19,12 +19,22 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.mindrot:jbcrypt:0.3m'
+
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	implementation 'org.mindrot:jbcrypt:0.3m'
+
+	// spring session
 	implementation 'org.springframework.session:spring-session-core'
 	implementation 'org.springframework.session:spring-session-jdbc:2.5.3'
+
+	// test
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// excel to object
 	implementation 'org.apache.poi:poi:5.0.0'
 	implementation 'org.apache.poi:poi-ooxml:5.0.0'
 
@@ -33,11 +43,16 @@ dependencies {
 	implementation('javax.activation:activation:1.1')
 	implementation('org.glassfish.jaxb:jaxb-runtime:2.3.0')
 
+	//lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	//db
 	runtimeOnly 'mysql:mysql-connector-java'
+	runtimeOnly 'com.h2database:h2'
+
+	// google 문자열 라이브러리리
+	testImplementation 'com.google.guava:guava:31.0.1-jre'
 }
 
 test {
