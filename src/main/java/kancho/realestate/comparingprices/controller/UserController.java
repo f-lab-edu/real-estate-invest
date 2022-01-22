@@ -41,6 +41,7 @@ public class UserController {
 		User loginUser = userService.login(requestUserDto);
 		HttpSession session = request.getSession();
 
+		// 같은 id로 로그인시, 이미 로그인한 상태입니다. 다른 id로 로그인 시, 기존 세션 만료
 		if(hasSessionKey(session)){
 			validateDuplicateLogin((SessionUserVO)session.getAttribute(SESSION_KEY), requestUserDto);
 			expirePreLoginSession(session);
