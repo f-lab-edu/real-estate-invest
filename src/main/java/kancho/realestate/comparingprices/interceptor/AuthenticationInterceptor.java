@@ -17,7 +17,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 		HttpSession session = request.getSession();
 
 		// User 세션에 값이 있으면
-		if (session.getAttribute(UserController.SESSION_KEY) == null) {
+		if (session == null || session.getAttribute(UserController.SESSION_KEY) == null) {
 			throw new AuthenticationException("로그인이 필요합니다.");
 		}
 
