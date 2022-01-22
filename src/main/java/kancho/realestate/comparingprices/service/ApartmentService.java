@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import kancho.realestate.comparingprices.domain.dto.request.RequestApartmentDto;
 import kancho.realestate.comparingprices.domain.dto.response.ResponseApartmentDto;
 import kancho.realestate.comparingprices.domain.model.Apartment;
+import kancho.realestate.comparingprices.domain.model.ApartmentPrice;
+import kancho.realestate.comparingprices.repository.ApartmentPriceRepository;
 import kancho.realestate.comparingprices.repository.ApartmentRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +21,23 @@ import lombok.RequiredArgsConstructor;
 public class ApartmentService {
 
 	private final ApartmentRepository apartmentRepository;
+	private final ApartmentPriceRepository apartmentPriceRepository;
+
+	public List<Apartment> findAllApartments() {
+		return apartmentRepository.findAll();
+	}
+
+	public List<ApartmentPrice> findAllApartmentsPrice() {
+		return apartmentPriceRepository.findAll();
+	}
+
+	public Apartment save(Apartment apartment) {
+		return apartmentRepository.save(apartment);
+	}
+
+	public ApartmentPrice save(ApartmentPrice apartmentPrice) {
+		return apartmentPriceRepository.save(apartmentPrice);
+	}
 
 	public List<ResponseApartmentDto> findApartmentDtosWithPaging(Pageable pageable) {
 		return apartmentRepository.findAll(pageable)

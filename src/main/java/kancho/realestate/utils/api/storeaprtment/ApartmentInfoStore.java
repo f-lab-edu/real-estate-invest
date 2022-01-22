@@ -22,7 +22,7 @@ import kancho.realestate.comparingprices.domain.model.ApartmentPrice;
 import kancho.realestate.comparingprices.domain.vo.ApartmentPriceUniqueInfo;
 import kancho.realestate.comparingprices.domain.vo.ApartmentUniqueInfo;
 import kancho.realestate.comparingprices.domain.vo.Gu;
-import kancho.realestate.utils.api.storeaprtment.service.ApartmentApiService;
+import kancho.realestate.comparingprices.service.ApartmentService;
 import lombok.RequiredArgsConstructor;
 
 @Profile("!test") // 테스트시 실행 x
@@ -32,7 +32,7 @@ public class ApartmentInfoStore implements ApplicationRunner {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	private final ApartmentApiClient apartmentApiClient;
-	private final ApartmentApiService apartmentApiService;
+	private final ApartmentService apartmentApiService;
 
 	private final int numOfMonth = 1; // 데이터로 가져올 개월 수
 
