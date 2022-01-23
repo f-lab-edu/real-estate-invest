@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import kancho.realestate.comparingprices.domain.model.Apartment;
 import kancho.realestate.comparingprices.domain.model.ApartmentPrice;
+import kancho.realestate.comparingprices.service.ApartmentService;
 
 @ActiveProfiles("test")
 @SpringBootTest
@@ -19,7 +20,7 @@ import kancho.realestate.comparingprices.domain.model.ApartmentPrice;
 class ApartmentApiServiceTest {
 
 	@Autowired
-	ApartmentApiService apartmentService;
+	ApartmentService apartmentService;
 
 	@Test
 	void 모든_아파트_정보를_조회하면_값이_존재함() {
