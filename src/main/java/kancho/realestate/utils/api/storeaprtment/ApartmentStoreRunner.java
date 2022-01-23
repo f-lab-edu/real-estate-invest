@@ -5,6 +5,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+import kancho.realestate.comparingprices.scheduler.util.ApartmentStorer;
 import lombok.RequiredArgsConstructor;
 
 @Profile("!test") // 테스트시 실행 x

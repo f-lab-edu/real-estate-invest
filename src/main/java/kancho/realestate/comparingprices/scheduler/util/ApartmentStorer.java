@@ -1,4 +1,4 @@
-package kancho.realestate.utils.api.storeaprtment;
+package kancho.realestate.comparingprices.scheduler.util;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -10,8 +10,6 @@ import javax.xml.bind.JAXBException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +22,6 @@ import kancho.realestate.comparingprices.domain.vo.ApartmentUniqueInfo;
 import kancho.realestate.comparingprices.domain.vo.Gu;
 import kancho.realestate.comparingprices.exception.InvalidApartmentXmlException;
 import kancho.realestate.comparingprices.service.ApartmentService;
-import lombok.RequiredArgsConstructor;
 
 @Profile("!test") // 테스트시 실행 x
 @Component

@@ -1,4 +1,4 @@
-package kancho.realestate.utils.api.storeaprtment.service;
+package kancho.realestate.comparingprices.service;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -17,7 +17,7 @@ import kancho.realestate.comparingprices.service.ApartmentService;
 @ActiveProfiles("test")
 @SpringBootTest
 @Transactional
-class ApartmentApiServiceTest {
+class ApartmentServiceTest {
 
 	@Autowired
 	ApartmentService apartmentService;

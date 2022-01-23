@@ -1,4 +1,4 @@
-package kancho.realestate.utils.api.storeaprtment;
+package kancho.realestate.comparingprices.scheduler.util;
 
 import static java.net.URLEncoder.*;
 
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component;
 import kancho.realestate.comparingprices.domain.dto.request.RequestApartmentDetailDto;
 import kancho.realestate.comparingprices.domain.vo.ApartmentDetail;
 import kancho.realestate.comparingprices.exception.InvalidApartmentXmlException;
-import kancho.realestate.utils.api.storeaprtment.mapper.ApartmentXmlMapper;
 
 @Component
 public class ApartmentApiClient {

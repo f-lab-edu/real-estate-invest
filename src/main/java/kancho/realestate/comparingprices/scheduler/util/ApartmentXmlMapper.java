@@ -1,4 +1,4 @@
-package kancho.realestate.utils.api.storeaprtment.mapper;
+package kancho.realestate.comparingprices.scheduler.util;
 
 import java.io.StringReader;
 import java.util.List;
