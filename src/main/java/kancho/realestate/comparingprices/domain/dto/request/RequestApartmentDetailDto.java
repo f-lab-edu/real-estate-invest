@@ -6,8 +6,10 @@ import kancho.realestate.comparingprices.domain.vo.Gu;
 import kancho.realestate.comparingprices.exception.InvalidDealYearAndMonthException;
 import kancho.realestate.comparingprices.exception.InvalidRegionalCodeException;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class RequestApartmentDetailDto {
 	private String regionalCode;
 	private int dealYear;
