@@ -31,14 +31,6 @@ public class ApartmentService {
 		return apartmentPriceRepository.findAll();
 	}
 
-	public Apartment save(Apartment apartment) {
-		return apartmentRepository.save(apartment);
-	}
-
-	public ApartmentPrice save(ApartmentPrice apartmentPrice) {
-		return apartmentPriceRepository.save(apartmentPrice);
-	}
-
 	public List<ResponseApartmentDto> findApartmentDtosWithPaging(Pageable pageable) {
 		return apartmentRepository.findAll(pageable)
 			.stream()
@@ -59,4 +51,15 @@ public class ApartmentService {
 		apartmentRepository.save(apartment);
 		return ResponseApartmentDto.from(apartment);
 	}
+
+	@Transactional
+	public Apartment save(Apartment apartment) {
+		return apartmentRepository.save(apartment);
+	}
+
+	@Transactional
+	public ApartmentPrice save(ApartmentPrice apartmentPrice) {
+		return apartmentPriceRepository.save(apartmentPrice);
+	}
+
 }
