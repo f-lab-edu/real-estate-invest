@@ -50,6 +50,13 @@ public class ApartmentDetail {
 	@XmlElement(name = "층")
 	private int floor;
 
+	public boolean isCorrectData(){
+		if(regionalCode == null || dong == null || jibun == null || bonbun == null || bubun == null || apartmentName == null || bubun == null) {
+			return false;
+		}
+		return true;
+	}
+
 	public ApartmentPrice getApartmentPrice() {
 		return new ApartmentPrice(this);
 	}
