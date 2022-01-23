@@ -1,6 +1,7 @@
 package kancho.realestate.comparingprices.domain.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Objects;
 
 import javax.persistence.Entity;
@@ -11,9 +12,11 @@ import javax.persistence.Id;
 import kancho.realestate.comparingprices.domain.vo.ApartmentDetail;
 import kancho.realestate.comparingprices.domain.vo.ApartmentPriceUniqueInfo;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 @Entity
+@ToString
 public class ApartmentPrice extends BaseTimeEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,25 +49,31 @@ public class ApartmentPrice extends BaseTimeEntity{
 	}
 
 	private int parseDealAmount(String dealAmount) {
-			dealAmount = dealAmount.trim().replace(",",""); // 공백 제거
-			return Integer.parseInt(dealAmount);
+		dealAmount = dealAmount.trim().replace(",",""); // 공백 제거
+		return Integer.parseInt(dealAmount);
 	}
 
 	public ApartmentPriceUniqueInfo getApartmentPriceUniqueInfo() {
 		return new ApartmentPriceUniqueInfo(this);
 	}
 
+	public BigDecimal getAreaForExclusiveUse() {
+		return BigDecimal.valueOf(areaForExclusiveUse)
+			.setScale(4, RoundingMode.HALF_EVEN)
+			.stripTrailingZeros();
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		if (!(o instanceof ApartmentPrice))
+		if (o == null || getClass() != o.getClass())
 			return false;
 
 		ApartmentPrice that = (ApartmentPrice)o;
-		BigDecimal thisAreaForExclusiveUse = new BigDecimal(that.areaForExclusiveUse);
-		BigDecimal thatAreaForExclusiveUse = new BigDecimal(areaForExclusiveUse);
-		
+		BigDecimal thisAreaForExclusiveUse = this.getAreaForExclusiveUse();
+		BigDecimal thatAreaForExclusiveUse = that.getAreaForExclusiveUse();
+
 		return apartmentId == that.apartmentId
 			&& thisAreaForExclusiveUse.compareTo(thatAreaForExclusiveUse) == 0 && dealYear == that.dealYear
 			&& dealMonth == that.dealMonth && dealDay == that.dealDay && dealAmount == that.dealAmount
@@ -73,6 +82,6 @@ public class ApartmentPrice extends BaseTimeEntity{
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(apartmentId, areaForExclusiveUse, dealYear, dealMonth, dealDay, dealAmount, floor);
+		return Objects.hash(apartmentId, this.getAreaForExclusiveUse(), dealYear, dealMonth, dealDay, dealAmount, floor);
 	}
 }
