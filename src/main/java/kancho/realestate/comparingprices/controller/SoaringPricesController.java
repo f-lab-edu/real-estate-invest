@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import kancho.realestate.comparingprices.domain.dto.response.SuccessReponseDto;
-import kancho.realestate.comparingprices.domain.model.SoaringPrices;
+import kancho.realestate.comparingprices.domain.model.SoaringPrice;
 import kancho.realestate.comparingprices.service.SoaringPricesService;
 import lombok.RequiredArgsConstructor;
 
@@ -21,13 +21,13 @@ public class SoaringPricesController {
 
 	@GetMapping(value = "/percent")
 	public ResponseEntity percentList() {
-		List<SoaringPrices> soaringPricesList = soaringPricesService.getSoaringPrices(SoaringPrices.Unit.PERCENT);
-		return new ResponseEntity<>(new SuccessReponseDto<>("급상승 부동산 가격 조회 성공", soaringPricesList), HttpStatus.OK);
+		List<SoaringPrice> soaringPriceList = soaringPricesService.getSoaringPrices(SoaringPrice.Unit.PERCENT);
+		return new ResponseEntity<>(new SuccessReponseDto<>("급상승 부동산 가격 조회 성공", soaringPriceList), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/won")
 	public ResponseEntity wonList() {
-		List<SoaringPrices> soaringPricesList = soaringPricesService.getSoaringPrices(SoaringPrices.Unit.WON);
-		return new ResponseEntity<>(new SuccessReponseDto<>("급상승 부동산 가격 조회 성공", soaringPricesList), HttpStatus.OK);
+		List<SoaringPrice> soaringPriceList = soaringPricesService.getSoaringPrices(SoaringPrice.Unit.WON);
+		return new ResponseEntity<>(new SuccessReponseDto<>("급상승 부동산 가격 조회 성공", soaringPriceList), HttpStatus.OK);
 	}
 }
