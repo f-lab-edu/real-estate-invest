@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import kancho.realestate.comparingprices.domain.dto.SessionUserVO;
 import kancho.realestate.comparingprices.domain.dto.request.RequestUserDto;
 import kancho.realestate.comparingprices.domain.dto.response.ResponseUserDto;
 import kancho.realestate.comparingprices.domain.model.User;
@@ -69,7 +70,6 @@ public class UserService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String account) throws UsernameNotFoundException {
 		User foundUser = getUserByAccount(account);
-		return new org.springframework.security.core.userdetails.User(foundUser.getAccount(), foundUser.getPassword(),
-			true, true, true, true,new ArrayList<>());
+		return new SessionUserVO(foundUser.getAccount(),foundUser.getPassword(),new ArrayList<>(),foundUser.getId());
 	}
 }

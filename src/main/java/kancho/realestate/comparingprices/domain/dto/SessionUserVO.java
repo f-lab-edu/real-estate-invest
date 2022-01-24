@@ -1,22 +1,25 @@
 package kancho.realestate.comparingprices.domain.dto;
 
-import java.io.Serializable;
+import java.util.Collection;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-public class SessionUserVO implements Serializable {
-	private Long userId;
-	private String account;
+public class SessionUserVO extends User {
 
-	private SessionUserVO() {
+	private Long userId;
+
+	public SessionUserVO(String username, String password,
+		Collection<? extends GrantedAuthority> authorities, Long userId) {
+		super(username, password, authorities);
+		this.userId = userId;
 	}
 
-	public SessionUserVO(Long userId, String account) {
-		this.userId = userId;
-		this.account = account;
+	@Override
+	public String getPassword() {
+		return super.getPassword();
 	}
 }

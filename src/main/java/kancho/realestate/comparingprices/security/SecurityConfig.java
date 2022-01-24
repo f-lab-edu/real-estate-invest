@@ -58,8 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	private Filter getAuthenticationFilter() throws Exception {
-		AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager(),
-			userService);
+		AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager());
 		authenticationFilter.setAuthenticationSuccessHandler(appAuthenticationSuccessHandler());
 		return authenticationFilter;
 	}
