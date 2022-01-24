@@ -113,7 +113,7 @@ class UserAcceptanceTest extends RestAssuredTest {
 	}
 
 	@Test
-	public void join_login_로그인_상태에서_회원가입_요청_예외처리() {
+	public void 로그인_상태에서_회원가입_요청_예외처리() {
 		//given
 		RequestUserDto 테스터1 = new RequestUserDto("tester", "12345657567zdasdas");
 		UserAcceptanceFixture.회원가입_요청(테스터1);
@@ -127,6 +127,6 @@ class UserAcceptanceTest extends RestAssuredTest {
 			UserAcceptanceFixture.세션ID_추출(로그인_요청_결과));
 
 		//then
-		assertThat(로그인중_회원가입_요청_결과.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+		assertThat(로그인중_회원가입_요청_결과.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
 	}
 }

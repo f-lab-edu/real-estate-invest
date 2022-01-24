@@ -1,6 +1,7 @@
 package kancho.realestate.comparingprices.security;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -16,34 +17,43 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.jdi.request.InvalidRequestStateException;
 
+import kancho.realestate.comparingprices.domain.dto.SessionUserVO;
 import kancho.realestate.comparingprices.domain.dto.request.RequestUserDto;
 import kancho.realestate.comparingprices.exception.DuplicateLoginException;
-import kancho.realestate.comparingprices.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-	private final UserService userService;
 
-	public AuthenticationFilter(AuthenticationManager authenticationManager, UserService userService) {
+	public AuthenticationFilter(AuthenticationManager authenticationManager) {
 		super(authenticationManager);
-		this.userService = userService;
 	}
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws
 		IOException, ServletException {
 		try {
+			validateJoinInNotLoggedIn((HttpServletRequest)request);
 			super.doFilter(request, response, chain);
 		} catch (DuplicateLoginException exception) {
 			HttpServletResponse httpServletResponse = (HttpServletResponse)response;
 			httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
+		} catch (InvalidRequestStateException ex) {
+			HttpServletResponse httpServletResponse = (HttpServletResponse)response;
+			httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
+		}
+	}
+
+	private void validateJoinInNotLoggedIn(HttpServletRequest request) {
+		HttpSession session = request.getSession(false);
+		if (request.getRequestURI().contains("/join") && !Objects.isNull(session)) {
+			throw new InvalidRequestStateException();
 		}
 	}
 
@@ -76,10 +86,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	}
 
 	private void validateDuplicateLogin(RequestUserDto creds) {
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		UserDetails userDetails = (UserDetails)principal;
-
-		if (userDetails.getUsername().equals(creds.getAccount())) {
+		SessionUserVO sessionUserVO = getUserFromSession();
+		if (sessionUserVO.getUsername().equals(creds.getAccount())) {
 			throw new DuplicateLoginException("이미 로그인한 상태입니다.");
 		}
 	}
@@ -92,5 +100,10 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 		Authentication authResult) throws IOException, ServletException {
 		super.successfulAuthentication(request, response, chain, authResult);
+	}
+
+	private SessionUserVO getUserFromSession(){
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return (SessionUserVO)principal;
 	}
 }
