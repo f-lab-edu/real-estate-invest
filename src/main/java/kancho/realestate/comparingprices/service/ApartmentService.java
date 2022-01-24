@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import kancho.realestate.comparingprices.domain.dto.request.RequestApartmentDto;
 import kancho.realestate.comparingprices.domain.dto.response.ResponseApartmentDto;
+import kancho.realestate.comparingprices.domain.dto.response.ResponseApartmentPriceDto;
 import kancho.realestate.comparingprices.domain.model.Apartment;
 import kancho.realestate.comparingprices.domain.model.ApartmentPrice;
 import kancho.realestate.comparingprices.repository.ApartmentPriceRepository;
@@ -35,6 +36,13 @@ public class ApartmentService {
 		return apartmentRepository.findAll(pageable)
 			.stream()
 			.map(ResponseApartmentDto::from)
+			.collect(Collectors.toList());
+	}
+
+	public List<ResponseApartmentPriceDto> findApartmentPriceByDealYearBetween(int start, int end) {
+		return apartmentPriceRepository.findByDealYearBetween(start, end)
+			.stream()
+			.map(ResponseApartmentPriceDto::from)
 			.collect(Collectors.toList());
 	}
 
