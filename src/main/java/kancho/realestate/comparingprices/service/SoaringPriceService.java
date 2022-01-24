@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class SoaringPricesService {
+public class SoaringPriceService {
 
 	private final SoaringPricesRepository soaringPricesRepository;
 
