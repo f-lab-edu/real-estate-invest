@@ -24,6 +24,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 
 	implementation 'org.mindrot:jbcrypt:0.3m'
 
@@ -33,6 +34,7 @@ dependencies {
 
 	// test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'io.rest-assured:rest-assured:3.3.0'
 
 	// excel to object
 	implementation 'org.apache.poi:poi:5.0.0'

@@ -1,5 +1,7 @@
 package kancho.realestate.comparingprices.domain.dto.response;
 
+import java.util.Objects;
+
 import kancho.realestate.comparingprices.domain.model.Apartment;
 import lombok.Getter;
 
@@ -57,5 +59,28 @@ public class ResponseApartmentDto {
 			", buildYear=" + buildYear +
 			", roadAddress='" + roadAddress + '\'' +
 			'}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		ResponseApartmentDto that = (ResponseApartmentDto)o;
+		return getId() == that.getId() && getBuildYear() == that.getBuildYear() && Objects.equals(
+			getRegionalCode(), that.getRegionalCode()) && Objects.equals(getCity(), that.getCity())
+			&& Objects.equals(getGu(), that.getGu()) && Objects.equals(getDong(), that.getDong())
+			&& Objects.equals(getJibun(), that.getJibun()) && Objects.equals(getBonbun(),
+			that.getBonbun()) && Objects.equals(getBubun(), that.getBubun()) && Objects.equals(
+			getApartmentName(), that.getApartmentName()) && Objects.equals(getRoadAddress(),
+			that.getRoadAddress());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getId(), getRegionalCode(), getCity(), getGu(), getDong(), getJibun(), getBonbun(),
+			getBubun(),
+			getApartmentName(), getBuildYear(), getRoadAddress());
 	}
 }

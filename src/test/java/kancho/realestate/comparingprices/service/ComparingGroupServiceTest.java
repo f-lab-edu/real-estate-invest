@@ -75,8 +75,8 @@ class ComparingGroupServiceTest extends ServiceTest {
 		System.out.println(groupDto);
 
 		// when
-		RequestGroupItemDto requestDto = new RequestGroupItemDto(groupDto.getId(), apartment1.getId());
-		ResponseGroupItemDto responseGroupItemDto = comparingGroupService.saveGroupItem(requestDto);
+		RequestGroupItemDto requestDto = new RequestGroupItemDto(apartment1.getId());
+		ResponseGroupItemDto responseGroupItemDto = comparingGroupService.saveGroupItem(groupDto.getId(),requestDto);
 
 		// then
 		assertThat(responseGroupItemDto.getId()).isNotNull();
@@ -116,10 +116,10 @@ class ComparingGroupServiceTest extends ServiceTest {
 			groupName);
 		ResponseComparingGroupDto groupDto = comparingGroupService.saveComparingGroup(requestComparingGroupDto);
 
-		RequestGroupItemDto groupItemDto1 = new RequestGroupItemDto(groupDto.getId(), apartment1.getId());
-		RequestGroupItemDto groupItemDto2 = new RequestGroupItemDto(groupDto.getId(), apartment2.getId());
-		ResponseGroupItemDto responseGroupItemDto1 = comparingGroupService.saveGroupItem(groupItemDto1);
-		ResponseGroupItemDto responseGroupItemDto2 = comparingGroupService.saveGroupItem(groupItemDto2);
+		RequestGroupItemDto groupItemDto1 = new RequestGroupItemDto(apartment1.getId());
+		RequestGroupItemDto groupItemDto2 = new RequestGroupItemDto(apartment2.getId());
+		ResponseGroupItemDto responseGroupItemDto1 = comparingGroupService.saveGroupItem(groupDto.getId(),groupItemDto1);
+		ResponseGroupItemDto responseGroupItemDto2 = comparingGroupService.saveGroupItem(groupDto.getId(),groupItemDto2);
 
 		// when
 		List<ResponseGroupItemDto> responses = comparingGroupService.findGroupItemsByGroupIdResponses(

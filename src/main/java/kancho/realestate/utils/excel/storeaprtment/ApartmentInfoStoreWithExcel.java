@@ -28,10 +28,10 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Component
-public class ApartmentInfoStore implements ApplicationRunner {
+public class ApartmentInfoStoreWithExcel implements ApplicationRunner {
 
 	private static final String DATA_PATH = "realestate-prices";
-	private static final Logger logger = LoggerFactory.getLogger(ApartmentInfoStore.class);
+	private static final Logger logger = LoggerFactory.getLogger(ApartmentInfoStoreWithExcel.class);
 	private static final int APARTMENT_SHEET_INDEX = 1;
 	private static final int DATA_ROW_START_INDEX = 1;
 

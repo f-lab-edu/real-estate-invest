@@ -1,8 +1,12 @@
 package kancho.realestate.comparingprices.service;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
-import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,13 +22,14 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
 
 	private final UserRepository userRepository;
+	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Transactional
 	public ResponseUserDto createUser(RequestUserDto requestUser) {
-		validateNotExistUser(getUserById(requestUser.getAccount()));
+		validateNotExistUser(getUserByAccountOptional(requestUser.getAccount()));
 		String encryptedPw = getEncryptedPassword(requestUser.getPassword());
 		User user = new User(requestUser.getAccount(), encryptedPw);
 		userRepository.save(user);
@@ -32,8 +37,8 @@ public class UserService {
 		return ResponseUserDto.from(user);
 	}
 
-	public String getEncryptedPassword(String password) {
-		return BCrypt.hashpw(password, BCrypt.gensalt());
+	private String getEncryptedPassword(String password) {
+		return bCryptPasswordEncoder.encode(password);
 	}
 
 	private void validateNotExistUser(Optional<User> foundUser) {
@@ -42,25 +47,29 @@ public class UserService {
 		}
 	}
 
-	public User login(RequestUserDto requestUser) {
-		User foundUser = getUserById(requestUser.getAccount()).orElseThrow(() -> new IdNotExistedException());
-		validatePassword(requestUser.getPassword(), foundUser.getPassword());
-		foundUser.updateLastLoginDttm();
-		return foundUser;
-	}
-
 	private boolean isExistUser(Optional<User> user) {
 		return user.isPresent();
 	}
 
 	private void validatePassword(String inputPassword, String storedPassword) {
-		if (!BCrypt.checkpw(inputPassword, storedPassword)) {
+		if (!bCryptPasswordEncoder.matches(inputPassword, storedPassword)) {
 			throw new PasswordWrongException();
 		}
 	}
 
-	public Optional<User> getUserById(String account) {
-		Optional<User> foundUser = userRepository.findByAccount(account);
-		return foundUser;
+	public User getUserByAccount(String account) {
+		return getUserByAccountOptional(account)
+			.orElseThrow(IdNotExistedException::new);
+	}
+
+	public Optional<User> getUserByAccountOptional(String account) {
+		return userRepository.findByAccount(account);
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String account) throws UsernameNotFoundException {
+		User foundUser = getUserByAccount(account);
+		return new org.springframework.security.core.userdetails.User(foundUser.getAccount(), foundUser.getPassword(),
+			true, true, true, true,new ArrayList<>());
 	}
 }

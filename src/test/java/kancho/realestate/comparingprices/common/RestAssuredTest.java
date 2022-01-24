@@ -1,23 +1,26 @@
-package kancho.realestate.comparingprices.acceptance;
+package kancho.realestate.comparingprices.common;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 
-/**
- * controller, 인수테스트 공통 설정 클래스
- */
+import io.restassured.RestAssured;
 
 @ActiveProfiles("test")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-public class AcceptanceTest {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class RestAssuredTest {
+
+	@LocalServerPort
+	private int port;
 
 	@Autowired
 	private DatabaseCleanup databaseCleanup;
 
 	@BeforeEach
-	public void init() {
+	public void setUp() {
+		RestAssured.port = port;
 		databaseCleanup.execute();
 	}
 }

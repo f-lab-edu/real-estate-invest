@@ -15,4 +15,12 @@ public class RequestUserDto {
 		this.account = account;
 		this.password = password;
 	}
+
+	@Override
+	public String toString() {
+		return "RequestUserDto{" +
+			"account='" + account + '\'' +
+			", password='" + password + '\'' +
+			'}';
+	}
 }

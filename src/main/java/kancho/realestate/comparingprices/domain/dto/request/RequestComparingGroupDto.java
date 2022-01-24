@@ -1,5 +1,8 @@
 package kancho.realestate.comparingprices.domain.dto.request;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import kancho.realestate.comparingprices.domain.model.ComparingGroup;
 import kancho.realestate.comparingprices.domain.model.User;
 import lombok.Getter;

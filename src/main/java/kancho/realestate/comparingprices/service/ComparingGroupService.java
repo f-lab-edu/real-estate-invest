@@ -52,10 +52,10 @@ public class ComparingGroupService {
 	}
 
 	@Transactional
-	public ResponseGroupItemDto saveGroupItem(RequestGroupItemDto requestDto){
+	public ResponseGroupItemDto saveGroupItem(Long groupId, RequestGroupItemDto requestDto){
 		Apartment apartment = apartmentRepository.findById(requestDto.getApartmentId())
 			.orElseThrow(EntityNotFoundException::new);
-		ComparingGroup comparingGroup = comparingGroupRepository.findById(requestDto.getGroupId())
+		ComparingGroup comparingGroup = comparingGroupRepository.findById(groupId)
 			.orElseThrow(EntityNotFoundException::new);
 		GroupItem groupItem = requestDto.toGroupItem(comparingGroup,apartment);
 		groupItemRepository.save(groupItem);

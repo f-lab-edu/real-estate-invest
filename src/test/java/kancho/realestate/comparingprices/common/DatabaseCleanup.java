@@ -1,4 +1,4 @@
-package kancho.realestate.comparingprices.acceptance;
+package kancho.realestate.comparingprices.common;
 
 import java.util.List;
 import java.util.stream.Collectors;
