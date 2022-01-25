@@ -54,7 +54,7 @@ public class SoaringPrice extends BaseTimeEntity {
 	public enum Unit{
 		PERCENT { // 퍼센트(%)
 			public long calculatePriceDifference(long latestPrice, long pastPrice){
-				return latestPrice * 100 / pastPrice;
+				return latestPrice * 100 / pastPrice - 100;
 			}
 		},
 		WON{ // 원(₩)
