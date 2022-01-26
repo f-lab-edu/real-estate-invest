@@ -12,7 +12,7 @@ import org.springframework.data.domain.PageRequest;
 
 import kancho.realestate.comparingprices.domain.model.Apartment;
 
-class ApartmentRepositoryTest extends RepositoryTest{
+class ApartmentRepositoryTest extends DomainTest {
 
 	@Autowired
 	private ApartmentRepository apartmentRepository;

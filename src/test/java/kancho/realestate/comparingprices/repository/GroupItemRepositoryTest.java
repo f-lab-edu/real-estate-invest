@@ -15,7 +15,7 @@ import kancho.realestate.comparingprices.domain.model.ComparingGroup;
 import kancho.realestate.comparingprices.domain.model.GroupItem;
 import kancho.realestate.comparingprices.domain.model.User;
 
-class GroupItemRepositoryTest extends RepositoryTest {
+class GroupItemRepositoryTest extends DomainTest {
 
 	@Autowired
 	GroupItemRepository groupItemRepository;

@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import kancho.realestate.comparingprices.domain.model.ComparingGroup;
 import kancho.realestate.comparingprices.domain.model.User;
 
-class ComparingGroupRepositoryTest extends RepositoryTest{
+class ComparingGroupRepositoryTest extends DomainTest {
 
 	@Autowired
 	private ComparingGroupRepository comparingGroupRepository;

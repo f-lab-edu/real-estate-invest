@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import kancho.realestate.comparingprices.domain.model.User;
 
-class UserRepositoryTest extends RepositoryTest {
+class UserRepositoryTest extends DomainTest {
 
 	@Autowired
 	private UserRepository userRepository;

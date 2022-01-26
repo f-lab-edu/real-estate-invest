@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 
 class ComparingGroupTest {
 
-
 	@DisplayName("비교그룹 생성")
 	@Test
 	void comparingGroup(){
