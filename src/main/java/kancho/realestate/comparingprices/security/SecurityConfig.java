@@ -58,13 +58,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	private Filter getAuthenticationFilter() throws Exception {
-		AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager());
+		AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager(), userService);
 		authenticationFilter.setAuthenticationSuccessHandler(appAuthenticationSuccessHandler());
 		return authenticationFilter;
 	}
 
 	@Bean
-	public AuthSuccessHandler appAuthenticationSuccessHandler(){
+	public AuthSuccessHandler appAuthenticationSuccessHandler() {
 		return new AuthSuccessHandler();
 	}
 

@@ -1,6 +1,7 @@
 package kancho.realestate.comparingprices.security;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 import javax.servlet.FilterChain;
@@ -25,14 +26,18 @@ import com.sun.jdi.request.InvalidRequestStateException;
 import kancho.realestate.comparingprices.domain.dto.SessionUserVO;
 import kancho.realestate.comparingprices.domain.dto.request.RequestUserDto;
 import kancho.realestate.comparingprices.exception.DuplicateLoginException;
+import kancho.realestate.comparingprices.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
+	private final UserService userService;
 
-	public AuthenticationFilter(AuthenticationManager authenticationManager) {
+	public AuthenticationFilter(AuthenticationManager authenticationManager,
+		UserService userService) {
 		super(authenticationManager);
+		this.userService = userService;
 	}
 
 	@Override
@@ -100,6 +105,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 		Authentication authResult) throws IOException, ServletException {
 		super.successfulAuthentication(request, response, chain, authResult);
+		SessionUserVO userFromSession = getUserFromSession();
+		userService.changeLoginTime(userFromSession.getUserId(), LocalDateTime.now());
 	}
 
 	private SessionUserVO getUserFromSession(){

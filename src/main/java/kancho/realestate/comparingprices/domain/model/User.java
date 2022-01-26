@@ -11,11 +11,11 @@ import javax.persistence.Id;
 
 import lombok.Getter;
 
-
 @Getter
 @Entity
-public class User extends BaseTimeEntity{
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class User extends BaseTimeEntity {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(unique = true, nullable = false)
@@ -45,7 +45,7 @@ public class User extends BaseTimeEntity{
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		if(!(o instanceof User))
+		if (!(o instanceof User))
 			return false;
 		User user = (User)o;
 		return Objects.equals(this.getId(), user.getId());
@@ -56,7 +56,8 @@ public class User extends BaseTimeEntity{
 		return Objects.hash(this.getId());
 	}
 
-	public void updateLastLoginDttm() {
-		this.lastLoginDttm=LocalDateTime.now();
+	// 메서드의 유연성과 테스트 용이성을 위해 LocalDateTime을 인자로 받게 함
+	public void updateLastLoginDttm(LocalDateTime loginTime) {
+		this.lastLoginDttm = loginTime == null ? LocalDateTime.now() : loginTime;
 	}
 }

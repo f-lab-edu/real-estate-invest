@@ -1,7 +1,10 @@
 package kancho.realestate.comparingprices.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
+
+import javax.persistence.EntityNotFoundException;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -30,12 +33,18 @@ public class UserService implements UserDetailsService {
 
 	@Transactional
 	public ResponseUserDto createUser(RequestUserDto requestUser) {
-		validateNotExistUser(getUserByAccountOptional(requestUser.getAccount()));
+		validateNotExistUser(findUserByAccountOptional(requestUser.getAccount()));
 		String encryptedPw = getEncryptedPassword(requestUser.getPassword());
 		User user = new User(requestUser.getAccount(), encryptedPw);
 		userRepository.save(user);
 
 		return ResponseUserDto.from(user);
+	}
+
+	@Transactional
+	public void changeLoginTime(Long userId, LocalDateTime loginTime){
+		User findUser = userRepository.findById(userId).orElseThrow(IdNotExistedException::new);
+		findUser.updateLastLoginDttm(loginTime);
 	}
 
 	private String getEncryptedPassword(String password) {
@@ -58,18 +67,22 @@ public class UserService implements UserDetailsService {
 		}
 	}
 
-	public User getUserByAccount(String account) {
-		return getUserByAccountOptional(account)
+	public User findUserByAccount(String account) {
+		return findUserByAccountOptional(account)
 			.orElseThrow(IdNotExistedException::new);
 	}
 
-	public Optional<User> getUserByAccountOptional(String account) {
+	protected User findUser(Long userId){
+		return userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
+	}
+
+	public Optional<User> findUserByAccountOptional(String account) {
 		return userRepository.findByAccount(account);
 	}
 
 	@Override
 	public UserDetails loadUserByUsername(String account) throws UsernameNotFoundException {
-		User foundUser = getUserByAccount(account);
+		User foundUser = findUserByAccount(account);
 		return new SessionUserVO(foundUser.getAccount(),foundUser.getPassword(),new ArrayList<>(),foundUser.getId());
 	}
 }
