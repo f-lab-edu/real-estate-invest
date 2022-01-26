@@ -10,6 +10,7 @@ import javax.xml.bind.JAXBException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +24,6 @@ import kancho.realestate.comparingprices.domain.vo.Gu;
 import kancho.realestate.comparingprices.exception.InvalidApartmentXmlException;
 import kancho.realestate.comparingprices.service.ApartmentService;
 
-@Profile("!test") // 테스트시 실행 x
 @Component
 public class ApartmentStorer  {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());

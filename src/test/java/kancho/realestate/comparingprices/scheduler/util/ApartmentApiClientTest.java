@@ -18,7 +18,6 @@ import kancho.realestate.comparingprices.exception.InvalidDealYearAndMonthExcept
 import kancho.realestate.comparingprices.exception.InvalidRegionalCodeException;
 import kancho.realestate.comparingprices.scheduler.util.ApartmentApiClient;
 
-@ActiveProfiles("test")
 @SpringBootTest
 class ApartmentApiClientTest {
 
