@@ -1,4 +1,4 @@
-package kancho.realestate.utils.api.storeaprtment;
+package kancho.realestate.comparingprices.scheduler.util;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -10,8 +10,7 @@ import javax.xml.bind.JAXBException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
@@ -22,65 +21,69 @@ import kancho.realestate.comparingprices.domain.model.ApartmentPrice;
 import kancho.realestate.comparingprices.domain.vo.ApartmentPriceUniqueInfo;
 import kancho.realestate.comparingprices.domain.vo.ApartmentUniqueInfo;
 import kancho.realestate.comparingprices.domain.vo.Gu;
-import kancho.realestate.utils.api.storeaprtment.service.ApartmentApiService;
-import lombok.RequiredArgsConstructor;
+import kancho.realestate.comparingprices.exception.InvalidApartmentXmlException;
+import kancho.realestate.comparingprices.service.ApartmentService;
 
-@Profile("!test") // 테스트시 실행 x
-@RequiredArgsConstructor
 @Component
-public class ApartmentInfoStore implements ApplicationRunner {
+public class ApartmentStorer  {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	private final ApartmentApiClient apartmentApiClient;
-	private final ApartmentApiService apartmentApiService;
+	private final ApartmentService apartmentService;
 
-	private final int numOfMonth = 1; // 데이터로 가져올 개월 수
+	private Map<ApartmentUniqueInfo, Long> existingApartmentData;
+	private Map<ApartmentPriceUniqueInfo, Long> existingApartmentPriceData;
 
-	Map<ApartmentUniqueInfo, Long> existingApartmentData;
-	Map<ApartmentPriceUniqueInfo, Long> existingApartmentPriceData;
-
-	@Override
-	public void run(ApplicationArguments args) throws Exception {
+	public ApartmentStorer(ApartmentApiClient apartmentApiClient, ApartmentService apartmentService) {
+		this.apartmentApiClient = apartmentApiClient;
+		this.apartmentService = apartmentService;
 		// 데이터베이스에 저장된 기존 아파트, 아파트 가격 정보 받아오기
 		existingApartmentData = getExistingApartments();
 		existingApartmentPriceData = getExistingApartmentPrices();
-		// 과거 부터 현재까지 모든 아파트 정보 데이터 요청하여 저장하기
-		saveAllOfApartmentInfo();
 	}
 
-	private void saveAllOfApartmentInfo() throws JAXBException, IOException, InterruptedException {
+	/*
+	 * @param numOfMonth: 데이터를 가져올 개월수
+	 */
+	public void saveAllOfApartmentInfo(int numOfMonth) throws JAXBException, IOException, InterruptedException {
 		// 오늘 날짜 정보 가져오기
 		LocalDateTime now = LocalDateTime.now();
 		// 각 월 마다 거래된 구별 아파트 정보 가져오기
-		for (int minusMonths = 0; minusMonths < numOfMonth; minusMonths++) {
+		for (int minusMonths = numOfMonth - 1; minusMonths >= 0; minusMonths--) {
 			for (Gu gu : Gu.values()) {
-				int dealYear = now.minusMonths(numOfMonth).getYear();
-				int dealMonth = now.minusMonths(numOfMonth).getMonthValue();
-				List<ApartmentDetail> details = apartmentApiClient.
-					getApartmentDetails(new RequestApartmentDetailDto(gu.getReginalCode(), dealYear, dealMonth)); // 공공 데이터 api로 데이터를 받아서
-				saveApartmentDetails(details); // 데이터베이스에 저장
-				Thread.sleep(2000);
+				int dealYear = now.minusMonths(minusMonths).getYear();
+				int dealMonth = now.minusMonths(minusMonths).getMonthValue();
+				try {
+					List<ApartmentDetail> details = apartmentApiClient.
+						getApartmentDetails(new RequestApartmentDetailDto(gu.getReginalCode(), dealYear, dealMonth)); // 공공 데이터 api로 데이터를 받아서
+					saveApartmentDetails(details); // 데이터베이스에 저장
+					Thread.sleep(2000);
+				} catch (InvalidApartmentXmlException e) {
+					logger.info("아파트 정보 파싱 실패 = {}", e);
+				}
 			}
 		}
 	}
 
 	private void saveApartmentDetails(List<ApartmentDetail> details) {
 		for (ApartmentDetail apartmentDetail : details) {
-			// 아파트 정보 저장
-			long apartmentId = saveApartment(apartmentDetail);
-			apartmentDetail.setApartmentId(apartmentId);
-			// 아파트 가격 정보 저장
-			saveApartmentPrice(apartmentDetail);
+			if (apartmentDetail.isCorrectData()){
+				// 아파트 정보 저장
+				long apartmentId = saveApartment(apartmentDetail);
+				apartmentDetail.setApartmentId(apartmentId);
+				// 아파트 가격 정보 저장
+				saveApartmentPrice(apartmentDetail);
+			}
 		}
 	}
 
 	private Map<ApartmentUniqueInfo, Long> getExistingApartments() {
-		return apartmentApiService.findAllApartments().stream() // 기존 아파트 정보를 찾아서,
+		return apartmentService.findAllApartments().stream() // 기존 아파트 정보를 찾아서,
 			.collect(Collectors.toMap(Apartment::getApartmentUniqueInfo, Apartment::getId)); // Map 자료구조로 매핑
 	}
 
 	private Map<ApartmentPriceUniqueInfo, Long> getExistingApartmentPrices() {
-		return apartmentApiService.findAllApartmentsPrice().stream() // 기존 아파트 가격 정보를 찾아서,
+		return apartmentService.findAllApartmentsPrice().stream() // 기존 아파트 가격 정보를 찾아서,
 			.collect(
 				Collectors.toMap(ApartmentPrice::getApartmentPriceUniqueInfo, ApartmentPrice::getId)); // Map 자료구조로 매핑
 	}
@@ -91,14 +94,14 @@ public class ApartmentInfoStore implements ApplicationRunner {
 		Apartment apartment = apartmentDetail.getApartment();
 
 		if (isNew(existingApartmentData, apartment)) {
-			apartmentId = apartmentApiService.save(apartment).getId();
+			Apartment saved = apartmentService.save(apartment);
+			apartmentId = saved.getId();
 			existingApartmentData.put(new ApartmentUniqueInfo(apartment), apartmentId);
 			logger.info("아파트 정보 저장 성공 = {}", apartment);
 		} else {
 			apartmentId = existingApartmentData.get(new ApartmentUniqueInfo(apartment));
 			logger.info("아파트 정보 저장 실패, 중복된 데이터 = {}", apartment);
 		}
-
 		return apartmentId;
 	}
 
@@ -106,8 +109,8 @@ public class ApartmentInfoStore implements ApplicationRunner {
 		ApartmentPrice apartmentPrice = apartmentDetail.getApartmentPrice();
 
 		if (isNew(existingApartmentPriceData, apartmentPrice)) {
-			long id = apartmentApiService.save(apartmentPrice).getApartmentId();
-			existingApartmentPriceData.put(new ApartmentPriceUniqueInfo(apartmentPrice), id);
+			ApartmentPrice saved = apartmentService.save(apartmentPrice);
+			existingApartmentPriceData.put(new ApartmentPriceUniqueInfo(apartmentPrice), saved.getId());
 			logger.info("아파트 가격 정보 저장 성공 = {}", apartmentPrice);
 		} else {
 			logger.info("아파트 가격 정보 저장 실패, 중복된 데이터 = {}", apartmentPrice);

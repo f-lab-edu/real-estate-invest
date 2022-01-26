@@ -1,4 +1,4 @@
-package kancho.realestate.utils.api.storeaprtment;
+package kancho.realestate.comparingprices.scheduler.util;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -16,8 +16,8 @@ import kancho.realestate.comparingprices.domain.dto.request.RequestApartmentDeta
 import kancho.realestate.comparingprices.domain.vo.ApartmentDetail;
 import kancho.realestate.comparingprices.exception.InvalidDealYearAndMonthException;
 import kancho.realestate.comparingprices.exception.InvalidRegionalCodeException;
+import kancho.realestate.comparingprices.scheduler.util.ApartmentApiClient;
 
-@ActiveProfiles("test")
 @SpringBootTest
 class ApartmentApiClientTest {
 

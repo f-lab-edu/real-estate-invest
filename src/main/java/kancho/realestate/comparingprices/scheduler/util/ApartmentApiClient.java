@@ -1,4 +1,4 @@
-package kancho.realestate.utils.api.storeaprtment;
+package kancho.realestate.comparingprices.scheduler.util;
 
 import static java.net.URLEncoder.*;
 
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 import kancho.realestate.comparingprices.domain.dto.request.RequestApartmentDetailDto;
 import kancho.realestate.comparingprices.domain.vo.ApartmentDetail;
-import kancho.realestate.utils.api.storeaprtment.mapper.ApartmentXmlMapper;
+import kancho.realestate.comparingprices.exception.InvalidApartmentXmlException;
 
 @Component
 public class ApartmentApiClient {
@@ -32,14 +32,15 @@ public class ApartmentApiClient {
 	private final String pageNo = "1"; // 페이지번호
 	private final String numOfRows = "1000"; // 한 페이지 결과 수
 
-	public List<ApartmentDetail> getApartmentDetails(RequestApartmentDetailDto requestDto) throws IOException, JAXBException {
-			URL url = new URL(makeRequestUrl(requestDto));
-			String responseAsXmlString = request(url); // 공공 API에 데이터 요청
-			return new ApartmentXmlMapper().apartmentXmlToList(responseAsXmlString);
+	public List<ApartmentDetail> getApartmentDetails(RequestApartmentDetailDto requestDto) throws IOException, JAXBException,
+		InvalidApartmentXmlException {
+		URL url = new URL(makeRequestUrl(requestDto));
+		String responseAsXmlString = request(url); // 공공 API에 데이터 요청
+		return new ApartmentXmlMapper().apartmentXmlToList(responseAsXmlString);
 	}
 
 	private String makeRequestUrl(RequestApartmentDetailDto requestDto) throws UnsupportedEncodingException {
-		String dealYearAndMonth = Integer.toString(requestDto.getDealYear()) + Integer.toString(requestDto.getDealMonth());
+		String dealYearAndMonth = makeDealYearAndMonth(requestDto);
 		StringBuilder urlBuilder = new StringBuilder();
 		return urlBuilder.append(domainName).append(path)
 			.append("?").append(encode("serviceKey", encoder)).append(accessKey)
@@ -48,6 +49,15 @@ public class ApartmentApiClient {
 			.append("&").append(encode("LAWD_CD", encoder)).append("=").append(encode(requestDto.getRegionalCode(), encoder))
 			.append("&").append(encode("DEAL_YMD", encoder)).append("=").append(encode(dealYearAndMonth, encoder))
 			.toString();
+	}
+
+	private String makeDealYearAndMonth(RequestApartmentDetailDto requestDto) {
+		StringBuilder dealYearAndMonth = new StringBuilder();
+		dealYearAndMonth.append(requestDto.getDealYear());
+		if (requestDto.getDealMonth() < 10){
+			dealYearAndMonth.append(0);
+		}
+		return dealYearAndMonth.append(requestDto.getDealMonth()).toString();
 	}
 
 	private String request(URL url) throws IOException {

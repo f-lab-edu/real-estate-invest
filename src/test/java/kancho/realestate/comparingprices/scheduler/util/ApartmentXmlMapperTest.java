@@ -1,4 +1,4 @@
-package kancho.realestate.utils.api.storeaprtment;
+package kancho.realestate.comparingprices.scheduler.util;
 
 import java.util.List;
 import javax.xml.bind.JAXBException;
@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import kancho.realestate.comparingprices.domain.vo.ApartmentDetail;
 import kancho.realestate.comparingprices.exception.InvalidApartmentXmlException;
-import kancho.realestate.utils.api.storeaprtment.mapper.ApartmentXmlMapper;
+import kancho.realestate.comparingprices.scheduler.util.ApartmentXmlMapper;
 
 class ApartmentXmlMapperTest {
 	private final ApartmentXmlMapper apartmentXmlMapper = new ApartmentXmlMapper();

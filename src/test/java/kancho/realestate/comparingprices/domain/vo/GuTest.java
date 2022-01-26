@@ -1,4 +1,4 @@
-package kancho.realestate.utils.api.storeaprtment.model;
+package kancho.realestate.comparingprices.domain.vo;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
