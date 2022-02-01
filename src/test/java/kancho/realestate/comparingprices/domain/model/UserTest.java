@@ -18,7 +18,7 @@ class UserTest extends DomainTest {
 	@Test
 	void 마지막_로그인_시각_변경() {
 		//given
-		User user = new User("tester1","1235df123");
+		User user = User.makeBasicAuthUser("tester1","1235df123");
 		em.persist(user);
 
 		//when

@@ -37,7 +37,7 @@ class GroupItemRepositoryTest extends DomainTest {
 		// given
 		String userId="testid12312";
 		String pssword="password1234";
-		User user = new User(userId, pssword);
+		User user = User.makeBasicAuthUser(userId, pssword);
 		userRepository.save(user);
 
 		String groupName="마래푸34 아리팍 24";

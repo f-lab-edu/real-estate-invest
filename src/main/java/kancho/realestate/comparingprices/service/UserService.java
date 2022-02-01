@@ -35,10 +35,16 @@ public class UserService implements UserDetailsService {
 	public ResponseUserDto createUser(RequestUserDto requestUser) {
 		validateNotExistUser(findUserByAccountOptional(requestUser.getAccount()));
 		String encryptedPw = getEncryptedPassword(requestUser.getPassword());
-		User user = new User(requestUser.getAccount(), encryptedPw);
+		User user = User.makeBasicAuthUser(requestUser.getAccount(), encryptedPw);
 		userRepository.save(user);
 
 		return ResponseUserDto.from(user);
+	}
+
+	@Transactional
+	public User oAuth2Login(User oAuth2User) {
+		oAuth2User.updateLastLoginDttm(LocalDateTime.now());
+		return userRepository.save(oAuth2User);
 	}
 
 	@Transactional
@@ -85,4 +91,6 @@ public class UserService implements UserDetailsService {
 		User foundUser = findUserByAccount(account);
 		return new SessionUserVO(foundUser.getAccount(),foundUser.getPassword(),new ArrayList<>(),foundUser.getId());
 	}
+
+
 }

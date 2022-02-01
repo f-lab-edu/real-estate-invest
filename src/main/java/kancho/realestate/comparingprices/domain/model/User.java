@@ -21,7 +21,7 @@ public class User extends BaseTimeEntity {
 	@Column(unique = true, nullable = false)
 	private String account;
 
-	@Column(nullable = false)
+	@Column
 	private String password;
 
 	private LocalDateTime lastLoginDttm;
@@ -31,14 +31,21 @@ public class User extends BaseTimeEntity {
 	protected User() {
 	}
 
-	public User(String account, String password) {
-		validateId(account);
+	private User(String account) {
+		this.account = account;
+	}
+
+	private User(String account, String password) {
 		this.account = account;
 		this.password = password;
 	}
 
-	private void validateId(String id) {
+	public static User makeBasicAuthUser(String account, String password) {
+		return new User(account, password);
+	}
 
+	public static User makeOAuth2User(String email) {
+		return new User(email);
 	}
 
 	@Override

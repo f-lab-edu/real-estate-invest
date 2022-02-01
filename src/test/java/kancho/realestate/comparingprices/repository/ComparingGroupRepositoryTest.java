@@ -25,7 +25,7 @@ class ComparingGroupRepositoryTest extends DomainTest {
 		// given
 		String userId="testid12312";
 		String pssword="password1234";
-		User user = new User(userId, pssword);
+		User user = User.makeBasicAuthUser(userId, pssword);
 		userRepository.save(user);
 
 		// when

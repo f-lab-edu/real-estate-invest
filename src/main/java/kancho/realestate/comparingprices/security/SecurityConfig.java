@@ -24,6 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private final UserService userService;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	private final SpringSessionBackedSessionRegistry<? extends Session> springSessionBackedSessionRegistry;
+	private final CustomOAuth2UserService customOAuth2UserService;
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -49,6 +50,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().disable();
 		http.httpBasic().disable();
 		http.formLogin().disable();
+
+		http.oauth2Login()
+			.defaultSuccessUrl("/auth/success")
+			.failureUrl("/auth/fail")
+			.userInfoEndpoint()
+			.userService(customOAuth2UserService);
 
 		http.logout()
 			.logoutUrl("/logout")

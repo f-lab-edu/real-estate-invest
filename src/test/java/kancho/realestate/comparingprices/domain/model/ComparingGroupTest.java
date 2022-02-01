@@ -10,7 +10,7 @@ class ComparingGroupTest {
 	@Test
 	void comparingGroup(){
 		String groupName="마래푸34 아리팍24";
-		ComparingGroup group = new ComparingGroup(new User("abc","1234"),groupName);
+		ComparingGroup group = new ComparingGroup(User.makeBasicAuthUser("abc","1234"),groupName);
 		Assertions.assertThat(group.getGroupName()).isEqualTo(groupName);
 	}
 }

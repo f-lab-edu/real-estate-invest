@@ -24,7 +24,7 @@ class UserRepositoryTest extends DomainTest {
 	void 사용자_등록(String id, String password) {
 
 		// when
-		User user = new User(id, password);
+		User user = User.makeBasicAuthUser(id, password);
 		userRepository.save(user);
 
 		// then
@@ -37,7 +37,7 @@ class UserRepositoryTest extends DomainTest {
 		// given
 		String account ="testid123";
 		String password = "test password1234";
-		User user = new User(account, password);
+		User user = User.makeBasicAuthUser(account, password);
 		userRepository.save(user);
 
 		// when
