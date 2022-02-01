@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import kancho.realestate.comparingprices.domain.model.ComparingGroup;
 import kancho.realestate.comparingprices.domain.model.User;
 
-class ComparingGroupRepositoryTest extends RepositoryTest{
+class ComparingGroupRepositoryTest extends DomainTest {
 
 	@Autowired
 	private ComparingGroupRepository comparingGroupRepository;
@@ -25,7 +25,7 @@ class ComparingGroupRepositoryTest extends RepositoryTest{
 		// given
 		String userId="testid12312";
 		String pssword="password1234";
-		User user = new User(userId, pssword);
+		User user = User.makeBasicAuthUser(userId, pssword);
 		userRepository.save(user);
 
 		// when

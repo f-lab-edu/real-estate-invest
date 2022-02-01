@@ -1,6 +1,8 @@
 package kancho.realestate.comparingprices.domain.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Entity;
@@ -9,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import lombok.Getter;
 
@@ -25,6 +28,9 @@ public class ComparingGroup extends BaseTimeEntity{
 	private String groupName;
 
 	private LocalDateTime deleteDttm;
+
+	@OneToMany(mappedBy = "comparingGroup")
+	private List<GroupItem> groupItems = new ArrayList<>();
 
 	protected ComparingGroup() {
 	}

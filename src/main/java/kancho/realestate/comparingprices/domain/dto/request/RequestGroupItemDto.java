@@ -8,14 +8,12 @@ import lombok.Getter;
 @Getter
 public class RequestGroupItemDto {
 
-	private Long groupId;
 	private Long apartmentId;
 
 	private RequestGroupItemDto() {
 	}
 
-	public RequestGroupItemDto(Long groupId, Long apartmentId) {
-		this.groupId = groupId;
+	public RequestGroupItemDto(Long apartmentId) {
 		this.apartmentId = apartmentId;
 	}
 

@@ -11,5 +11,5 @@ import kancho.realestate.comparingprices.config.JpaAuditingConfiguration;
 @Import(JpaAuditingConfiguration.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
-public class RepositoryTest {
+public class DomainTest {
 }

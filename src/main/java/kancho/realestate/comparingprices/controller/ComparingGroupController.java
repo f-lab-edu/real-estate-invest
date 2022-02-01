@@ -44,7 +44,7 @@ public class ComparingGroupController {
 	public ResponseEntity createComparingGroupItem(@PathVariable Long groupId,
 		@RequestBody RequestGroupItemDto requestGroupItemDto) {
 		// TODO: JPA로 전환시 groupId로 ComparingGroup 객체를 조회. RequestGroupItemDto에서는 groupId 제외
-		ResponseGroupItemDto savedGroupItem = comparingGroupService.saveGroupItem(requestGroupItemDto);
+		ResponseGroupItemDto savedGroupItem = comparingGroupService.saveGroupItem(groupId, requestGroupItemDto);
 		return new ResponseEntity<>(new SuccessReponseDto<>("그룹에 추가 되었습니다.", savedGroupItem), HttpStatus.CREATED);
 	}
 

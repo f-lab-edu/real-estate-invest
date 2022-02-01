@@ -11,17 +11,17 @@ import javax.persistence.Id;
 
 import lombok.Getter;
 
-
 @Getter
 @Entity
-public class User extends BaseTimeEntity{
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class User extends BaseTimeEntity {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(unique = true, nullable = false)
 	private String account;
 
-	@Column(nullable = false)
+	@Column
 	private String password;
 
 	private LocalDateTime lastLoginDttm;
@@ -31,21 +31,28 @@ public class User extends BaseTimeEntity{
 	protected User() {
 	}
 
-	public User(String account, String password) {
-		validateId(account);
+	private User(String account) {
+		this.account = account;
+	}
+
+	private User(String account, String password) {
 		this.account = account;
 		this.password = password;
 	}
 
-	private void validateId(String id) {
+	public static User makeBasicAuthUser(String account, String password) {
+		return new User(account, password);
+	}
 
+	public static User makeOAuth2User(String email) {
+		return new User(email);
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		if(!(o instanceof User))
+		if (!(o instanceof User))
 			return false;
 		User user = (User)o;
 		return Objects.equals(this.getId(), user.getId());
@@ -56,7 +63,8 @@ public class User extends BaseTimeEntity{
 		return Objects.hash(this.getId());
 	}
 
-	public void updateLastLoginDttm() {
-		this.lastLoginDttm=LocalDateTime.now();
+	// 메서드의 유연성과 테스트 용이성을 위해 LocalDateTime을 인자로 받게 함
+	public void updateLastLoginDttm(LocalDateTime loginTime) {
+		this.lastLoginDttm = loginTime == null ? LocalDateTime.now() : loginTime;
 	}
 }

@@ -20,6 +20,10 @@ public class RequestApartmentDto {
 	private RequestApartmentDto() {
 	}
 
+	public RequestApartmentDto(String regionalCode) {
+		this.regionalCode = regionalCode;
+	}
+
 	public RequestApartmentDto(String regionalCode, String city, String gu, String dong, String jibun,
 		String bonbun, String bubun, String apartmentName, int buildYear, String roadAddress) {
 		this.regionalCode = regionalCode;

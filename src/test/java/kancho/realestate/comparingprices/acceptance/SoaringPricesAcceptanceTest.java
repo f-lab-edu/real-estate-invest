@@ -1,4 +1,4 @@
-package kancho.realestate.comparingprices.controller;
+package kancho.realestate.comparingprices.acceptance;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -11,11 +11,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import kancho.realestate.comparingprices.acceptance.AcceptanceTest;
+import kancho.realestate.comparingprices.common.MockMvcTest;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-class SoaringPricesControllerTest extends AcceptanceTest {
+class SoaringPricesAcceptanceTest extends MockMvcTest {
 
 	@Autowired
 	MockMvc mockMvc;

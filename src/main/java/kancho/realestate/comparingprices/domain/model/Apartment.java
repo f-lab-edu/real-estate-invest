@@ -16,7 +16,7 @@ import lombok.Getter;
 @Getter
 @Table(indexes = @Index(name = "idx_distinct", columnList ="regionalCode, dong, jibun, apartmentName" ))
 @Entity
-public class Apartment extends BaseTimeEntity{
+public class Apartment extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,7 +44,8 @@ public class Apartment extends BaseTimeEntity{
 
 	private LocalDateTime deleteDttm;
 
-	protected Apartment() {}
+	protected Apartment() {
+	}
 
 	public Apartment(String regionalCode, String city, String gu, String dong, String jibun,
 		String bonbun, String bubun, String apartmentName, int buildYear, String roadAddress) {
@@ -75,7 +76,7 @@ public class Apartment extends BaseTimeEntity{
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		if(!(o instanceof Apartment))
+		if (!(o instanceof Apartment))
 			return false;
 		Apartment apartment = (Apartment)o;
 		return getId() == apartment.getId();

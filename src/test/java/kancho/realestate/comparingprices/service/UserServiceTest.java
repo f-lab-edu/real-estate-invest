@@ -1,85 +1,69 @@
 package kancho.realestate.comparingprices.service;
 
-import java.util.Optional;
+import java.time.LocalDateTime;
 
 import org.assertj.core.api.Assertions;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import kancho.realestate.comparingprices.domain.dto.request.RequestUserDto;
+import kancho.realestate.comparingprices.domain.dto.response.ResponseUserDto;
 import kancho.realestate.comparingprices.domain.model.User;
 import kancho.realestate.comparingprices.exception.DuplicateUserAccountException;
-import kancho.realestate.comparingprices.exception.IdNotExistedException;
-import kancho.realestate.comparingprices.exception.PasswordWrongException;
-import kancho.realestate.comparingprices.repository.UserRepository;
 
 class UserServiceTest extends ServiceTest {
 
 	@Autowired
-	UserService userService;
+	private UserService userService;
 
 	@Autowired
-	UserRepository userRepository;
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-	@Transactional
 	@ParameterizedTest
 	@CsvSource(value = {"tom2542,23lg354232"})
 	void 회원가입_패스워드_암호화_테스트(String id, String password) {
+		//given
 		RequestUserDto requestUserDto = new RequestUserDto(id, password);
+
+		//when
 		userService.createUser(requestUserDto);
-		Optional<User> createdUser = userService.getUserById(id);
-		Assertions.assertThat(createdUser.orElse(null)).isNotEqualTo(password);
+		User createdUser = userService.findUserByAccount(id);
+
+		//then
+		Assertions.assertThat(createdUser).isNotEqualTo(password);
+		Assertions.assertThat(bCryptPasswordEncoder.matches(requestUserDto.getPassword(), createdUser.getPassword()))
+			.isTrue();
 	}
 
 	@ParameterizedTest
 	@CsvSource(value = {"tom2542:23lg354232"}, delimiter = ':')
-	void 로그인_테스트(String id, String password) {
-		RequestUserDto requestUserDto = new RequestUserDto(id, password);
-		userService.createUser(requestUserDto);
-		userService.login(requestUserDto);
-	}
-
-	@Transactional
-	@ParameterizedTest
-	@CsvSource(value = {"tom2542:23lg354232:23lg35423"}, delimiter = ':')
-	void 로그인_비밀번호_오류_테스트(String id, String password, String wrongPassword) {
+	void 회원가입_중복아이디_오류(String id, String password) {
+		//given
 		RequestUserDto requestJoinUserDto = new RequestUserDto(id, password);
 		userService.createUser(requestJoinUserDto);
 
-		RequestUserDto requestLoginUserDto = new RequestUserDto(id, wrongPassword);
-		Assertions.assertThatThrownBy(()->{
-			userService.login(requestLoginUserDto);
-		}).isInstanceOf(PasswordWrongException.class);
-
-	}
-
-	@Transactional
-	@ParameterizedTest
-	@CsvSource(value = {"tom2542:23lg354232:tom25"}, delimiter = ':')
-	void 로그인_없는_아이디_오류_테스트(String id, String password, String wrongId) {
-		RequestUserDto requestJoinUserDto = new RequestUserDto(id, password);
-		userService.createUser(requestJoinUserDto);
-
-		RequestUserDto requestLoginUserDto = new RequestUserDto(wrongId, password);
-		Assertions.assertThatThrownBy(()->{
-			userService.login(requestLoginUserDto);
-		}).isInstanceOf(IdNotExistedException.class);
-	}
-
-	@Transactional
-	@ParameterizedTest
-	@CsvSource(value = {"tom2542:23lg354232"}, delimiter = ':')
-	void 회원가입_중복아이디_오류(String id, String password){
-		RequestUserDto requestJoinUserDto = new RequestUserDto(id, password);
-		userService.createUser(requestJoinUserDto);
-
+		//when, then
 		RequestUserDto requestDuplicateJoinUserDto = new RequestUserDto(id, password);
-		Assertions.assertThatThrownBy(()->{
-			userService.createUser(requestDuplicateJoinUserDto);
-		}).isInstanceOf(DuplicateUserAccountException.class);
+		Assertions.assertThatThrownBy(() -> userService.createUser(requestDuplicateJoinUserDto))
+			.isInstanceOf(DuplicateUserAccountException.class);
+	}
 
+	@ParameterizedTest
+	@CsvSource(value = {"tom2542:23lg354232"}, delimiter = ':')
+	void 로그인_후_최종로그인시각_변경_확인(String id, String password) {
+		//given
+		RequestUserDto requestJoinUserDto = new RequestUserDto(id, password);
+		ResponseUserDto user = userService.createUser(requestJoinUserDto);
+
+		//when
+		LocalDateTime loginTime = LocalDateTime.now();
+		userService.changeLoginTime(user.getUserId(), loginTime);
+
+		//then
+		User findUser = userService.findUser(user.getUserId());
+		Assertions.assertThat(findUser.getLastLoginDttm()).isEqualTo(loginTime);
 	}
 }
